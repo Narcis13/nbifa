@@ -21,8 +21,8 @@ module.exports = function (ctx) {
       // 'eva-icons'
     ],
 
-    // framework: 'all', // --- includes everything; for dev only!
-    framework: {
+     framework: 'all', // --- includes everything; for dev only!
+    /*framework: {
       components: [
         'QLayout',
         'QHeader',
@@ -50,7 +50,7 @@ module.exports = function (ctx) {
 
       // iconSet: 'ionicons-v4'
       // lang: 'de' // Quasar language
-    },
+    },*/
 
     supportIE: false,
 

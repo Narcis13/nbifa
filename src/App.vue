@@ -1,24 +1,14 @@
 <template>
-  <v-app>
-    <Navbar />
-
-    <v-content>
-      <router-view></router-view>
-    </v-content>
-    <v-footer app class="pl-3">@2019 Narcis  Brindusescu</v-footer>
-  </v-app>
+  <div id="q-app">
+    <router-view />
+  </div>
 </template>
 
 <script>
-import Navbar from '@/components/Navbar'
-
 export default {
-  name: 'App',
-  components:{Navbar},
-  data () {
-    return {
-      //
-    }
-  }
+  name: 'App'
 }
 </script>
+
+<style>
+</style>

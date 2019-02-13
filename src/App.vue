@@ -5,7 +5,7 @@
     <v-content>
       <router-view></router-view>
     </v-content>
-    <v-footer app class="pl-3">@2019 Narcis Petru Brindusescu</v-footer>
+    <v-footer app class="pl-3">@2019 Narcis  Brindusescu</v-footer>
   </v-app>
 </template>
 

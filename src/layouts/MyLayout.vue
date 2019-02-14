@@ -63,7 +63,7 @@ export default {
   computed:{
     userAutentificat(){
      // return this.$store.getters.user !== null && this.$store.getters.user !== undefined
-     return true;
+     return false;
     },
     numeUtilizator(){
       return this.$store.getters.user

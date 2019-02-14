@@ -62,15 +62,15 @@ export default {
   },
   computed:{
     userAutentificat(){
-     // return this.$store.getters.user !== null && this.$store.getters.user !== undefined
-     return false;
+      return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+     //return false;
     },
     numeUtilizator(){
       return this.$store.getters.user
     },
     rolUtilizator(){
-     //  return this.$store.getters.rol
-     return 'admin'
+       return this.$store.getters.rol
+     //return 'admin'
     }
   },
   methods: {

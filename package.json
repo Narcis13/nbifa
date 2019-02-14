@@ -7,15 +7,23 @@
   "author": "Narcis Brindusescu <Narcis75@gmail.com>",
   "private": true,
   "scripts": {
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "start": "nodemon ./server/server.js"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
+    "knex": "^0.16.3",
+    "mysql2": "^1.6.5",
     "quasar": "^1.0.0-beta.0"
   },
   "devDependencies": {
     "@quasar/app": "^1.0.0-beta.0",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.10",
     "strip-ansi": "=3.0.1"
   },
   "engines": {

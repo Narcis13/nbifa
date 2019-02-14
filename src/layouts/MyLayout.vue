@@ -37,7 +37,7 @@
 
       <q-footer elevated class="bg-grey-8 text-white">
         <q-toolbar>
-          <q-toolbar-title>@2018 Narcis Petru Brindusescu </q-toolbar-title>
+          <q-toolbar-title>@2019 Narcis Petru Brindusescu </q-toolbar-title>
         </q-toolbar>     
       </q-footer>
   </q-layout>

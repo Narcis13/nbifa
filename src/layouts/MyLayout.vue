@@ -24,6 +24,7 @@
               <q-btn-dropdown
                   class="glossy"
                   color="purple"
+                  v-if="userAutentificat"
                   :label="numeUtilizator"
                 >
                   <div class="row no-wrap q-pa-md">

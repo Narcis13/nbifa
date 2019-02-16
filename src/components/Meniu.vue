@@ -7,7 +7,7 @@
                     v-if="isAdmin"
                     v-ripple
                     :active="link === 'inbox'"
-                    @click="link = 'inbox'"
+                    @click="clickUtilizatori"
                     active-class="my-menu-link"
                     >
                     <q-item-section avatar>
@@ -95,6 +95,7 @@ export default {
     methods:{
       clickUtilizatori(e){
           //alert('Click Utilizatori');
+          this.link='inbox';
           this.$router.push('/utilizatori');
       },
       clickIntrari(e){

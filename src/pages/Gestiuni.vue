@@ -18,11 +18,83 @@
             </q-card-actions>
 
           </q-card>
+          <q-btn
+            round
+            color="primary"
+            @click="opened=true"
+            class="fixed"
+            icon="add"
+            style="right: 48px; bottom: 64px"
+          />
+
+          <q-dialog v-model="opened"  transition-show="jump-down" transition-hide="jump-up">
+              <q-card class="q-pa-md" style="width: 400px; max-width: 90vw;padding:10">
+
+                     <q-input v-model="numegestiune" label="Denumire" :rules="[val => !!val || 'Cimp obligatoriu!']" >
+                       <q-tooltip>Cimp obligatoriu!</q-tooltip>
+                     </q-input>
+
+                    <q-select v-model="cUser" :options="listaUtilizatori" @input="userSelectat" label="Utilizator implicit" />
+
+                     <div class="q-pa-sm">
+                               <q-tabs
+                                  v-model="selectedTab"
+                                  dense
+                                  class="text-grey"
+                                  active-color="primary"
+                                  indicator-color="primary"
+                                  align="justify"
+                                  narrow-indicator
+                                >
+                                  <q-tab  name="receptie"  icon="mail" label="Comisia receptie" />
+                                  <q-tab name="inventar"  icon="mail" label="Comisia inventariere" />
+                                </q-tabs>
+
+                                <q-separator />
+                       
+                                <q-tab-panels v-model="selectedTab" animated>
+                                  <q-tab-panel name="receptie">
+                                      <q-input v-model="r_p"  label="Presedinte" />
+                                      <q-input v-model="r_m1"  label="Membru 1" />
+                                      <q-input v-model="r_m2"  label="Membru 2" />
+                                      <q-input v-model="r_m3"  label="Membru 3" />
+                                  </q-tab-panel>
+                                  <q-tab-panel name="inventar">
+                                      <q-input v-model="i_p"  label="Presedinte" />
+                                      <q-input v-model="i_m1"  label="Membru 1" />
+                                      <q-input v-model="i_m2"  label="Membru 2" />
+                                      <q-input v-model="i_m3"  label="Membru 3" />
+                                  </q-tab-panel>
+                                </q-tab-panels>
+                          
+                
+                     </div>
+                     <div class="row justify-center">
+                      <q-btn
+                        color="primary"
+                        icon="contact_mail"
+                        dense
+                        @click="gestiuneNoua"
+                        label="Adaug"
+                      />
+
+                      <q-btn
+                        color="primary"
+                        class="q-ml-md"
+                        icon="code"
+                        dense
+                        @click="reset"
+                        label="Reset"
+                      />
+
+                  </div>
+              </q-card>
+          </q-dialog>
     </q-page>
 </template>
 <script>
 import axios from 'axios'
-import { uid, filter } from 'quasar'
+//import { uid, filter } from 'quasar'
 
 function parseUsers () {
   return listaUtilizatori.map(user => {
@@ -38,6 +110,8 @@ export default {
   data () {
     return {
       stars: 3,
+      selectedTab:'receptie',
+      cUser:'',
       numegestiune:'',
       terms:'',
       r_p:'',
@@ -75,13 +149,17 @@ export default {
                                                             return {
                                                               label: user.username,
                                                               id:user.id,
-                                                              value: user.username
+                                                              value: user.id
                                                             }
                                                           })
         }
       ).catch(err =>{})
   },
   methods:{
+    userSelectat(value){
+           console.log(value.value)
+           this.userId=value.value
+    },
     gestiuneNoua(){
      // alert('Gestiune Noua')
       const numegestiune=this.numegestiune;
@@ -148,6 +226,21 @@ export default {
     selected (item) {
     //  this.$q.notify(`id selectat "${item.id}"`)
          this.userId=item.id;
+    },
+     reset(){
+            this.selectedTab = 'receptie'
+            this.numegestiune='';
+            this.userId=0;
+            this.cUser='';
+            this.r_p='';
+            this.r_m1='';
+            this.r_m2='';
+            this.r_m3='';
+            this.i_p='';
+            this.i_m1='';
+            this.i_m2='';
+            this.i_m3='';
+            this.terms='';
     },
     search(terms, done){
       //console.log('terms ',terms, this.listaUtilizatori,filter(terms, {field: 'username', list: this.listaUtilizatori}));

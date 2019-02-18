@@ -3,11 +3,11 @@
           <q-card v-for="g in gestiuni" inline style="width: 200px" class="bg-secondary text-white q-ma-sm" :key="g.denumire">
             <q-card-section>
                 <div class="text-h6">{{g.denumire}}</div>
-                <div class="text-subtitle2">Utilizator implicit:</div>
+                <div class="text-subtitle2">Utilizator implicit:{{g.username}}</div>
             </q-card-section>
 
             <q-card-section>
-                {{ lorem }}
+               Gestionar: {{ g.gestionar }}
             </q-card-section>
 
             <q-separator dark />
@@ -35,7 +35,7 @@
                      </q-input>
 
                     <q-select v-model="cUser" :options="listaUtilizatori" @input="userSelectat" label="Utilizator implicit" />
-
+                    <q-input v-model="gestionar" label="Gestionar"  />
                      <div class="q-pa-sm">
                                <q-tabs
                                   v-model="selectedTab"
@@ -113,6 +113,7 @@ export default {
       selectedTab:'receptie',
       cUser:'',
       numegestiune:'',
+      gestionar:'',
       terms:'',
       r_p:'',
       r_m1:'',
@@ -168,6 +169,7 @@ export default {
       axios.post(process.env.host+'gest/gestiunenoua',{
          "denumire":this.numegestiune,
          "userid":this.userId,
+         "gestionar":this.gestionar,
          "r_presedinte":this.r_p,
          "r_membru1":this.r_m1,
          "r_membru2":this.r_m2,
@@ -189,6 +191,8 @@ export default {
           "id":res.data.id,
           "denumire":that.numegestiune,
           "userid":that.userId,
+          "username":that.cUser.label,
+          "gestionar":that.gestionar,
           "r_presedinte":that.r_p,
           "r_membru1":that.r_m1,
           "r_membru2":that.r_m2,

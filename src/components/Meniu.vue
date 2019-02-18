@@ -22,7 +22,7 @@
                     v-if="isAdmin"
                     v-ripple
                     :active="link === 'outbox'"
-                    @click="link = 'outbox'"
+                    @click="clickGestiuni"
                     active-class="my-menu-link"
                     >
                     <q-item-section avatar>
@@ -102,7 +102,8 @@ export default {
           this.$router.push('/test');
       },
       clickGestiuni(e){
-          this.$router.push('/test');
+            this.link='outbox';
+          this.$router.push('/gestiuni');
       }
     },
     computed:{

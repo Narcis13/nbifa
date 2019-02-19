@@ -26,6 +26,19 @@
             icon="add"
             style="right: 48px; bottom: 64px"
           />
+              <q-dialog v-model="confirm" persistent>
+                <q-card>
+                  <q-card-section class="row items-center">
+                    <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
+                    <span class="q-ml-sm">Sunteti sigur ca doriti stergerea?</span>
+                  </q-card-section>
+
+                  <q-card-actions align="right">
+                    <q-btn flat label="Abandon" color="primary" v-close-dialog />
+                    <q-btn flat label="Sterge" color="primary" @click="sterg" v-close-dialog />
+                  </q-card-actions>
+                </q-card>
+              </q-dialog>
 
           <q-dialog v-model="opened"  transition-show="jump-down" transition-hide="jump-up">
               <q-card class="q-pa-md" style="width: 400px; max-width: 90vw;padding:10">
@@ -109,7 +122,8 @@ function parseUsers () {
 export default {
   data () {
     return {
-      stars: 3,
+      confirm: false,
+      idGestiuneCurenta:0,
       modificare:false,
       selectedTab:'receptie',
       cUser:'',
@@ -167,15 +181,20 @@ export default {
        this.reset();
        this.opened=true;
     },
+    sterg(id){
+        console.log('sterg efectiv id ',this.idGestiuneCurenta);
+    },
     stergGestiune(t){
        // console.log('detalii',t);
-       this.modificare=true;
+       //this.modificare=true;
         this.gestiuni.map(item =>{
           if (item.denumire==t){
-              console.log('sterg gestiunea '+item.id,t);
+            this.idGestiuneCurenta = item.id
+            this.confirm=true;
+            //  console.log('sterg gestiunea '+item.id,t);
           }
         })
-         this.opened=true;
+        
     },
     vreauDetalii(t){
        // console.log('detalii',t);

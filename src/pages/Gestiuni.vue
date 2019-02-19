@@ -13,15 +13,15 @@
             <q-separator dark />
 
             <q-card-actions>
-                <q-btn flat>Detalii</q-btn>
-                <q-btn flat>Sterge</q-btn>
+                <q-btn flat :key="g.denumire" @click="vreauDetalii(g.denumire)">Detalii</q-btn>
+                <q-btn flat @click="stergGestiune(g.denumire)">Sterge</q-btn>
             </q-card-actions>
 
           </q-card>
           <q-btn
             round
             color="primary"
-            @click="opened=true"
+            @click="showDialog"
             class="fixed"
             icon="add"
             style="right: 48px; bottom: 64px"
@@ -75,7 +75,7 @@
                         icon="contact_mail"
                         dense
                         @click="gestiuneNoua"
-                        label="Adaug"
+                        :label="numeButonDialog"
                       />
 
                       <q-btn
@@ -110,6 +110,7 @@ export default {
   data () {
     return {
       stars: 3,
+      modificare:false,
       selectedTab:'receptie',
       cUser:'',
       numegestiune:'',
@@ -156,13 +157,44 @@ export default {
         }
       ).catch(err =>{})
   },
+  computed:{
+       numeButonDialog(){
+         return this.modificare ? 'MODIFICA' : 'ADAUGA'
+       }
+  },
   methods:{
+    showDialog(){
+       this.reset();
+       this.opened=true;
+    },
+    stergGestiune(t){
+       // console.log('detalii',t);
+       this.modificare=true;
+        this.gestiuni.map(item =>{
+          if (item.denumire==t){
+              console.log('sterg gestiunea '+item.id,t);
+          }
+        })
+         this.opened=true;
+    },
+    vreauDetalii(t){
+       // console.log('detalii',t);
+       this.modificare=true;
+        this.gestiuni.map(item =>{
+          if (item.denumire==t){
+            this.numegestiune=item.denumire;
+            this.gestionar = item.gestionar;
+          }
+        })
+         this.opened=true;
+    },
     userSelectat(value){
            console.log(value.value)
            this.userId=value.value
     },
     gestiuneNoua(){
      // alert('Gestiune Noua')
+      
       const numegestiune=this.numegestiune;
       const token=this.$store.getters.token;
       var that = this;
@@ -232,6 +264,8 @@ export default {
          this.userId=item.id;
     },
      reset(){
+            console.log('RESET');
+            this.modificare=false;
             this.selectedTab = 'receptie'
             this.numegestiune='';
             this.userId=0;

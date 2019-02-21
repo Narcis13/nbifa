@@ -19,6 +19,20 @@ module.exports.toate_gestiunile = (req, res, next) => {
 }
 
 
+module.exports.sterg_gestiune = (req, res, next) => {
+  console.log('sunt in controllerul gestiuni actiunea delete....',req.params.userId)
+  knex('gestiuni').where({
+    id: req.params.idgest
+  }).del()
+  .then(()=>{
+    return res.status(200).json({
+      message: "Gestiune stearsa!"
+    });
+  
+  }).catch(err =>{})
+};
+
+
 module.exports.gestiunenoua = (req,res,next) =>{
 
   console.log('sunt in comntrolerul gestiune actiunea gestiune noua')

@@ -8,7 +8,7 @@ const GestController =require('../controllers/gestiune');
 
 router.post("/gestiunenoua", GestController.gestiunenoua);
 
-//router.delete("/:userId", /*checkaut,*/ UserController.user_delete);
+router.delete("/:idgest", /*checkaut,*/ GestController.sterg_gestiune);
 
 router.get("/toategestiunile", /*checkaut,*/ GestController.toate_gestiunile); 
 

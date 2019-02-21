@@ -183,6 +183,22 @@ export default {
     },
     sterg(id){
         console.log('sterg efectiv id ',this.idGestiuneCurenta);
+        const token=this.$store.getters.token;
+        var that = this;
+              axios.delete(process.env.host+`gest/${this.idGestiuneCurenta}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+                res => {
+                        this.$q.notify({
+                            color: 'secondary',
+                            icon: 'delete',
+                            message: `Gestiune stearsa!`
+                          })
+                  that.gestiuni.some(function(item, index) {
+                      return ( that.gestiuni[index]["id"] === that.idGestiuneCurenta) ? !!( that.gestiuni.splice(index, 1)) : false;
+                  });       
+                  //this.tableData=[...res.data.utilizatori]
+                }
+              ).catch(err =>{})
     },
     stergGestiune(t){
        // console.log('detalii',t);

@@ -3,7 +3,7 @@
           <q-card v-for="g in gestiuni" inline style="width: 200px" class="bg-secondary text-white q-ma-sm" :key="g.denumire">
             <q-card-section>
                 <div class="text-h6">{{g.denumire}}</div>
-                <div class="text-subtitle2">Utilizator implicit:{{g.username}}</div>
+                <div class="text-subtitle2">Utilizator implicit: {{g.username}}</div>
             </q-card-section>
 
             <q-card-section>
@@ -217,17 +217,19 @@ export default {
        this.modificare=true;
         this.gestiuni.map(item =>{
           if (item.denumire==t){
+            this.idGestiuneCurenta=item.id;
             this.numegestiune=item.denumire;
             this.gestionar = item.gestionar;
-        this.r_p=item.r_presedinte;
-         this.r_m1=item.r_membru1;
-         this.r_m2=item.r_membru2;
-         this.r_m3=item.r_membru3;
-         this.i_p=item.i_presedinte;
-         this.i_m1=item.i_membru1;
-         this.i_m2=item.i_membru2;
-         this.i_m3=item.i_membru3;
-         this.cUser=item.username;
+            this.r_p=item.r_presedinte;
+            this.r_m1=item.r_membru1;
+            this.r_m2=item.r_membru2;
+            this.r_m3=item.r_membru3;
+            this.i_p=item.i_presedinte;
+            this.i_m1=item.i_membru1;
+            this.i_m2=item.i_membru2;
+            this.i_m3=item.i_membru3;
+            this.cUser=item.username;
+            this.userId=item.userid;
           }
         })
          this.opened=true;
@@ -243,9 +245,53 @@ export default {
       const token=this.$store.getters.token;
       var that = this;
       if(this.modificare){
-           console.log('e de fapt modificare');
+           console.log('e de fapt modificare',this.idGestiuneCurenta);
            this.modificare=false;
-      } else {
+                 axios.patch(process.env.host+`gest/${this.idGestiuneCurenta}`,{
+                  "denumire":this.numegestiune,
+                  "userid":this.userId,
+                  "gestionar":this.gestionar,
+                  "r_presedinte":this.r_p,
+                  "r_membru1":this.r_m1,
+                  "r_membru2":this.r_m2,
+                  "r_membru3":this.r_m3,
+                  "i_presedinte":this.i_p,
+                  "i_membru1":this.i_m1,
+                  "i_membru2":this.i_m2,
+                  "i_membru3":this.i_m3,
+                  "stare":"activ"
+                },{headers:{"Authorization" : `Bearer ${token}`}}).then(
+                      res => {
+                        that.opened=false;
+
+                        that.gestiuni.map(item=>{
+
+                              if(item.id==that.idGestiuneCurenta){
+                                  item.denumire=that.numegestiune;
+                                  item.gestionar=that.gestionar;
+                                  item.userid=that.userId;
+                                  item.username=that.cUser.label;
+                                  item.r_presedinte=that.r_p;
+                                  item.r_memebri1=that.r_m1;
+                                  item.r_membru2=that.r_m2;
+                                  item.r_membru3=that.r_m3;
+                                  item.i_presedinte=that.i_p;
+                                  item.i_memebru1=that.i_m1;
+                                  item.i_memebru2=that.i_m2;
+                                  item.i_memebru3=that.i_m3;
+                              }
+                        })
+
+                          this.$q.notify({
+                          message:`Gestiunea ${numegestiune} a fost actualizata cu succes!`,
+                          timeout:1500,
+                          position:'top',
+                          color:'positive'
+                })
+                })
+                
+             }
+       else {
       axios.post(process.env.host+'gest/gestiunenoua',{
          "denumire":this.numegestiune,
          "userid":this.userId,
@@ -284,6 +330,7 @@ export default {
         });
 
           that.numegestiune='';
+          that.gestionar='';
           that.userId=0;
           that.r_p='';
           that.r_m1='';

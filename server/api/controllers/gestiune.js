@@ -32,6 +32,34 @@ module.exports.sterg_gestiune = (req, res, next) => {
   }).catch(err =>{})
 };
 
+module.exports.update_gestiune = (req, res, next) => {
+  console.log('sunt in controllerul gestiuni actiunea UPDATE....',req.params.idgest)
+  knex('gestiuni').where({
+    id: req.params.idgest
+  }).update({
+    denumire:req.body.denumire,
+    userid:req.body.userid,
+    gestionar:req.body.gestionar,
+    r_presedinte:req.body.r_presedinte,
+    r_membru1:req.body.r_membru1,
+    r_membru2:req.body.r_membru2,
+    r_membru3:req.body.r_membru3,
+    i_presedinte:req.body.i_presedinte,
+    i_membru1:req.body.i_membru1,
+    i_membru2:req.body.i_membru2,
+    i_membru3:req.body.i_membru3,          
+    updated_at:new Date().toISOString(),
+    stare:req.body.stare
+  })
+  .then(()=>{
+    return res.status(200).json({
+      message: "Gestiune actualizata!"
+    });
+  
+  }).catch(err =>{})
+};
+
+
 
 module.exports.gestiunenoua = (req,res,next) =>{
 

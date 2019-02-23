@@ -10,6 +10,8 @@ router.post("/gestiunenoua", GestController.gestiunenoua);
 
 router.delete("/:idgest", /*checkaut,*/ GestController.sterg_gestiune);
 
+router.patch("/:idgest", /*checkaut,*/ GestController.update_gestiune);
+
 router.get("/toategestiunile", /*checkaut,*/ GestController.toate_gestiunile); 
 
 

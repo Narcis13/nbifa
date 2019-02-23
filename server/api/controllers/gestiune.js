@@ -8,7 +8,7 @@ module.exports.toate_gestiunile = (req, res, next) => {
 .from('gestiuni')
 .innerJoin('utilizatori','utilizatori.id','gestiuni.userid')
     */ 
-   knex.select(['gestiuni.id', 'gestiuni.denumire', 'gestiuni.r_presedinte', 'gestiuni.i_presedinte' ,'utilizatori.username','gestiuni.gestionar'])
+   knex.select(['gestiuni.id', 'gestiuni.denumire', 'gestiuni.userid' ,'gestiuni.r_presedinte', 'gestiuni.i_presedinte' ,'gestiuni.r_membru1','gestiuni.r_membru2','gestiuni.r_membru3','gestiuni.i_membru1','gestiuni.i_membru2','gestiuni.i_membru3','utilizatori.username','gestiuni.gestionar'])
    .from('gestiuni')
    .innerJoin('utilizatori','utilizatori.id','gestiuni.userid').orderBy('gestiuni.denumire').then((rows)=>{
       return res.status(200).json({

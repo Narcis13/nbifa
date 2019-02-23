@@ -18,7 +18,7 @@
     "jsonwebtoken": "^8.4.0",
     "knex": "^0.16.3",
     "mysql2": "^1.6.5",
-    "quasar": "^1.0.0-beta.3"
+    "quasar": "^1.0.0-beta.4"
   },
   "devDependencies": {
     "@quasar/app": "^1.0.0-beta.7",

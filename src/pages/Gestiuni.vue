@@ -219,6 +219,15 @@ export default {
           if (item.denumire==t){
             this.numegestiune=item.denumire;
             this.gestionar = item.gestionar;
+        this.r_p=item.r_presedinte;
+         this.r_m1=item.r_membru1;
+         this.r_m2=item.r_membru2;
+         this.r_m3=item.r_membru3;
+         this.i_p=item.i_presedinte;
+         this.i_m1=item.i_membru1;
+         this.i_m2=item.i_membru2;
+         this.i_m3=item.i_membru3;
+         this.cUser=item.username;
           }
         })
          this.opened=true;
@@ -229,10 +238,14 @@ export default {
     },
     gestiuneNoua(){
      // alert('Gestiune Noua')
-      
+
       const numegestiune=this.numegestiune;
       const token=this.$store.getters.token;
       var that = this;
+      if(this.modificare){
+           console.log('e de fapt modificare');
+           this.modificare=false;
+      } else {
       axios.post(process.env.host+'gest/gestiunenoua',{
          "denumire":this.numegestiune,
          "userid":this.userId,
@@ -292,7 +305,7 @@ export default {
                     icon: 'delete',
                     message: `ATENTIE! ${err.response.data.message}`
                   })
-     });
+     });}
     },
     selected (item) {
     //  this.$q.notify(`id selectat "${item.id}"`)

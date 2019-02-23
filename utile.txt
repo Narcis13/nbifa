@@ -1,0 +1,6 @@
+upgrade quasar
+
+
+D:\proiecte\nbifa>npm upgrade -g @quasar/cli
+
+D:\proiecte\nbifa>npm upgrade @quasar/app quasar

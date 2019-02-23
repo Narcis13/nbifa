@@ -1,12 +1,13 @@
 <template>
 
           <q-list  padding class="text-primary">
-              <q-item-label header>Administrare</q-item-label>
+              <q-item-label v-if="isAdmin" header>Administrare</q-item-label>
                     <q-item
                     clickable
+                    v-if="isAdmin"
                     v-ripple
                     :active="link === 'inbox'"
-                    @click="link = 'inbox'"
+                    @click="clickUtilizatori"
                     active-class="my-menu-link"
                     >
                     <q-item-section avatar>
@@ -18,9 +19,10 @@
             
                     <q-item
                     clickable
+                    v-if="isAdmin"
                     v-ripple
                     :active="link === 'outbox'"
-                    @click="link = 'outbox'"
+                    @click="clickGestiuni"
                     active-class="my-menu-link"
                     >
                     <q-item-section avatar>
@@ -32,6 +34,7 @@
             
                     <q-item
                     clickable
+                    v-if="isAdmin"
                     v-ripple
                     :active="link === 'trash'"
                     @click="link = 'trash'"
@@ -48,6 +51,7 @@
             <q-item-label header>Operatiuni</q-item-label>
                     <q-item
                     clickable
+                    v-if="esteLogat"
                     v-ripple
                     :active="link === 'settings'"
                     @click="link = 'settings'"
@@ -57,7 +61,7 @@
                         <q-icon name="settings" ></q-icon>
                     </q-item-section>
             
-                    <q-item-section>Settings</q-item-section>
+                    <q-item-section>Operatiune noua...</q-item-section>
                     </q-item>
             
                     <q-item
@@ -80,28 +84,34 @@
 
 export default {
     name:'Meniu',
-    props: ['rol'],
+    props: ['rol','logat'],
     data: function () {
         return {
             link:'inbox',
-            rol: this.rol
+            rol: this.rol,
+            logat:this.logat
         }
     },
     methods:{
       clickUtilizatori(e){
           //alert('Click Utilizatori');
+          this.link='inbox';
           this.$router.push('/utilizatori');
       },
       clickIntrari(e){
           this.$router.push('/test');
       },
       clickGestiuni(e){
-          this.$router.push('/test');
+            this.link='outbox';
+          this.$router.push('/gestiuni');
       }
     },
     computed:{
         isAdmin(){
             return this.rol==='admin'
+        },
+        esteLogat(){
+             return this.logat
         }
     }
 }

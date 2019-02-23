@@ -21,13 +21,47 @@
           
         </q-toolbar-title>
         <q-btn v-if="!userAutentificat" flat dense @click="doLogin">Autentificare!</q-btn>
-              
-        <q-btn v-if="userAutentificat" flat dense @click="doLogout">Iesire!</q-btn>
+              <q-btn-dropdown
+                  class="glossy"
+                  color="purple"
+                  v-if="userAutentificat"
+                  :label="numeUtilizator"
+                >
+                  <div class="row no-wrap q-pa-md">
+                    <div class="column">
+                      <div class="text-h6 q-mb-md">Gestiuni operate</div>
+                        <q-option-group
+                          v-model="group"
+                          :options="options"
+                          color="primary"
+                        />
+                    </div>
+
+                    <q-separator vertical inset class="q-mx-lg" />
+
+                    <div class="column items-center">
+                      <q-avatar size="72px">
+                        <img src="https://cdn.quasar-framework.org/img/boy-avatar.png">
+                      </q-avatar>
+
+                      <div class="text-subtitle1 q-mt-md q-mb-xs">{{numeUtilizator}}</div>
+
+                      <q-btn
+                        color="primary"
+                        label="Inchide"
+                        push
+                        size="sm"
+                        v-close-menu
+                      />
+                    </div>
+                  </div>
+                </q-btn-dropdown>
+        <q-btn class="q-ml-md" v-if="userAutentificat" flat dense @click="doLogout">Iesire!</q-btn>
       </q-toolbar>
     </q-header>
 
    <q-drawer v-model="left" side="left" bordered>
-    <Meniu :rol="rolUtilizator"/>
+    <Meniu :rol="rolUtilizator" :logat="userAutentificat"/>
       
     </q-drawer>
 
@@ -54,7 +88,22 @@ export default {
   },
   data () {
     return {
-      left: this.$q.platform.is.desktop
+      left: this.$q.platform.is.desktop,
+      group: 'op1',
+      options: [
+        {
+          label: 'GEstiunea 1',
+          value: 'op1'
+        },
+        {
+          label: 'GEstiunea 2',
+          value: 'op2'
+        },
+        {
+          label: 'GEstiunea 3',
+          value: 'op3'
+        }
+      ]
     }
   },
   created(){

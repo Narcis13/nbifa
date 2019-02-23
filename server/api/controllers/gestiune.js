@@ -3,13 +3,34 @@ const knex =require('../../db.js');
 
 module.exports.toate_gestiunile = (req, res, next) => {
     console.log('sunt in controllerul gestiune actiunea toate_gestiunile....')
-    knex('gestiuni').then((rows)=>{
+    /*
+    knex.select(['gestiuni.id', 'gestiuni.denumire', 'gestiuni.r_presedinte', 'gestiuni.i_presedinte' ,'utilizatori.username'])
+.from('gestiuni')
+.innerJoin('utilizatori','utilizatori.id','gestiuni.userid')
+    */ 
+   knex.select(['gestiuni.id', 'gestiuni.denumire', 'gestiuni.userid' ,'gestiuni.r_presedinte', 'gestiuni.i_presedinte' ,'gestiuni.r_membru1','gestiuni.r_membru2','gestiuni.r_membru3','gestiuni.i_membru1','gestiuni.i_membru2','gestiuni.i_membru3','utilizatori.username','gestiuni.gestionar'])
+   .from('gestiuni')
+   .innerJoin('utilizatori','utilizatori.id','gestiuni.userid').orderBy('gestiuni.denumire').then((rows)=>{
       return res.status(200).json({
        message: "Toate gestiunile",
        gestiuni:rows
      });
     }).catch(err =>{})
 }
+
+
+module.exports.sterg_gestiune = (req, res, next) => {
+  console.log('sunt in controllerul gestiuni actiunea delete....',req.params.userId)
+  knex('gestiuni').where({
+    id: req.params.idgest
+  }).del()
+  .then(()=>{
+    return res.status(200).json({
+      message: "Gestiune stearsa!"
+    });
+  
+  }).catch(err =>{})
+};
 
 
 module.exports.gestiunenoua = (req,res,next) =>{
@@ -32,6 +53,7 @@ module.exports.gestiunenoua = (req,res,next) =>{
         knex('gestiuni').insert({
           denumire:req.body.denumire,
           userid:req.body.userid,
+          gestionar:req.body.gestionar,
           r_presedinte:req.body.r_presedinte,
           r_membru1:req.body.r_membru1,
           r_membru2:req.body.r_membru2,

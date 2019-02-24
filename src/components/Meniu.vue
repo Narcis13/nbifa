@@ -37,7 +37,7 @@
                     v-if="isAdmin"
                     v-ripple
                     :active="link === 'trash'"
-                    @click="link = 'trash'"
+                    @click="clickCategorii"
                     active-class="my-menu-link"
                     >
                     <q-item-section avatar>
@@ -104,6 +104,10 @@ export default {
       clickGestiuni(e){
             this.link='outbox';
           this.$router.push('/gestiuni');
+      },
+      clickCategorii(e){
+            this.link='trash';
+          this.$router.push('/categorii');
       }
     },
     computed:{

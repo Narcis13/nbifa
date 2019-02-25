@@ -7,6 +7,7 @@ const bodyParser=require('body-parser');
 
 const userRoutes = require('./api/routes/user');
 const gestRoutes = require('./api/routes/gestiune');
+const categRoutes = require('./api/routes/categorie');
 
 app.use(morgan('dev'));
 
@@ -31,6 +32,7 @@ app.use((req, res, next) => {
 
 app.use('/user',userRoutes);
 app.use('/gest',gestRoutes);
+app.use('/categ',categRoutes);
 
 app.use((req,resp,next)=>{
     const error = new Error('Resursa nu poate fi gasita!!');

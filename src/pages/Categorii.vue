@@ -14,8 +14,8 @@
 
              >
              <template v-slot:top>
-                    <q-btn flat dense color="primary"  label="Adauga" @click="addRow" ></q-btn>
-                    <q-btn class="on-right" flat dense color="primary"  label="Sterge" @click="removeRow" ></q-btn>
+                    <q-btn  outline rounded  color="primary"  label="Adauga" @click="opened=true" ></q-btn>
+                    <q-btn class="on-right"  outline rounded  color="primary"  label="Sterge" @click="removeRow" ></q-btn>
                     <q-space ></q-space>
                     <q-input borderless dense debounce="300" color="primary" v-model="filter" placeholder="Cauta">
                         <template v-slot:append>
@@ -24,6 +24,45 @@
                     </q-input>
            </template>
             </q-table>
+
+               <q-dialog v-model="opened"  transition-show="jump-down" transition-hide="jump-up">
+                  <q-card class="q-pa-md" style="width: 400px; max-width: 90vw;padding:10">
+                       <q-input v-model="denumire" label="Denumire" :rules="[val => !!val || 'Cimp obligatoriu!']" >
+                         <q-tooltip>Cimp obligatoriu!</q-tooltip>
+                        </q-input>
+
+                        <q-select v-model="numegestiune" :options="gestiuni" @input="userSelectat" label="Gestiune" />
+                        <q-input v-model="cont" label="Cont (debit)"  />
+                        <q-input v-model="contcheltuiala" label="Cont cheltuiala"  />
+
+                        <div class="q-mt-md q-gutter-sm">
+                            <q-radio v-model="tipmaterial" val="MAT." label="Material" />
+                            <q-radio v-model="tipmaterial" val="OB. INV." label="Obiect inventar" />
+                            <q-radio v-model="tipmaterial" val="M. FIX" label="Mijloc fix" />
+
+                       </div>
+                        <div class="row justify-center q-mt-md">
+                          <q-btn
+                            color="primary"
+                            icon="contact_mail"
+                            dense
+                            @click="categNoua"
+                            label="Adauga"
+                          />
+
+                          <q-btn
+                            color="primary"
+                            class="q-ml-md"
+                            icon="code"
+                            dense
+                            @click="reset"
+                            label="Reset"
+                          />
+
+                      </div>
+                  </q-card>
+               </q-dialog>
+
         </div>
     </q-page>
 </template>
@@ -36,6 +75,14 @@ export default {
     data(){
         return {
             categorii:[],
+            gestiuni:[],
+            opened:false,
+            denumire:'',
+            numegestiune:'',
+            idgestiune:0,
+            cont:'',
+            contcheltuiala:'',
+            tipmaterial:'MAT.',
             pagination: {
                 sortBy: 'name',
                 descending: false,
@@ -75,6 +122,19 @@ export default {
            this.categorii=[...res.data.categorii]
         }
       ).catch(err =>{})
+
+      axios.get(process.env.host+'gest/toategestiunile',{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+        res => {
+          this.gestiuni=res.data.gestiuni.map(gest => {
+                                                            return {
+                                                              label: gest.denumire,
+                                                              id:gest.id,
+                                                              value: gest.id
+                                                            }
+                                                          })
+        }
+      ).catch(err =>{})
   },
   computed: {
     tableClass () {
@@ -87,7 +147,14 @@ export default {
       }
   },
   methods:{
-
+        reset(){
+            this.denumire='';
+            this.numegestiune='';
+            this.idgestiune=0;
+            this.cont='';
+            this.contcheltuiala='';
+            this.tipmaterial='MAT.';
+        }
   }
 }
 </script>

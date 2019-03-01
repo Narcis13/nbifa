@@ -17,3 +17,42 @@ module.exports.toate = (req, res, next) => {
      });
     }).catch(err =>{})
 }
+
+module.exports.categorienoua = (req,res,next) =>{
+
+    console.log('sunt in comntrolerul categorii actiunea categorie noua')
+  
+    if(req.body.denumire===""||req.body.idgestiune==0){
+      return res.status(401).json({
+        message: "Cimpuri vide!"
+      })
+    }
+  
+    knex('categorii').where({
+      denumire : req.body.denumire
+    }).then((rows)=>{
+        if(rows.length>0) return res.status(401).json({
+                                                        message: "Acest nume este deja folosit!"
+                                                      })
+        else {
+          knex('categorii').insert({
+            denumire:req.body.denumire,
+            idgestiune:req.body.idgestiune,
+            cont:req.body.cont,
+            contcheltuiala:req.body.contcheltuiala,
+            tipmaterial:req.body.tipmaterial,
+    
+            created_at:new Date().toISOString(),
+            updated_at:new Date().toISOString(),
+            stare:req.body.stare
+            
+        }).then((d)=>{
+          console.log('Categorie adaugata ',d)
+          return res.status(200).json({
+            message: "Categorie adaugata!",
+            id:d[0]
+          })
+        }).catch(err =>{})
+        }                                              
+    }).catch(err =>{})
+  }

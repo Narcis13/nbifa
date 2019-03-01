@@ -31,7 +31,7 @@
                          <q-tooltip>Cimp obligatoriu!</q-tooltip>
                         </q-input>
 
-                        <q-select v-model="numegestiune" :options="gestiuni" @input="userSelectat" label="Gestiune" />
+                        <q-select v-model="numegestiune" :options="gestiuni" @input="gestSelectata" label="Gestiune" />
                         <q-input v-model="cont" label="Cont (debit)"  />
                         <q-input v-model="contcheltuiala" label="Cont cheltuiala"  />
 
@@ -154,6 +154,58 @@ export default {
             this.cont='';
             this.contcheltuiala='';
             this.tipmaterial='MAT.';
+        },
+        gestSelectata(v){
+          console.log(v);
+         this.idgestiune=v.value
+        },
+        categNoua(){
+          const token=this.$store.getters.token;
+          var that = this;
+
+                axios.post(process.env.host+'categ/categorienoua',{
+                "denumire":this.denumire,
+                "idgestiune":this.idgestiune,
+                "cont":this.cont,
+                "contcheltuiala":this.contcheltuiala,
+                "tipmaterial":this.tipmaterial,
+
+                "stare":"activ"
+              },{headers:{"Authorization" : `Bearer ${token}`}}).then(
+                    res => {
+                      console.log('raspuns insert categorie',res);
+                        this.$q.notify({
+                        message:`Categoria de repere ${that.denumire} a fost adaugata cu succes!`,
+                        timeout:1500,
+                        position:'top',
+                        color:'positive'
+              });
+
+                that.categorii.unshift({
+                  "id":res.data.id,
+                  "denumire":that.denumire,
+                  "idgestiune":that.idgestiune,
+                  "cont":that.cont,
+                  "contcheltuiala":that.contcheltuiala,
+                  "tipmaterial":that.tipmaterial,
+                  "gestiune":that.numegestiune,
+
+                });
+
+              that.reset();
+
+              that.opened=false;
+                    }
+            ).catch(err=>{
+              console.log('Eroare.............',err.response.data.message)
+              this.$q.notify({
+                            color: 'negative',
+                            timeout:1500,
+                            position:'top',
+                            icon: 'delete',
+                            message: `ATENTIE! ${err.response.data.message}`
+                          })
+            });
         }
   }
 }

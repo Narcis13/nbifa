@@ -4,7 +4,7 @@ const router = express.Router();
 const CatController =require('../controllers/categorie');
 
 
-//router.post("/gestiunenoua", GestController.gestiunenoua);
+router.post("/categorienoua", CatController.categorienoua);
 
 //router.delete("/:idgest", /*checkaut,*/ GestController.sterg_gestiune);
 

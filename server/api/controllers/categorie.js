@@ -10,13 +10,52 @@ module.exports.toate = (req, res, next) => {
     */ 
    knex.select(['categorii.id', {gestiune:'gestiuni.denumire'}, 'categorii.denumire','categorii.idgestiune' ,'categorii.cont', 'categorii.contcheltuiala' ,'categorii.tipmaterial'])
    .from('categorii')
-   .innerJoin('gestiuni','gestiuni.id','categorii.idgestiune').orderBy('gestiuni.denumire').then((rows)=>{
+   .innerJoin('gestiuni','gestiuni.id','categorii.idgestiune').where({"categorii.stare":"activ"}).orderBy('gestiuni.denumire').then((rows)=>{
       return res.status(200).json({
        message: "Toate CATEGORIILE",
        categorii:rows
      });
     }).catch(err =>{})
 }
+
+module.exports.update = (req, res, next) => {
+  const cimp=Object.keys(req.body)[0];
+  const valoare = req.body[cimp];
+  console.log('sunt in controllerul categorii actiunea UPDATE BUCATELE....',req.params.idcateg,cimp,valoare)
+  knex('categorii').where({
+    id: req.params.idcateg
+  }).update({
+         
+    updated_at:new Date().toISOString(),
+    [cimp]:valoare
+  })
+  .then(()=>{
+    return res.status(200).json({
+      message: "Actualizare reusita"
+    });
+  
+  }).catch(err =>{})
+
+};
+
+
+module.exports.update_categorie = (req, res, next) => {
+  console.log('sunt in controllerul categorii actiunea UPDATE....',req.params.idcateg)
+  knex('categorii').where({
+    id: req.params.idcateg
+  }).update({
+         
+    updated_at:new Date().toISOString(),
+    stare:"inactiv"
+  })
+  .then(()=>{
+    return res.status(200).json({
+      message: "Categorie repere stearsa!"
+    });
+  
+  }).catch(err =>{})
+};
+
 
 module.exports.categorienoua = (req,res,next) =>{
 

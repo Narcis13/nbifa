@@ -15,7 +15,7 @@
              >
              <template v-slot:top>
                     <q-btn  outline rounded  color="primary"  label="Adauga" @click="opened=true" ></q-btn>
-                    <q-btn class="on-right"  outline rounded  color="primary"  label="Sterge" @click="removeRow" ></q-btn>
+                    <q-btn class="on-right"  outline rounded  color="primary"  label="Sterge" @click="stergCateg" ></q-btn>
                     <q-space ></q-space>
                     <q-input borderless dense debounce="300" color="primary" v-model="filter" placeholder="Cauta">
                         <template v-slot:append>
@@ -23,6 +23,51 @@
                         </template>
                     </q-input>
            </template>
+
+                   <template v-slot:body="props">
+                      <q-tr :props="props">
+                       <q-td auto-width>
+                          <q-checkbox  v-model="props.selected" ></q-checkbox>
+                        </q-td>
+                        <q-td key="id" :props="props">{{ props.row.id }}</q-td>
+                        <q-td key="denumire" :props="props">
+                          {{ props.row.denumire }}
+                                <q-popup-edit v-model="props.row.denumire" @save="editeaza(props.row.id,'denumire',props.row.denumire)">
+                                  <q-input v-model="props.row.denumire" dense autofocus  ></q-input>
+                                </q-popup-edit>
+                        </q-td>
+                        <q-td key="gestiune" :props="props">
+                          {{ props.row.gestiune }}
+                               <q-popup-edit buttons v-model="props.row.gestiune" @save="editeaza(props.row.id,'idgestiune',idgestiune)">
+                                     <q-select v-model="props.row.gestiune" :options="gestiuni" @input="gestSelectata" label="Gestiune" />
+                                </q-popup-edit>
+                         </q-td>
+                        <q-td key="cont" :props="props">
+                          {{ props.row.cont }}
+                                <q-popup-edit v-model="props.row.cont" @save="editeaza(props.row.id,'cont',props.row.cont)">
+                                  <q-input v-model="props.row.cont" dense autofocus  ></q-input>
+                                </q-popup-edit>
+                         </q-td>
+                        <q-td key="contcheltuiala" :props="props">
+                          {{ props.row.contcheltuiala }}
+                                <q-popup-edit v-model="props.row.contcheltuiala" @save="editeaza(props.row.id,'contcheltuiala',props.row.contcheltuiala)">
+                                  <q-input v-model="props.row.contcheltuiala" dense autofocus  ></q-input>
+                                </q-popup-edit>
+                        </q-td>
+                        <q-td key="tipmaterial" :props="props">
+                          {{ props.row.tipmaterial }}
+                                <q-popup-edit v-model="props.row.tipmaterial" @save="editeaza(props.row.id,'tipmaterial',props.row.tipmaterial)">
+                                   
+                                      <q-radio v-model="props.row.tipmaterial" val="MAT." label="Material" />
+                                      <q-radio v-model="props.row.tipmaterial" val="OB. INV." label="Obiect inventar" />
+                                      <q-radio v-model="props.row.tipmaterial" val="M. FIX" label="Mijloc fix" />
+
+                                   
+                                </q-popup-edit>
+                        </q-td>
+                      </q-tr>
+                  </template>
+
             </q-table>
 
                <q-dialog v-model="opened"  transition-show="jump-down" transition-hide="jump-up">
@@ -70,7 +115,15 @@
 
 
 <script>
-import axios from 'axios'
+import axios from 'axios';
+
+function removeByKey(array, params){
+  array.some(function(item, index) {
+    return (array[index][params.key] === params.value) ? !!(array.splice(index, 1)) : false;
+  });
+  return array;
+}
+
 export default {
     data(){
         return {
@@ -147,6 +200,18 @@ export default {
       }
   },
   methods:{
+        editeaza(id,cheie,valoarenoua){
+
+              console.log('editez',id,cheie,valoarenoua)
+              const token=this.$store.getters.token;
+               var that = this;
+              axios.put(process.env.host+`categ/${id}`,{[cheie]:valoarenoua}
+                 ,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+                      res => {
+
+                })
+                
+        },
         reset(){
             this.denumire='';
             this.numegestiune='';
@@ -158,6 +223,36 @@ export default {
         gestSelectata(v){
           console.log(v);
          this.idgestiune=v.value
+        },
+        stergCateg(){
+          if(this.selected.length==0){
+                          this.$q.notify({
+                          message:`Selectati o categorie!`,
+                          timeout:1500,
+                          position:'top',
+                          color:'positive' 
+                          })
+                          return;
+          }
+           console.log('sterg',this.selected[0].id)
+            const token=this.$store.getters.token;
+            var that = this;
+            axios.patch(process.env.host+`categ/${this.selected[0].id}`,{}
+          ,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+                      res => {
+                       
+                       // that.categorii.filter(item => item.id!==that.selected[0].id)
+                         that.categorii = removeByKey(that.categorii,{key:'id',value:that.selected[0].id});
+
+                          this.$q.notify({
+                          message:`Categoria selectata a fost invalidata!`,
+                          timeout:1500,
+                          position:'top',
+                          color:'positive'
+                })
+                })
+
+
         },
         categNoua(){
           const token=this.$store.getters.token;
@@ -173,7 +268,7 @@ export default {
                 "stare":"activ"
               },{headers:{"Authorization" : `Bearer ${token}`}}).then(
                     res => {
-                      console.log('raspuns insert categorie',res);
+                      console.log('raspuns insert categorie',res,that.numegestiune);
                         this.$q.notify({
                         message:`Categoria de repere ${that.denumire} a fost adaugata cu succes!`,
                         timeout:1500,
@@ -188,7 +283,7 @@ export default {
                   "cont":that.cont,
                   "contcheltuiala":that.contcheltuiala,
                   "tipmaterial":that.tipmaterial,
-                  "gestiune":that.numegestiune,
+                  "gestiune":that.numegestiune.label,
 
                 });
 

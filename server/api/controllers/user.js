@@ -58,6 +58,7 @@ module.exports.user_login = (req, res, next) => {
           expiresIn: "2h"
         }
       );
+      
   
       return res.status(200).json({
         message: "Logat cu succes",

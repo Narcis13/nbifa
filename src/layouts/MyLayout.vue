@@ -25,14 +25,15 @@
                   class="glossy"
                   color="purple"
                   v-if="userAutentificat"
-                  :label="numeUtilizator"
+                  :label="numeUtilizator+' '+gestiuneaCurenta"
+                  @input="actUser"
                 >
                   <div class="row no-wrap q-pa-md">
                     <div class="column">
                       <div class="text-h6 q-mb-md">Gestiuni operate</div>
                         <q-option-group
                           v-model="group"
-                          :options="options"
+                          :options="gestiuni"
                           color="primary"
                         />
                     </div>
@@ -44,7 +45,7 @@
                         <img src="https://cdn.quasar-framework.org/img/boy-avatar.png">
                       </q-avatar>
 
-                      <div class="text-subtitle1 q-mt-md q-mb-xs">{{numeUtilizator}}</div>
+                      <div class="text-subtitle1 q-mt-md q-mb-xs">{{numeUtilizator}} {{gestiuneaCurenta}}</div>
 
                       <q-btn
                         color="primary"
@@ -90,6 +91,7 @@ export default {
     return {
       left: this.$q.platform.is.desktop,
       group: 'op1',
+      gestiune:{id:0,denumire:''},
       options: [
         {
           label: 'GEstiunea 1',
@@ -120,6 +122,34 @@ export default {
     rolUtilizator(){
        return this.$store.getters.rol
      //return 'admin'
+    },
+    gestiuneaCurenta(){
+       return this.gestiune.denumire
+    },
+    gestiuni(){
+      if(this.$store.getters.gestiuni.length>0) {
+        this.group=this.$store.getters.gestiuni[0].id
+        this.gestiune = {id:this.$store.getters.gestiuni[0].id,denumire:this.$store.getters.gestiuni[0].denumire}
+      }
+       return this.$store.getters.gestiuni.map( item =>({
+
+               label:item.denumire,
+               value:item.id
+       }))
+      /*return [
+        {
+          label: 'GEstiunea 1',
+          value: 'op1'
+        },
+        {
+          label: 'GEstiunea 2',
+          value: 'op2'
+        },
+        {
+          label: 'GEstiunea 3',
+          value: 'op3'
+        }
+      ]*/
     }
   },
   methods: {
@@ -129,6 +159,14 @@ export default {
     },
     doLogout(){
       this.$store.dispatch('logout');
+    },
+    actUser(p){
+      console.log('actionez user',this.group,this.gestiuni);
+      var that=this;
+      this.gestiuni.map(item =>{
+        if(item.value==that.group) that.gestiune={id:item.value,denumire:item.label}
+      })
+  
     }
 
   }

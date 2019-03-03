@@ -58,14 +58,24 @@ module.exports.user_login = (req, res, next) => {
           expiresIn: "2h"
         }
       );
-      
-  
-      return res.status(200).json({
-        message: "Logat cu succes",
-        token,
-        rol:rows[0].rol,
-        nume: req.body.user
-      })
+
+      knex('gestiuni').where({
+        userid: rows[0].id
+
+      }).select()
+      .then(r=>{
+          //asta se copiaza in callbackul de la al doilea request rows[0].id
+          return res.status(200).json({
+            message: "Logat cu succes",
+            token,
+            rol:rows[0].rol,
+            gestiuni:r,
+            nume: req.body.user
+          })
+
+      }).catch(err =>{})
+    
+
     }
     else
     return res.status(401).json({

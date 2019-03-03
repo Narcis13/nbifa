@@ -2,7 +2,8 @@ export default {
     state: {
       user: null,
       token:null,
-      rol:null
+      rol:null,
+      gestiuni:null
     },
     mutations: {
       registerUserForMeetup (state, payload) {
@@ -23,12 +24,14 @@ export default {
           state.user = payload.nume;
           state.token = payload.token;
           state.rol = payload.rol;
+          state.gestiuni = payload.gestiuni;
         }
         else
         {
           state.user = null;
           state.token = null;
           state.rol = null;
+          state.gestiuni =null;
         }
    
       }
@@ -140,6 +143,9 @@ export default {
       },
       token(state){
         return state.token
+      },
+      gestiuni(state){
+        return state.gestiuni
       }
     }
   }

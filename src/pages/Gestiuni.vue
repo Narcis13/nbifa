@@ -146,7 +146,7 @@ export default {
     }
   },
   created(){
-     //console.log('Se creeaza Utilizatorii....')
+     console.log('Gestiune curenta',this.$store.getters.gestiuneCurenta)
      const token=this.$store.getters.token;
 
       axios.get(process.env.host+'gest/toategestiunile',{headers:{"Authorization" : `Bearer ${token}`}}).then(

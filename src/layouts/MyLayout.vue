@@ -130,6 +130,7 @@ export default {
       if(this.$store.getters.gestiuni.length>0) {
         this.group=this.$store.getters.gestiuni[0].id
         this.gestiune = {id:this.$store.getters.gestiuni[0].id,denumire:this.$store.getters.gestiuni[0].denumire}
+        this.$store.dispatch('schimbaGestiuneaCurenta',this.gestiune)
       }
        return this.$store.getters.gestiuni.map( item =>({
 
@@ -164,8 +165,12 @@ export default {
       console.log('actionez user',this.group,this.gestiuni);
       var that=this;
       this.gestiuni.map(item =>{
-        if(item.value==that.group) that.gestiune={id:item.value,denumire:item.label}
+        if(item.value==that.group) {
+          that.gestiune={id:item.value,denumire:item.label}
+          
+          }
       })
+       this.$store.dispatch('schimbaGestiuneaCurenta',this.gestiune)
   
     }
 

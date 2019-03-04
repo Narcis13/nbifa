@@ -3,7 +3,8 @@ export default {
       user: null,
       token:null,
       rol:null,
-      gestiuni:null
+      gestiuni:null,
+      gestiuneCurenta:null
     },
     mutations: {
       registerUserForMeetup (state, payload) {
@@ -34,6 +35,9 @@ export default {
           state.gestiuni =null;
         }
    
+      },
+      setGestiuneCurenta (state,payload){
+        state.gestiuneCurenta = payload;
       }
     },
     actions: {
@@ -97,6 +101,11 @@ export default {
         commit('setUser', payload);
         this.$router.push('/');
       },
+      schimbaGestiuneaCurenta ({commit}, payload) {
+        console.log('se ruleaza actiunea schimbaGestiuneaCurenta...',payload);
+        commit('setGestiuneCurenta', payload);
+        
+      },
       autoSignIn ({commit}, payload) {
         commit('setUser', {
           id: payload.uid,
@@ -146,6 +155,9 @@ export default {
       },
       gestiuni(state){
         return state.gestiuni
+      },
+      gestiuneCurenta(state){
+        return state.gestiuneCurenta
       }
     }
   }

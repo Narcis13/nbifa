@@ -130,7 +130,7 @@ export default {
       if(this.$store.getters.gestiuni.length>0) {
         this.group=this.$store.getters.gestiuni[0].id
         this.gestiune = {id:this.$store.getters.gestiuni[0].id,denumire:this.$store.getters.gestiuni[0].denumire}
-        this.$store.dispatch('schimbaGestiuneaCurenta',this.gestiune)
+        //this.$store.dispatch('schimbaGestiuneaCurenta',this.gestiune)
       }
        return this.$store.getters.gestiuni.map( item =>({
 
@@ -159,6 +159,7 @@ export default {
      this.$router.push('/login');
     },
     doLogout(){
+       this.$store.dispatch('schimbaGestiuneaCurenta',{id:0,denumire:''})
       this.$store.dispatch('logout');
     },
     actUser(p){

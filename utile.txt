@@ -4,3 +4,6 @@ upgrade quasar
 D:\proiecte\nbifa>npm upgrade -g @quasar/cli
 
 D:\proiecte\nbifa>npm upgrade @quasar/app quasar
+
+
+If you upgrade your global @quasar/cli package (highly recommended) --- $ npm install @quasar/cli@latest, you can then run $ quasar upgrade inside your v1 projects and it will auto upgrade all project quasar related packages automatically (non breaking changes).

@@ -47,6 +47,41 @@
                     <q-item-section>Categorii repere</q-item-section>
                     </q-item>
             
+                    <q-separator v-if="esteLogat" spaced ></q-separator>
+                   <q-item-label v-if="esteLogat" header>Nomenclatoare</q-item-label>
+                    <q-item
+                    clickable
+                    v-if="esteLogat"
+                    v-ripple
+                    :active="link === 'settings'"
+                    @click="link = 'settings'"
+                    active-class="my-menu-link"
+                    >
+                    <q-item-section avatar>
+                        <q-icon name="settings" ></q-icon>
+                    </q-item-section>
+            
+                    <q-item-section>Locuri de dispunere</q-item-section>
+                    </q-item>
+            
+                    <q-item
+                    clickable
+                    v-ripple
+                     v-if="esteLogat"
+                    :active="link === 'help'"
+                    @click="link = 'help'"
+                    active-class="my-menu-link"
+                    >
+                    <q-item-section avatar>
+                        <q-icon name="help" ></q-icon>
+                    </q-item-section>
+            
+                    <q-item-section>Materiale</q-item-section>
+                    </q-item>
+
+
+
+
                     <q-separator spaced ></q-separator>
             <q-item-label header>Operatiuni</q-item-label>
                     <q-item

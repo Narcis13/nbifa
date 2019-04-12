@@ -1,7 +1,12 @@
 <template>
     <q-page padding>
-        <div class="q-pa-md">
-            <h1>Plan de conturi</h1>
+        <div class="q-pa-md q-gutter-sm">
+            <q-tree
+                    :nodes="conturi"
+                    node-key="id"
+                    selected-color="primary"
+                    :selected.sync="selected"
+            />
         </div>
     </q-page>
 </template>     
@@ -14,7 +19,8 @@ import axios from 'axios';
 export default {
     data(){
         return {
-            conturi:[]
+            conturi:[],
+            selected:''
         }
 
     },

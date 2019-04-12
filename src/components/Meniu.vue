@@ -31,6 +31,22 @@
             
                     <q-item-section>Gestiuni</q-item-section>
                     </q-item>
+
+                    <q-item
+                        clickable
+                        v-if="isAdmin"
+                        v-ripple
+                        :active="link === 'conturi'"
+                        @click="clickConturi"
+                        active-class="my-menu-link"
+                    >
+                    <q-item-section avatar>
+                        <q-icon name="send" ></q-icon>
+                    </q-item-section>
+            
+                    <q-item-section>Plan Conturi</q-item-section>
+                    </q-item>
+
             
                     <q-item
                     clickable
@@ -139,6 +155,10 @@ export default {
       clickGestiuni(e){
             this.link='outbox';
           this.$router.push('/gestiuni');
+      },
+      clickConturi(e){
+            this.link='conturi';
+            this.$router.push('/conturi');
       },
       clickCategorii(e){
             this.link='trash';

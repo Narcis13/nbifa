@@ -8,9 +8,9 @@ module.exports.toate = (req, res, next) => {
     console.log('sunt in controllerul cont actiunea toate....')
      var toate=[],nivel1=[],nivel2=[],nivel3=[];
      rows.map((item)=>{
-         if (item.nivel==0) nivel1.push({id:item.id,cont:item.cont,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[]})
-         if (item.nivel==1) nivel2.push({id:item.id,cont:item.cont,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[]})
-         if (item.nivel==2) nivel3.push({id:item.id,cont:item.cont,label:item.cont+" "+item.denumire,sintetic:item.sintetic})
+         if (item.nivel==0) nivel1.push({id:item.id,cont:item.cont,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:false})
+         if (item.nivel==1) nivel2.push({id:item.id,cont:item.cont,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:false})
+         if (item.nivel==2) nivel3.push({id:item.id,cont:item.cont,label:item.cont+" "+item.denumire,sintetic:item.sintetic,isLeaf:true})
      })
 
      nivel3.map((item)=>{

@@ -16,7 +16,22 @@
                     />
              </template>
              <template v-slot:after>
-                   <h3 v-if="eFrunza">{{selected}}</h3>
+                 <div class="q-pa-md q-gutter-sm">
+                   <h5 v-if="eFrunza">Cont sintetic: {{nodSelectat.label}}</h5>
+                   <q-input v-if="eFrunza" standout v-model="analitic"  :prefix="nodSelectat.cont" >
+                        <template v-slot:prepend>
+                            <q-icon name="mail" ></q-icon>
+                        </template>
+                    </q-input>
+                    <q-input
+                            v-model="explicatii"
+                            v-if="eFrunza"
+                            label="Explicatii"
+                            filled
+                            type="textarea"
+                    />
+                    <q-btn v-if="eFrunza" outline rounded  color="primary"  label="Adauga analitic" @click="adaugAnalitic" ></q-btn>
+                 </div>
              </template>
            </q-splitter>
 
@@ -33,6 +48,8 @@ export default {
     data(){
         return {
             conturi:[],
+            analitic:"",
+            explicatii:"",
             selected:null,
             nodSelectat:null,
             splitterModel:50
@@ -54,13 +71,32 @@ export default {
     methods:{
 
         getSelectedNode(target){
+            this.analitic="";
+            this.explicatii="";
             console.log('Element selectat', target,this.$refs.tree.getNodeByKey(target))
             this.nodSelectat= this.$refs.tree.getNodeByKey(target)
+        },
+        adaugAnalitic(){
+
         }
     },
     computed:{
         eFrunza(){
-            return this.nodSelectat&&!this.nodSelectat.children
+            if(this.nodSelectat){
+
+                if(this.nodSelectat.children){
+
+                        if(this.nodSelectat.children.length==0)
+                          return true
+                        else
+                          return false  
+                }
+                else return true;
+
+            }
+            else
+            return false;
+           // return this.nodSelectat&&(this.nodSelectat.children&&(this.nodSelectat.children.length==0))||this.nodSelectat.isLeaf
         }
 
     }

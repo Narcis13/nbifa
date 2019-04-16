@@ -77,7 +77,60 @@ export default {
             this.nodSelectat= this.$refs.tree.getNodeByKey(target)
         },
         adaugAnalitic(){
+            if(this.explicatii==""|| this.analitic==""){
+               this.$q.notify({
+                    color: 'secondary',
+                    icon: 'delete',
+                    position:'top',
+                    message: `Nu sunt acceptate cimpuri vide!`
+                  })
+            }
+            else{
+                //aici cod pentru introducerea efectiva
+                          const token=this.$store.getters.token;
+                          var that = this;
 
+                        axios.post(process.env.host+'conturi/analiticnou',{
+                        "cont":this.analitic,
+                        "idsintetic":this.nodSelectat.id,
+                        "explicatii":this.explicatii,
+
+
+                        "stare":"activ"
+                    },{headers:{"Authorization" : `Bearer ${token}`}}).then(
+                            res => {
+                            console.log('raspuns insert analitic',res);
+                                this.$q.notify({
+                                message:`Cont analitic adaugat cu succes!`,
+                                timeout:1500,
+                                position:'top',
+                                color:'positive'
+                    });
+                            //prelucrari view client side
+                            if (this.nodSelectat.children){
+                            this.nodSelectat.children.push({id:res.data.id,cont:this.analitic,sintetic:this.nodSelectat.cont,isLeaf:false,label:this.nodSelectat.cont+this.analitic+" "+this.explicatii})
+                            }
+                            else
+                            {
+                                this.nodSelectat['children']=[];
+                                 this.nodSelectat.children.push({id:res.data.id,cont:this.analitic,sintetic:this.nodSelectat.cont,isLeaf:false,label:this.nodSelectat.cont+this.analitic+" "+this.explicatii})
+                            }
+                            this.nodSelectat=null;
+
+
+                            }
+                    ).catch(err=>{
+                    console.log('Eroare.............',err.response.data.message)
+                    this.$q.notify({
+                                    color: 'negative',
+                                    timeout:1500,
+                                    position:'top',
+                                    icon: 'delete',
+                                    message: `ATENTIE! ${err.response.data.message}`
+                                })
+                    });
+
+            }
         }
     },
     computed:{

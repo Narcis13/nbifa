@@ -30,3 +30,29 @@ module.exports.toate = (req, res, next) => {
      });
     }).catch(err =>{})
 }
+
+module.exports.analiticnou = (req,res,next) =>{
+
+  console.log('sunt in controllerul conturi  actiunea analitic nou')
+
+
+
+
+        knex('analitice').insert({
+          cont:req.body.cont,
+          idsintetic:req.body.idsintetic,
+          explicatii:req.body.explicatii,
+          created_at:new Date().toISOString(),
+          updated_at:new Date().toISOString(),
+          stare:req.body.stare
+          
+      }).then((d)=>{
+        console.log('analitic adaugat ',d)
+        return res.status(200).json({
+          message: "Analitic adaugat!",
+          id:d[0]
+        })
+      }).catch(err =>{})
+                                                
+
+}

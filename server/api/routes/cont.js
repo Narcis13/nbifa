@@ -6,7 +6,7 @@ const ContController =require('../controllers/cont');
 
 //router.post("/signup", UserController.user_signup);
 
-//router.post("/gestiunenoua", GestController.gestiunenoua);
+router.post("/analiticnou", ContController.analiticnou);
 
 //router.delete("/:idgest", /*checkaut,*/ GestController.sterg_gestiune);
 

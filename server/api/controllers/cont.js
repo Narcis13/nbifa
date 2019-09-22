@@ -31,6 +31,20 @@ module.exports.toate = (req, res, next) => {
     }).catch(err =>{})
 }
 
+module.exports.toatetoate = (req, res, next) => {
+    
+
+  knex.select(['conturi.id','conturi.denumire','conturi.sintetic',{analitic:'analitice.cont'},'conturi.cont','analitice.explicatii']).from('conturi').leftJoin('analitice', 'conturi.id', 'analitice.idsintetic').where('conturi.id', '>', 1).orderBy('conturi.cont').then((rows)=>{
+   
+     return res.status(200).json({
+      message: "Toate CONTURILE ciu analitice",
+      conturi:rows
+    });
+   }).catch(err =>{})
+}
+
+
+
 module.exports.analiticnou = (req,res,next) =>{
 
   console.log('sunt in controllerul conturi  actiunea analitic nou')

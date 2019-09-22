@@ -13,6 +13,6 @@ router.post("/analiticnou", ContController.analiticnou);
 //router.patch("/:idgest", /*checkaut,*/ GestController.update_gestiune);
 
 router.get("/toate", /*checkaut,*/ ContController.toate); 
-
+router.get("/toatetoate", /*checkaut,*/ ContController.toatetoate); 
 
 module.exports=router;

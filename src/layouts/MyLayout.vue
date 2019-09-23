@@ -52,7 +52,7 @@
                         label="Inchide"
                         push
                         size="sm"
-                        v-close-menu
+                        v-close-popup
                       />
                     </div>
                   </div>

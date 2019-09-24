@@ -3,9 +3,10 @@
         <div class="q-pa-md q-gutter-sm">
            <q-splitter
                 v-model="splitterModel"
-       
+             style="height: 90vh;"
              >
               <template v-slot:before>
+                  
                     <q-tree
                         :nodes="conturi"
                         node-key="id"
@@ -14,6 +15,7 @@
                         selected-color="primary"
                         :selected.sync="selected"
                     />
+                   
              </template>
              <template v-slot:after>
                  <div class="q-pa-md q-gutter-sm">

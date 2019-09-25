@@ -47,7 +47,7 @@ module.exports.toatetoate = (req, res, next) => {
 
 module.exports.analiticnou = (req,res,next) =>{
 
-  console.log('sunt in controllerul conturi  actiunea analitic nou')
+  console.log('sunt in controllerul conturi  actiunea analitic nou',req.body)
 
 
 
@@ -61,11 +61,25 @@ module.exports.analiticnou = (req,res,next) =>{
           stare:req.body.stare
           
       }).then((d)=>{
-        console.log('analitic adaugat ',d)
-        return res.status(200).json({
-          message: "Analitic adaugat!",
-          id:d[0]
-        })
+        
+            knex('conturi').insert({
+              cont:req.body.contcomplet,
+              tip:"A",
+              denumire:req.body.explicatii,
+              created_at:new Date().toISOString(),
+              updated_at:new Date().toISOString(),
+              sintetic:req.body.contsintetic,
+              nivel:3
+              
+             }).then((d)=>{
+                console.log('analitic adaugat ',d)
+                return res.status(200).json({
+                  message: "Analitic adaugat!",
+                  id:d[0]
+                }).catch(err =>{})
+            }).catch(err =>{})
+       
+  
       }).catch(err =>{})
                                                 
 

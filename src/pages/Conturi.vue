@@ -108,6 +108,8 @@ export default {
                         "cont":this.analitic,
                         "idsintetic":this.nodSelectat.id,
                         "explicatii":this.explicatii,
+                        "contsintetic":this.nodSelectat.cont,
+                        "contcomplet":this.nodSelectat.cont+this.analitic,
 
 
                         "stare":"activ"

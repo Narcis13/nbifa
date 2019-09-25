@@ -110,6 +110,7 @@ export default {
                         "explicatii":this.explicatii,
                         "contsintetic":this.nodSelectat.cont,
                         "contcomplet":this.nodSelectat.cont+this.analitic,
+                        "nivel":this.nodSelectat.nivel+1,
 
 
                         "stare":"activ"
@@ -151,16 +152,24 @@ export default {
     },
     computed:{
         eFrunza(){
+            let contineFrunze=false;
             if(this.nodSelectat){
 
                 if(this.nodSelectat.children){
-
-                        if(this.nodSelectat.children.length==0)
+                        this.nodSelectat.children.map((item)=>{
+                            if(!item.children) contineFrunze=true;
+                        })
+                        if(this.nodSelectat.children.length==0||contineFrunze)
                           return true
                         else
                           return false  
                 }
-                else return true;
+                else {
+                    if(this.nodSelectat.nivel<3)
+                    return true
+                    else
+                    return false
+                    };
 
             }
             else

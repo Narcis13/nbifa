@@ -6,12 +6,19 @@ module.exports.toate = (req, res, next) => {
 
    knex('conturi').where('id', '>', 1).orderBy('cont').then((rows)=>{
     console.log('sunt in controllerul cont actiunea toate....')
-     var toate=[],nivel1=[],nivel2=[],nivel3=[];
+     var analitice=[],nivel1=[],nivel2=[],nivel3=[];
      rows.map((item)=>{
-         if (item.nivel==0) nivel1.push({id:item.id,cont:item.cont,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:false})
-         if (item.nivel==1) nivel2.push({id:item.id,cont:item.cont,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:false})
-         if (item.nivel==2) nivel3.push({id:item.id,cont:item.cont,label:item.cont+" "+item.denumire,sintetic:item.sintetic,isLeaf:true})
+         if (item.nivel==0) nivel1.push({id:item.id,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:false})
+         if (item.nivel==1) nivel2.push({id:item.id,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:false})
+         if (item.nivel==2) nivel3.push({id:item.id,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:true})
+         if (item.nivel==3) analitice.push({id:item.id,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,isLeaf:true})
      })
+
+     analitice.map((item)=>{
+      nivel3.map(it=>{
+        if(it.cont==item.sintetic) it.children.push(item)
+      })
+    })
 
      nivel3.map((item)=>{
        nivel2.map(it=>{
@@ -61,15 +68,13 @@ module.exports.analiticnou = (req,res,next) =>{
           stare:req.body.stare
           
       }).then((d)=>{
-        
+            console.log('Ajung si aici sa adaug in conturi...',req.body.contcomplet);
             knex('conturi').insert({
               cont:req.body.contcomplet,
               tip:"A",
               denumire:req.body.explicatii,
-              created_at:new Date().toISOString(),
-              updated_at:new Date().toISOString(),
               sintetic:req.body.contsintetic,
-              nivel:3
+              nivel:req.body.nivel
               
              }).then((d)=>{
                 console.log('analitic adaugat ',d)

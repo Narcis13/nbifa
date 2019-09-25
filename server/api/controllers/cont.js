@@ -8,10 +8,10 @@ module.exports.toate = (req, res, next) => {
     console.log('sunt in controllerul cont actiunea toate....')
      var analitice=[],nivel1=[],nivel2=[],nivel3=[];
      rows.map((item)=>{
-         if (item.nivel==0) nivel1.push({id:item.id,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:false})
-         if (item.nivel==1) nivel2.push({id:item.id,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:false})
-         if (item.nivel==2) nivel3.push({id:item.id,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:true})
-         if (item.nivel==3) analitice.push({id:item.id,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,isLeaf:true})
+         if (item.nivel==0) nivel1.push({id:item.id,tip:item.tip,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:false})
+         if (item.nivel==1) nivel2.push({id:item.id,tip:item.tip,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:false})
+         if (item.nivel==2) nivel3.push({id:item.id,tip:item.tip,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:true})
+         if (item.nivel==3) analitice.push({id:item.id,tip:item.tip,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,isLeaf:true})
      })
 
      analitice.map((item)=>{
@@ -71,7 +71,7 @@ module.exports.analiticnou = (req,res,next) =>{
             console.log('Ajung si aici sa adaug in conturi...',req.body.contcomplet);
             knex('conturi').insert({
               cont:req.body.contcomplet,
-              tip:"A",
+              tip:"N",
               denumire:req.body.explicatii,
               sintetic:req.body.contsintetic,
               nivel:req.body.nivel

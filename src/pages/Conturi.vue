@@ -38,6 +38,15 @@
            </q-splitter>
 
         </div>
+           <q-btn
+                v-if="eAnalitic"
+                round
+                color="red"
+                @click="showDialog"
+                class="fixed"
+                icon="delete"
+                style="right: 48px; bottom: 64px"
+          />
     </q-page>
 </template>     
 
@@ -151,13 +160,22 @@ export default {
         }
     },
     computed:{
+        eAnalitic(){
+             if(this.nodSelectat){
+                return this.nodSelectat.tip=="N" ? true : false;
+             }
+             else
+             return false;
+        },
         eFrunza(){
             let contineFrunze=false;
             if(this.nodSelectat){
-
+               if(this.nodSelectat.tip=="N") return false
+               else{
                 if(this.nodSelectat.children){
                         this.nodSelectat.children.map((item)=>{
-                            if(!item.children) contineFrunze=true;
+                            //if(!item.children) contineFrunze=true; // sa vedem daca iese daca nu revenim
+                            if(item.tip=="N") contineFrunze=true;
                         })
                         if(this.nodSelectat.children.length==0||contineFrunze)
                           return true
@@ -170,10 +188,12 @@ export default {
                     else
                     return false
                     };
-
+               }
             }
             else
             return false;
+
+
            // return this.nodSelectat&&(this.nodSelectat.children&&(this.nodSelectat.children.length==0))||this.nodSelectat.isLeaf
         }
 

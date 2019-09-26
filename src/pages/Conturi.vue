@@ -42,7 +42,7 @@
                 v-if="eAnalitic"
                 round
                 color="red"
-                @click="showDialog"
+                @click="stergCont"
                 class="fixed"
                 icon="delete"
                 style="right: 48px; bottom: 64px"
@@ -99,6 +99,9 @@ export default {
             console.log('Element selectat', target,this.$refs.tree.getNodeByKey(target))
             this.nodSelectat= this.$refs.tree.getNodeByKey(target)
         },
+        stergCont(){
+            console.log("sterg acest cont",this.nodSelectat)
+        },
         adaugAnalitic(){
             if(this.explicatii==""|| this.analitic==""){
                this.$q.notify({
@@ -134,12 +137,12 @@ export default {
                     });
                             //prelucrari view client side
                             if (this.nodSelectat.children){
-                            this.nodSelectat.children.push({id:res.data.id,cont:this.analitic,sintetic:this.nodSelectat.cont,isLeaf:false,label:this.nodSelectat.cont+this.analitic+" "+this.explicatii})
+                            this.nodSelectat.children.push({id:res.data.id,tip:"N",cont:this.analitic,sintetic:this.nodSelectat.cont,isLeaf:false,label:this.nodSelectat.cont+this.analitic+" "+this.explicatii})
                             }
                             else
                             {
                                 this.nodSelectat['children']=[];
-                                 this.nodSelectat.children.push({id:res.data.id,cont:this.analitic,sintetic:this.nodSelectat.cont,isLeaf:false,label:this.nodSelectat.cont+this.analitic+" "+this.explicatii})
+                                 this.nodSelectat.children.push({id:res.data.id,tip:"N",cont:this.analitic,sintetic:this.nodSelectat.cont,isLeaf:false,label:this.nodSelectat.cont+this.analitic+" "+this.explicatii})
                             }
                             this.nodSelectat=null;
 

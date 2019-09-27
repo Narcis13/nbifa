@@ -8,7 +8,7 @@ const ContController =require('../controllers/cont');
 
 router.post("/analiticnou", ContController.analiticnou);
 
-//router.delete("/:idgest", /*checkaut,*/ GestController.sterg_gestiune);
+router.delete("/:idcont", /*checkaut,*/ ContController.sterg_cont);
 
 //router.patch("/:idgest", /*checkaut,*/ GestController.update_gestiune);
 

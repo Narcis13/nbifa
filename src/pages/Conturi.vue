@@ -101,6 +101,23 @@ export default {
         },
         stergCont(){
             console.log("sterg acest cont",this.nodSelectat)
+              const token=this.$store.getters.token;
+              var that = this;
+              axios.delete(process.env.host+`conturi/${this.nodSelectat.id}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+                res => {
+                        this.$q.notify({
+                            color: 'secondary',
+                            icon: 'delete',
+                            position:'top',
+                            message: `Cont analitic sters!`
+                          })
+                  /*that.gestiuni.some(function(item, index) {
+                      return ( that.gestiuni[index]["id"] === that.idGestiuneCurenta) ? !!( that.gestiuni.splice(index, 1)) : false;
+                  });       */
+                  //this.tableData=[...res.data.utilizatori]
+                }
+              ).catch(err =>{})
         },
         adaugAnalitic(){
             if(this.explicatii==""|| this.analitic==""){

@@ -51,6 +51,21 @@ module.exports.toatetoate = (req, res, next) => {
 }
 
 
+module.exports.sterg_cont = (req, res, next) => {
+    
+  console.log('sunt in controllerul conturi actiunea sterg cont')
+  knex('conturi').where({
+    id: req.params.idcont
+  }).del()
+  .then(()=>{
+    return res.status(200).json({
+      message: "Cont analitic sters!"
+    });
+  
+  }).catch(err =>{})
+
+}
+
 
 module.exports.analiticnou = (req,res,next) =>{
 

@@ -81,13 +81,13 @@ export default {
 
       //experiment
       
-      axios.get(process.env.host+'conturi/toatetoate',{headers:{"Authorization" : `Bearer ${token}`}}).then(
+     /* axios.get(process.env.host+'conturi/toatetoate',{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
         res => {
            console.log('Rspuns la toate conturile si analitice',res.data);
            
         }
-      ).catch(err =>{})
+      ).catch(err =>{})*/
 
 
     },

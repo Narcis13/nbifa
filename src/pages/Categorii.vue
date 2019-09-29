@@ -44,15 +44,11 @@
                          </q-td>
                         <q-td key="cont" :props="props">
                           {{ props.row.cont }}
-                                <q-popup-edit v-model="props.row.cont" @save="editeaza(props.row.id,'cont',props.row.cont)">
-                                  <q-input v-model="props.row.cont" dense autofocus  ></q-input>
-                                </q-popup-edit>
+
                          </q-td>
                         <q-td key="contcheltuiala" :props="props">
                           {{ props.row.contcheltuiala }}
-                                <q-popup-edit v-model="props.row.contcheltuiala" @save="editeaza(props.row.id,'contcheltuiala',props.row.contcheltuiala)">
-                                  <q-input v-model="props.row.contcheltuiala" dense autofocus  ></q-input>
-                                </q-popup-edit>
+
                         </q-td>
                         <q-td key="tipmaterial" :props="props">
                           {{ props.row.tipmaterial }}
@@ -77,8 +73,46 @@
                         </q-input>
 
                         <q-select v-model="numegestiune" :options="gestiuni" @input="gestSelectata" label="Gestiune" />
-                        <q-input v-model="cont" label="Cont (debit)"  />
-                        <q-input v-model="contcheltuiala" label="Cont cheltuiala"  />
+                          <q-select
+                            v-model="cont"
+                            use-input
+                            hide-selected
+                            fill-input
+                            input-debounce="0"
+                            :options="conturianalitice"
+                            @filter="filterFn"
+                            label="Cont analitic"
+                            hint="Tastati 2 caractere pentru a afisa lista cu optiuni"
+                            
+                          >
+                            <template v-slot:no-option>
+                              <q-item>
+                                <q-item-section class="text-grey">
+                                  Nicio optiune!
+                                </q-item-section>
+                              </q-item>
+                            </template>
+                          </q-select>
+                          <q-select
+                            v-model="contcheltuiala"
+                            use-input
+                            hide-selected
+                            fill-input
+                            input-debounce="0"
+                            :options="conturicheltuiala"
+                            @filter="filterFn"
+                            label="Cont cheltuiala"
+                            hint="Tastati 2 caractere pentru a afisa lista cu optiuni"
+                            
+                          >
+                            <template v-slot:no-option>
+                              <q-item>
+                                <q-item-section class="text-grey">
+                                  Nicio optiune!
+                                </q-item-section>
+                              </q-item>
+                            </template>
+                          </q-select>                    
 
                         <div class="q-mt-md q-gutter-sm">
                             <q-radio v-model="tipmaterial" val="MAT." label="Material" />
@@ -116,6 +150,9 @@
 
 <script>
 import axios from 'axios';
+var optiunianalitice = [
+  
+]
 
 function removeByKey(array, params){
   array.some(function(item, index) {
@@ -129,6 +166,8 @@ export default {
         return {
             categorii:[],
             gestiuni:[],
+            conturianalitice:optiunianalitice,
+            conturicheltuiala:optiunianalitice,
             opened:false,
             denumire:'',
             numegestiune:'',
@@ -176,6 +215,21 @@ export default {
         }
       ).catch(err =>{})
 
+      axios.get(process.env.host+'conturi/toatetoate',{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+        res => {
+           console.log('Rspuns la toate conturile si analitice',res.data);
+           this.conturianalitice = res.data.conturi.map((c)=>{
+             return {
+               label:c.cont+" "+c.denumire,
+               value:c.id
+             }
+           })
+           optiunianalitice=[...this.conturianalitice];
+           this.conturicheltuiala=[...this.conturianalitice]
+        }
+      ).catch(err =>{})
+
       axios.get(process.env.host+'gest/toategestiunile',{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
         res => {
@@ -213,6 +267,7 @@ export default {
                 
         },
         reset(){
+          console.log('reset',this.cont)
             this.denumire='';
             this.numegestiune='';
             this.idgestiune=0;
@@ -254,6 +309,19 @@ export default {
 
 
         },
+        filterFn (val, update, abort) {
+                if (val.length < 2) {
+                  abort()
+                  return
+                }
+
+                update(() => {
+                  console.log('filtru',optiunianalitice,this.conturianalitice)
+                  const needle = val.toLowerCase()
+                  this.conturianalitice = optiunianalitice.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
+                  this.conturicheltuiala = optiunianalitice.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
+                })
+         },
         categNoua(){
           const token=this.$store.getters.token;
           var that = this;
@@ -261,8 +329,10 @@ export default {
                 axios.post(process.env.host+'categ/categorienoua',{
                 "denumire":this.denumire,
                 "idgestiune":this.idgestiune,
-                "cont":this.cont,
-                "contcheltuiala":this.contcheltuiala,
+                "idcont":this.cont.value,
+                "cont":this.cont.label,
+                "idcontchelt":this.contcheltuiala.value,
+                "contcheltuiala":this.contcheltuiala.label,
                 "tipmaterial":this.tipmaterial,
 
                 "stare":"activ"

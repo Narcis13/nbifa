@@ -3,7 +3,7 @@
      <div  class="bg-grey-2" style=" padding: 25px">
          
       
-         <q-input label="Utilizator" v-model="numeUser" :rules="[val => !!val || 'Cimp obligatoriu!']" />
+         <q-input autofocus label="Utilizator" v-model="numeUser" :rules="[val => !!val || 'Cimp obligatoriu!']" />
         
    
         <q-input label="Parola" type="password" v-model="pass"  /> 

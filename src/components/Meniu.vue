@@ -46,7 +46,7 @@
             
                     <q-item-section>Plan Conturi</q-item-section>
                     </q-item>
-
+                    
             
                     <q-item
                     clickable
@@ -62,7 +62,20 @@
             
                     <q-item-section>Categorii repere</q-item-section>
                     </q-item>
+                    <q-item
+                        clickable
+                        v-if="isAdmin"
+                        v-ripple
+                        :active="link === 'setari'"
+                        @click="clickSetari"
+                        active-class="my-menu-link"
+                    >
+                    <q-item-section avatar>
+                        <q-icon name="settings_applications" ></q-icon>
+                    </q-item-section>
             
+                    <q-item-section>Configurare aplicatie</q-item-section>
+                    </q-item>
                     <q-separator v-if="esteLogat" spaced ></q-separator>
                    <q-item-label v-if="esteLogat" header>Nomenclatoare</q-item-label>
                     <q-item
@@ -159,6 +172,11 @@ export default {
       clickConturi(e){
             this.link='conturi';
             this.$router.push('/conturi');
+      },
+      clickSetari(e){
+            this.link='setari';
+           // this.$router.push('/conturi');
+           alert('Setari aplicatie neimenentat!')
       },
       clickCategorii(e){
             this.link='trash';

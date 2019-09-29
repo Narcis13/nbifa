@@ -41,10 +41,10 @@ module.exports.toate = (req, res, next) => {
 module.exports.toatetoate = (req, res, next) => {
     
 
-  knex.select(['conturi.id','conturi.denumire','conturi.sintetic',{analitic:'analitice.cont'},'conturi.cont','analitice.explicatii']).from('conturi').leftJoin('analitice', 'conturi.id', 'analitice.idsintetic').where('conturi.id', '>', 1).orderBy('conturi.cont').then((rows)=>{
+  knex('conturi').where('tip', '=', 'N').orderBy('cont').then((rows)=>{
    
      return res.status(200).json({
-      message: "Toate CONTURILE ciu analitice",
+      message: "Toate CONTURILE nou create",
       conturi:rows
     });
    }).catch(err =>{})

@@ -77,6 +77,8 @@ module.exports.categorienoua = (req,res,next) =>{
           knex('categorii').insert({
             denumire:req.body.denumire,
             idgestiune:req.body.idgestiune,
+            idcont:req.body.idcont,
+            idcontchelt:req.body.idcontchelt,
             cont:req.body.cont,
             contcheltuiala:req.body.contcheltuiala,
             tipmaterial:req.body.tipmaterial,

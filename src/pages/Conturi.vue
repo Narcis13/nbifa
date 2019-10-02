@@ -54,6 +54,19 @@
 
 import axios from 'axios';
 
+function searchTree(element, matchingTitle){
+     if(element.id == matchingTitle){
+          return element;
+     }else if (element.children != null){
+          var i;
+          var result = null;
+          for(i=0; result == null && i < element.children.length; i++){
+               result = searchTree(element.children[i], matchingTitle);
+          }
+          return result;
+     }
+     return null;
+}
 
 export default {
     data(){
@@ -112,12 +125,25 @@ export default {
                             position:'top',
                             message: `Cont analitic sters!`
                           })
-                  /*that.gestiuni.some(function(item, index) {
-                      return ( that.gestiuni[index]["id"] === that.idGestiuneCurenta) ? !!( that.gestiuni.splice(index, 1)) : false;
-                  });       */
-                  //this.tableData=[...res.data.utilizatori]
-                }
+                          
+                            var parinte=null;
+                            var id=this.nodSelectat.parentID
+                            this.conturi.map((c)=>{
+                            let p=searchTree(c, id);
+                            if(p!==null) parinte=p;
+                            })
+
+                            for(var i = 0; i < parinte.children.length; i++) {
+                                if(parinte.children[i].id == this.nodSelectat.id) {
+                                    parinte.children.splice(i, 1);
+                                    break;
+                                }
+                            }
+                            
+                                }
               ).catch(err =>{})
+
+          
         },
         adaugAnalitic(){
             if(this.explicatii==""|| this.analitic==""){

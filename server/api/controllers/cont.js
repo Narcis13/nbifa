@@ -8,27 +8,27 @@ module.exports.toate = (req, res, next) => {
     console.log('sunt in controllerul cont actiunea toate....')
      var analitice=[],nivel1=[],nivel2=[],nivel3=[];
      rows.map((item)=>{
-         if (item.nivel==0) nivel1.push({id:item.id,tip:item.tip,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:false})
-         if (item.nivel==1) nivel2.push({id:item.id,tip:item.tip,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:false})
-         if (item.nivel==2) nivel3.push({id:item.id,tip:item.tip,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:true})
-         if (item.nivel==3) analitice.push({id:item.id,tip:item.tip,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,isLeaf:true})
+         if (item.nivel==0) nivel1.push({id:item.id,parentID:0,tip:item.tip,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:false})
+         if (item.nivel==1) nivel2.push({id:item.id,parentID:0,tip:item.tip,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:false})
+         if (item.nivel==2) nivel3.push({id:item.id,parentID:0,tip:item.tip,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,children:[],isLeaf:true})
+         if (item.nivel==3) analitice.push({id:item.id,parentID:0,tip:item.tip,cont:item.cont,nivel:item.nivel,label:item.cont+" "+item.denumire,sintetic:item.sintetic,isLeaf:true})
      })
 
      analitice.map((item)=>{
       nivel3.map(it=>{
-        if(it.cont==item.sintetic) it.children.push(item)
+        if(it.cont==item.sintetic) {item.parentID=it.id; it.children.push(item);}
       })
     })
 
      nivel3.map((item)=>{
        nivel2.map(it=>{
-         if(it.cont==item.sintetic) it.children.push(item)
+         if(it.cont==item.sintetic) {item.parentID=it.id; it.children.push(item);}
        })
      })
 
      nivel2.map((item)=>{
       nivel1.map(it=>{
-        if(it.cont==item.sintetic) it.children.push(item)
+        if(it.cont==item.sintetic) {item.parentID=it.id; it.children.push(item);}
       })
     })
       return res.status(200).json({

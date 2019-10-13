@@ -6,7 +6,7 @@ const LocController =require('../controllers/loc');
 
 //router.post("/signup", UserController.user_signup);
 
-//router.post("/gestiunenoua", GestController.gestiunenoua);
+router.post("/locnou", LocController.locnou);
 
 //router.delete("/:idgest", /*checkaut,*/ GestController.sterg_gestiune);
 

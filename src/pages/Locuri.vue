@@ -21,7 +21,7 @@
     <q-btn
             round
             color="primary"
-            @click="showDialog"
+         
             class="fixed"
             icon="add"
             style="right: 48px; bottom: 64px"
@@ -62,14 +62,47 @@ export default {
   methods: {
     adLoc(){
        // alert('adaug loc')
-       let locNou={
-           id:0,
-           denumire:this.numenou,
+       const numenou=this.numenou;
+         const token=this.$store.getters.token;
+         var that = this;
+
+          axios.post(process.env.host+'locuri/locnou',{
+            "denumire":this.numenou,
+            "stare":'ACTIV',
+            "prioritate":1
+      },{headers:{"Authorization" : `Bearer ${token}`}}).then(
+            res => {
+              console.log('Am primit idul,',res.data,numenou)
+                 this.$q.notify({
+                 message:`Locul ${numenou} a fost adaugat cu succes!`,
+                 timeout:1500,
+                 position:'top',
+                 color:'positive'
+      });
+
+           let locNou={
+           id:res.data.id ,
+           denumire:numenou,
            stare:'ACTIV',
            prioritate:1
-       }
-       this.locuri.unshift(locNou);
-       this.numenou='';
+          }
+         that.locuri.unshift(locNou);
+         that.numenou='';
+
+            }
+     ).catch(err=>{
+       console.log('Eroare.............',err.response.data.message)
+       this.$q.notify({
+                    color: 'negative',
+                    timeout:1500,
+                    position:'top',
+                    icon: 'delete',
+                    message: `ATENTIE! ${err.response.data.message}`
+                  })
+     });
+
+
+
     },  
     onLeft ({ reset }) {
       this.$q.notify('Loc de dispunere sters cu succes')

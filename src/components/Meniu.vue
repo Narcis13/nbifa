@@ -82,8 +82,8 @@
                     clickable
                     v-if="esteLogat"
                     v-ripple
-                    :active="link === 'settings'"
-                    @click="link = 'settings'"
+                    :active="link === 'locuri'"
+                    @click="clickLocuri"
                     active-class="my-menu-link"
                     >
                     <q-item-section avatar>
@@ -97,8 +97,8 @@
                     clickable
                     v-ripple
                      v-if="esteLogat"
-                    :active="link === 'help'"
-                    @click="link = 'help'"
+                    :active="link === 'materiale'"
+                    @click="clickMateriale"
                     active-class="my-menu-link"
                     >
                     <q-item-section avatar>
@@ -164,6 +164,10 @@ export default {
       },
       clickIntrari(e){
           this.$router.push('/test');
+      },
+      clickLocuri(e){
+            this.link='locuri';
+            this.$router.push('/locuri');
       },
       clickGestiuni(e){
             this.link='outbox';

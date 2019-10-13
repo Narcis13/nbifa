@@ -9,7 +9,8 @@ const routes = [
       { path: '/utilizatori', component: () => import('pages/Utilizatori.vue') },
       { path: '/gestiuni', component: () => import('pages/Gestiuni.vue') },
       { path: '/categorii', component: () => import('pages/Categorii.vue') },
-      { path: '/conturi', component: () => import('pages/Conturi.vue') }
+      { path: '/conturi', component: () => import('pages/Conturi.vue') },
+      { path: '/locuri', component: () => import('pages/Locuri.vue') },
     ]
   }
 ]

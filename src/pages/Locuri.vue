@@ -3,7 +3,7 @@
      <div class="q-pa-md" style="max-width:300px">
             <q-list bordered separator>
 
-                    <q-slide-item clickable v-ripple v-for="l in locuri" :key="l.id" @left="onLeft" @right="onRight" left-color="red">
+                    <q-slide-item  v-for="l in locuri" :key="l.id" @left="onLeft(l.id,$event)" @right="onRight" left-color="red">
                         <template v-slot:left>
                             <div class="row items-center">
                                 <q-icon left name="delete" /> Sterge!
@@ -12,6 +12,9 @@
 
                         <q-item>
                           <q-item-section>{{l.denumire}}</q-item-section>
+                          <q-item-section v-if="l.nou" side >
+                                <q-badge color="orange" text-color="black" label="NOU!" />
+                          </q-item-section>
                         </q-item>
                     </q-slide-item>
 
@@ -84,6 +87,7 @@ export default {
            id:res.data.id ,
            denumire:numenou,
            stare:'ACTIV',
+           nou:true,
            prioritate:1
           }
          that.locuri.unshift(locNou);
@@ -104,9 +108,10 @@ export default {
 
 
     },  
-    onLeft ({ reset }) {
+    onLeft (k,{reset}) {
+      console.log('asta primesc la on Left',k,reset)
       this.$q.notify('Loc de dispunere sters cu succes')
-      this.finalize(reset)
+      this.finalize(reset,k)
     },
 
     onRight ({ reset }) {
@@ -114,9 +119,18 @@ export default {
       this.finalize(reset)
     },
 
-    finalize (reset) {
+    finalize (reset,id) {
+      var that=this;
+       const token=this.$store.getters.token;
       this.timer = setTimeout(() => {
         reset()
+         axios.patch(process.env.host+`locuri/${id}`,{},{headers:{"Authorization" : `Bearer ${token}`}}).then(
+                res => {
+                                     that.locuri.some(function(item, index) {
+                                            return ( that.locuri[index]["id"] === id) ? !!( that.locuri.splice(index, 1)) : false;
+                                           });   
+                   })
+
       }, 1000)
     }
   },

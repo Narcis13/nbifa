@@ -3,13 +3,34 @@ const knex =require('../../db.js');
 
 module.exports.toate_locurile = (req, res, next) => {
     console.log('sunt in controllerul locuri actiunea toate_locurile....')
-    knex('locuri').orderBy(['prioritate', { column: 'denumire', order: 'asc' }]).then((rows)=>{
+    knex('locuri').where('stare', 'ACTIV').orderBy(['prioritate', { column: 'denumire', order: 'asc' }]).then((rows)=>{
       return res.status(200).json({
        message: "Toate locurile",
        locuri:rows
      });
     }).catch(err =>{})
 }
+
+
+module.exports.update_loc = (req, res, next) => {
+  console.log('sunt in controllerul locuri actiunea UPDATE....',req.params.idloc)
+  knex('locuri').where({
+    id: req.params.idloc
+  }).update({
+
+    stare:'INACTIV'
+  })
+  .then(()=>{
+    return res.status(200).json({
+      message: "Lc de dispunere incativat!"
+    });
+  
+  }).catch(err =>{})
+};
+
+
+
+
 
 module.exports.locnou = (req,res,next) =>{
 

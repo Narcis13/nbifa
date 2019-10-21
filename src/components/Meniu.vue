@@ -169,6 +169,10 @@ export default {
             this.link='locuri';
             this.$router.push('/locuri');
       },
+      clickMateriale(e){
+            this.link='materiale';
+            this.$router.push('/materiale');
+      },
       clickGestiuni(e){
             this.link='outbox';
           this.$router.push('/gestiuni');

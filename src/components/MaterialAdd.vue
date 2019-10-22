@@ -2,10 +2,10 @@
      <q-btn icon="add_box" color="secondary" flat label="Adauga" class="q-mr-sm">
            <q-menu>
                     
-                    <div class="column no-wrap q-pa-md">
-                        <div class="text-h6 q-mb-md">Settings</div>
-                        <q-toggle v-model="mobileData" label="Use Mobile Data" />
-                        <q-toggle v-model="bluetooth" label="Bluetooth" />
+                    <div class="column no-wrap q-pa-md" style="min-width:300px">
+                        <q-input autofocus ref="edNume" v-model="nume_material" label="Denumire"  @keyup.enter="urmatorul('edUM')" />
+                        <q-input ref="edUM" v-model="um_material" label="UM" @keyup.enter="urmatorul('edPret')"  />
+                        <q-input ref="edPret" v-model.number="pret_predefinit" label="Pret predefinit" type="number"   />
                         <q-btn
                             color="primary"
                             @click="adauga"
@@ -30,12 +30,17 @@ export default {
     props: [],
     data: function () {
         return {
-           
+           nume_material:"",
+           pret_predefinit:1,
+           um_material:"buc"
         }
     },
     methods:{
         adauga(){
                this.$q.notify('Material adaugat cu succes')
+        },
+        urmatorul(el){
+         this.$refs[el].focus();
         }
     }
 }

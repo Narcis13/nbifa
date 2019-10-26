@@ -2,7 +2,7 @@
 --
 -- Host: 127.0.0.1    Database: bifa
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.19-MariaDB
+-- Server version	5.7.24
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -207,7 +207,7 @@ CREATE TABLE `locuri` (
   `prioritate` int(11) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -216,8 +216,38 @@ CREATE TABLE `locuri` (
 
 LOCK TABLES `locuri` WRITE;
 /*!40000 ALTER TABLE `locuri` DISABLE KEYS */;
-INSERT INTO `locuri` VALUES (1,'DEPOZIT','ACTIV',0);
+INSERT INTO `locuri` VALUES (1,'DEPOZIT','ACTIV',0),(2,'Chirurgie','INACTIV',1),(3,'Medicala','INACTIV',1),(4,'ENDOSCOPIE','INACTIV',1),(5,'INFORMATICA','ACTIV',1),(6,'CAZARMARE','ACTIV',1),(7,'POLICLINICA','ACTIV',1);
 /*!40000 ALTER TABLE `locuri` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `materiale`
+--
+
+DROP TABLE IF EXISTS `materiale`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `materiale` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `denumire` varchar(45) NOT NULL DEFAULT 'generic',
+  `um` varchar(15) NOT NULL DEFAULT 'buc',
+  `pretpredefinit` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `idgestiune` int(11) NOT NULL,
+  `iduser` int(11) NOT NULL,
+  `stare` varchar(15) NOT NULL DEFAULT 'activ',
+  `datacreere` datetime DEFAULT NULL,
+  `datamodificare` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `materiale`
+--
+
+LOCK TABLES `materiale` WRITE;
+/*!40000 ALTER TABLE `materiale` DISABLE KEYS */;
+/*!40000 ALTER TABLE `materiale` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -288,4 +318,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-11 23:30:07
+-- Dump completed on 2019-10-26 18:34:03

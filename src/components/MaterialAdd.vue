@@ -27,16 +27,22 @@
 
 export default {
     name:'MaterialAdd',
-    props: [],
+    props: ['data'],
     data: function () {
         return {
            nume_material:"",
            pret_predefinit:1,
-           um_material:"buc"
+           um_material:"buc",
+           materiale:this.data
         }
+    },
+    created(){
+      console.log('Componentul MaterialAdd a fost creat cu datele',this.materiale)
     },
     methods:{
         adauga(){
+            console.log('Acum am aceste materiale',this.materiale)
+            this.materiale.push({denumire:"qazwsxedcrfv"})
                this.$q.notify('Material adaugat cu succes')
         },
         urmatorul(el){

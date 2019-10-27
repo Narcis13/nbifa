@@ -1,0 +1,1 @@
+- la startul aplicatiei gestiunea curenta aferenta userulu logat este null

@@ -1,10 +1,12 @@
 export default {
     state: {
       user: null,
+      iduser:0,
       token:null,
       rol:null,
+      numereal:'',
       gestiuni:null,
-      gestiuneCurenta:null
+      gestiuneCurenta:{id:0,denumire:''}
     },
     mutations: {
       registerUserForMeetup (state, payload) {
@@ -23,15 +25,19 @@ export default {
       setUser (state, payload) {
         if(payload){
           state.user = payload.nume;
+          state.iduser=payload.iduser;
           state.token = payload.token;
           state.rol = payload.rol;
+          state.numereal=payload.nume_real;
           state.gestiuni = payload.gestiuni;
         }
         else
         {
           state.user = null;
+          state.iduser=0;
           state.token = null;
           state.rol = null;
+          state.numereal='';
           state.gestiuni =null;
         }
    
@@ -147,6 +153,9 @@ export default {
       user (state) {
         return state.user
       },
+      userid(state){
+          return state.iduser
+      },
       rol(state){
         return state.rol
       },
@@ -158,7 +167,9 @@ export default {
       },
       gestiuneCurenta(state){
         return state.gestiuneCurenta
+      },
+      numeReal(state){
+        return state.numereal
       }
-    }
   }
-  
+}

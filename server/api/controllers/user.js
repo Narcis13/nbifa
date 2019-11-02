@@ -70,7 +70,9 @@ module.exports.user_login = (req, res, next) => {
             token,
             rol:rows[0].rol,
             gestiuni:r,
-            nume: req.body.user
+            nume: req.body.user,
+            nume_real:rows[0].name,
+            iduser:rows[0].id
           })
 
       }).catch(err =>{})

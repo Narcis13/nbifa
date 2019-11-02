@@ -130,7 +130,7 @@ export default {
       if(this.$store.getters.gestiuni.length>0) {
         this.group=this.$store.getters.gestiuni[0].id
         this.gestiune = {id:this.$store.getters.gestiuni[0].id,denumire:this.$store.getters.gestiuni[0].denumire}
-        //this.$store.dispatch('schimbaGestiuneaCurenta',this.gestiune)
+        this.$store.dispatch('schimbaGestiuneaCurenta',{id:this.$store.getters.gestiuni[0].id,denumire:this.$store.getters.gestiuni[0].denumire})
       }
        return this.$store.getters.gestiuni.map( item =>({
 

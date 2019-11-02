@@ -17,7 +17,7 @@
         >
         <template v-slot:body-cell="props">
           <q-td :props="props">
-              <div style="color:blue">
+              <div v-bind:style="{color:props.row.eNou? 'blue':'black'}">
                 {{props.value}}
               </div>
 
@@ -38,8 +38,9 @@ export default {
     data(){
         return {
             columns: [
+               { name: 'id', align: 'center', label: 'id', field: 'id', sortable: true },
         {
-          name: 'name',
+          name: 'denumire',
           required: true,
           label: 'Denumire',
           align: 'left',
@@ -60,8 +61,8 @@ export default {
       filter: '',
       selected: [],
       pagination: {
-                sortBy: 'name',
-                descending: false,
+                sortBy: 'id',
+                descending: true,
                 page: 1,
                 rowsPerPage: 12
                 // rowsNumber: xx if getting data from a server
@@ -69,7 +70,7 @@ export default {
         }
     },
     created(){
-           console.log('Gestiune curenta',this.$store.getters.gestiuneCurenta)
+           console.log('Gestiune curenta',this.$store.getters.gestiuneCurenta,'id user logat',this.$store.getters.userid)
            const token=this.$store.getters.token;
 
         axios.get(process.env.host+'materiale/toate',{headers:{"Authorization" : `Bearer ${token}`}}).then(

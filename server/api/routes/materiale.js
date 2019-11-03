@@ -4,7 +4,7 @@ const checkaut =require('../middleware/check-aut');
 const MaterialeController =require('../controllers/materiale');
 //const checkAuth = require('../middleware/check-auth');
 
-//router.post("/signup", UserController.user_signup);
+router.post("/materialnou", MaterialeController.materialnou);
 
 //router.post("/login", UserController.user_login);
 

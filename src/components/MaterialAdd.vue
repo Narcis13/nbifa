@@ -25,7 +25,7 @@
 </template>
 
 <script>
-
+import axios from 'axios'
 export default {
     name:'MaterialAdd',
     props: ['data'],
@@ -42,15 +42,46 @@ export default {
     },
     methods:{
         adauga(){
-            console.log('Acum am aceste materiale',this.nume_material)
+          const token=this.$store.getters.token;
+          var that = this;
+
+                axios.post(process.env.host+'materiale/materialnou',{
+                "denumire":this.nume_material,
+                "um":this.um_material,
+                "pretpredefinit":this.pret_predefinit,
+                "idgestiune":this.$store.getters.gestiuneCurenta.id,
+                "iduser":this.$store.getters.userid,
+                "stare":"activ"
+              },{headers:{"Authorization" : `Bearer ${token}`}}).then(
+                    res => {
+                      console.log('raspuns insert material',res);
+                        this.$q.notify({
+                        message:`Reperul ${that.nume_material} a fost adaugat cu succes!`,
+                        timeout:1500,
+                        position:'top',
+                        color:'positive'
+              });
+
+                that.data.unshift({id:res.data.id,denumire:this.nume_material,um:this.um_material,pretpredefinit:this.pret_predefinit,user:this.$store.getters.numeReal,gestiune:this.$store.getters.gestiuneCurenta.denumire,datacreere:new Date().toISOString(),datamodificare:new Date().toISOString(),eNou:true})
+                that.nume_material="";
+                that.pret_predefinit=1
+                that.um_material="buc";
+                    }
+            ).catch(err=>{
+              console.log('Eroare.............',err.response.data.message)
+              this.$q.notify({
+                            color: 'negative',
+                            timeout:1500,
+                            position:'top',
+                            icon: 'delete',
+                            message: `ATENTIE! ${err.response.data.message}`
+                          })
+            });
 
           // this.materiale.push({denumire:this.nume_material,um:this.um_material,pretpredefinit:this.pret_predefinit})
-            this.data.unshift({id:999,denumire:this.nume_material,um:this.um_material,pretpredefinit:this.pret_predefinit,user:this.$store.getters.numeReal,gestiune:this.$store.getters.gestiuneCurenta.denumire,eNou:true})
-            this.nume_material="";
-            this.pret_predefinit=1
-            this.um_material="buc";
 
-               this.$q.notify({color:'secondary',message:'Material adaugat cu succes',position:'top'})
+
+             //  this.$q.notify({color:'secondary',message:'Material adaugat cu succes',position:'top'})
         },
         urmatorul(el){
          this.$refs[el].focus();

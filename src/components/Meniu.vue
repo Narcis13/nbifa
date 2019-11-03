@@ -139,7 +139,7 @@
                         <q-icon name="help" ></q-icon>
                     </q-item-section>
             
-                    <q-item-section>Help</q-item-section>
+                    <q-item-section>Rapoarte</q-item-section>
                     </q-item>
       </q-list>
 </template>

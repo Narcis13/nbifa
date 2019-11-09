@@ -10,7 +10,7 @@ module.exports.toate = (req, res, next) => {
  knex.column(['materiale.id','materiale.denumire','materiale.um','materiale.pretpredefinit',{gestiune:'gestiuni.denumire'},{user:'utilizatori.name'},'materiale.datacreere','materiale.datamodificare'])
  .select().from('materiale')
  .innerJoin('gestiuni','materiale.idgestiune','gestiuni.id')
- .innerJoin('utilizatori','utilizatori.id','materiale.iduser').then((rows)=>{
+ .innerJoin('utilizatori','utilizatori.id','materiale.iduser').where('materiale.stare', 'ACTIV').then((rows)=>{
    return res.status(200).json({
     message: "Toate materialele",
     materiale:rows
@@ -46,4 +46,20 @@ module.exports.materialnou = (req,res,next) =>{
     id:d[0]
   })
 }).catch(err =>{ console.log(err)})
+};
+
+module.exports.sterg_material = (req, res, next) => {
+  console.log('sunt in controllerul materiale actiunea STERGERE....',req.params.id)
+  knex('materiale').where({
+    id: req.params.id
+  }).update({
+
+    stare:'INACTIV'
+  })
+  .then(()=>{
+    return res.status(200).json({
+      message: "Reper inactivat!"
+    });
+  
+  }).catch(err =>{})
 };

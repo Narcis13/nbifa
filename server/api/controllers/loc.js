@@ -22,7 +22,7 @@ module.exports.update_loc = (req, res, next) => {
   })
   .then(()=>{
     return res.status(200).json({
-      message: "Lc de dispunere incativat!"
+      message: "Loc de dispunere inactivat!"
     });
   
   }).catch(err =>{})

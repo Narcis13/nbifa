@@ -23,6 +23,12 @@
 
           </q-td>
         </template>
+                <template slot="top-selection" slot-scope="props">
+        
+        
+                    <div class="col" />
+                    <q-btn color="negative" flat round icon="delete" @click="deleteRow" />
+                </template>
         </q-table>
         </div>
     </q-page>    
@@ -80,6 +86,26 @@ export default {
              this.materiale=[...res.data.materiale]
           }
         ).catch(err =>{})
+    },
+    methods:{
+      deleteRow(){
+        console.log('Sterg material',this.selected)
+        var that=this;
+       const token=this.$store.getters.token;
+       let id= this.selected[0].id;
+                axios.patch(process.env.host+`materiale/sterg/${id}`,{},{headers:{"Authorization" : `Bearer ${token}`}}).then(
+                res => {
+                         this.$q.notify({
+                          message:`Materialul selectat ${that.selected[0].denumire} a fost invalidat!`,
+                          timeout:1500,
+                          position:'top',
+                          color:'positive'
+                          })
+                                     that.materiale.some(function(item, index) {
+                                            return ( that.materiale[index]["id"] === id) ? !!( that.materiale.splice(index, 1)) : false;
+                                           });   
+                   })
+      }
     }
 }
 </script>

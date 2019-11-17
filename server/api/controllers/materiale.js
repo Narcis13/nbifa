@@ -63,3 +63,23 @@ module.exports.sterg_material = (req, res, next) => {
   
   }).catch(err =>{})
 };
+
+module.exports.update = (req, res, next) => {
+  const cimp=Object.keys(req.body)[0];
+  const valoare = req.body[cimp];
+  console.log('sunt in controllerul materiale actiunea UPDATE BUCATELE....',req.params.idmaterial,cimp,valoare)
+  knex('materiale').where({
+    id: req.params.idmaterial
+  }).update({
+         
+    datamodificare:knex.fn.now(),
+    [cimp]:valoare
+  })
+  .then(()=>{
+    return res.status(200).json({
+      message: "Actualizare reusita"
+    });
+  
+  }).catch(err =>{})
+
+};

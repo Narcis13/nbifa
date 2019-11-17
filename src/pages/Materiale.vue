@@ -29,6 +29,53 @@
                     <div class="col" />
                     <q-btn color="negative" flat round icon="delete" @click="deleteRow" />
                 </template>
+
+
+                 <template v-slot:body="props">
+                      <q-tr :props="props">
+                       <q-td auto-width>
+                          <q-checkbox  v-model="props.selected" ></q-checkbox>
+                        </q-td>
+                        <q-td key="id" :props="props">{{ props.row.id }}</q-td>
+                        <q-td key="denumire" :props="props">
+                          {{ props.row.denumire }}
+                                <q-popup-edit buttons v-model="props.row.denumire" @save="editeaza(props.row.id,'denumire',props.row.denumire)">
+                                  <q-input v-model="props.row.denumire" dense autofocus  ></q-input>
+                                </q-popup-edit>
+                        </q-td>
+                        <q-td key="um" :props="props">
+                          {{ props.row.um }}
+                               <q-popup-edit buttons v-model="props.row.um" @save="editeaza(props.row.id,'um',props.row.um)">
+                                     <q-input v-model="props.row.um" dense autofocus  ></q-input>
+                                </q-popup-edit>
+                         </q-td>
+                         <q-td key="pretpredefinit" :props="props">
+                          {{ props.row.pretpredefinit }}
+                               <q-popup-edit buttons v-model="props.row.pretpredefinit" @save="editeaza(props.row.id,'pretpredefinit',props.row.pretpredefinit)">
+                                     <q-input v-model="props.row.pretpredefinit" dense autofocus  ></q-input>
+                                </q-popup-edit>
+                         </q-td>
+
+                        <q-td key="gestiune" :props="props">
+                          {{ props.row.gestiune }}
+
+                         </q-td>
+                        <q-td key="user" :props="props">
+                          {{ props.row.user }}
+
+                        </q-td>
+                        <q-td key="datacreere" :props="props">
+                          {{ props.row.datacreere }}
+
+                         </q-td>
+                        <q-td key="datamodificare" :props="props">
+                          {{ props.row.datamodificare }}
+
+                        </q-td>
+
+                      </q-tr>
+                  </template>
+
         </q-table>
         </div>
     </q-page>    
@@ -88,6 +135,24 @@ export default {
         ).catch(err =>{})
     },
     methods:{
+            editeaza(id,cheie,valoarenoua){
+
+              console.log('editez',id,cheie,valoarenoua)
+              const token=this.$store.getters.token;
+               var that = this;
+              axios.put(process.env.host+`materiale/${id}`,{[cheie]:valoarenoua}
+                 ,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+                      res => {
+
+                            // aici merge sa actualizez si in grid data modificarii
+                            that.materiale.map((item,index)=>{
+                              if (item.id==id){
+                                that.materiale[index].datamodificare=(new Date()).toLocaleDateString('ro-RO');
+                              }
+                            })
+                })
+                
+        },
       deleteRow(){
         console.log('Sterg material',this.selected)
         var that=this;

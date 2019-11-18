@@ -15,21 +15,16 @@
                     :pagination.sync="pagination"
                     rows-per-page-label="Inregistrari pe pagina"
         >
-        <template v-slot:body-cell="props">
-          <q-td :props="props">
-              <div v-bind:style="{color:props.row.eNou? 'blue':'black'}">
-                {{props.value}}
-              </div>
+           <template v-slot:top>
 
-          </q-td>
-        </template>
-                <template slot="top-selection" slot-scope="props">
-        
-        
-                    <div class="col" />
-                    <q-btn color="negative" flat round icon="delete" @click="deleteRow" />
-                </template>
-
+                    <q-btn class="on-right"  outline rounded  color="primary"  label="Sterge" @click="deleteRow" ></q-btn>
+                    <q-space ></q-space>
+                    <q-input borderless dense debounce="300" color="primary" v-model="filter" placeholder="Cauta">
+                        <template v-slot:append>
+                        <q-icon name="search" ></q-icon>
+                        </template>
+                    </q-input>
+           </template>
 
                  <template v-slot:body="props">
                       <q-tr :props="props">
@@ -74,6 +69,15 @@
                         </q-td>
 
                       </q-tr>
+                  </template>
+
+                  <template v-slot:body-cell="props">
+                     <q-td :props="props">
+                        <div v-bind:style="{color:props.row.eNou? 'blue':'black'}">
+                             {{props.value}}
+                        </div>
+
+                    </q-td>
                   </template>
 
         </q-table>

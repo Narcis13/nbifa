@@ -10,7 +10,7 @@ module.exports.toate = (req, res, next) => {
  knex.column(['materiale.id','materiale.denumire','materiale.um','materiale.pretpredefinit',{gestiune:'gestiuni.denumire'},{user:'utilizatori.name'},'materiale.datacreere','materiale.datamodificare'])
  .select().from('materiale')
  .innerJoin('gestiuni','materiale.idgestiune','gestiuni.id')
- .innerJoin('utilizatori','utilizatori.id','materiale.iduser').where('materiale.stare', 'ACTIV').then((rows)=>{
+ .innerJoin('utilizatori','utilizatori.id','materiale.iduser').where({'materiale.stare': 'ACTIV','materiale.idgestiune':req.params.idgest}).then((rows)=>{
    return res.status(200).json({
     message: "Toate materialele",
     materiale:rows

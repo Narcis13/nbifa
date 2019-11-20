@@ -11,7 +11,7 @@ router.post("/materialnou", MaterialeController.materialnou);
 //router.delete("/:userId", /*checkaut,*/ UserController.user_delete);
 router.put("/:idmaterial", /*checkaut,*/ MaterialeController.update);
 router.patch("/sterg/:id", /*checkaut,*/ MaterialeController.sterg_material);
-router.get("/toate", /*checkaut,*/ MaterialeController.toate); 
+router.get("/toate/:idgest", /*checkaut,*/ MaterialeController.toate); 
 
 
 module.exports=router;

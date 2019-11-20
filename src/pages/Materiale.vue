@@ -130,7 +130,7 @@ export default {
            console.log('Gestiune curenta',this.$store.getters.gestiuneCurenta,'id user logat',this.$store.getters.userid)
            const token=this.$store.getters.token;
 
-        axios.get(process.env.host+'materiale/toate',{headers:{"Authorization" : `Bearer ${token}`}}).then(
+        axios.get(process.env.host+`materiale/toate/${this.$store.getters.gestiuneCurenta.id}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
           res => {
              console.log('Rspuns la toate materialele',res.data);

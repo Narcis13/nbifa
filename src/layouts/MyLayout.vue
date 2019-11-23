@@ -131,6 +131,7 @@ export default {
         this.group=this.$store.getters.gestiuni[0].id
         this.gestiune = {id:this.$store.getters.gestiuni[0].id,denumire:this.$store.getters.gestiuni[0].denumire}
         this.$store.dispatch('schimbaGestiuneaCurenta',{id:this.$store.getters.gestiuni[0].id,denumire:this.$store.getters.gestiuni[0].denumire})
+        this.$emit('schimbgestiunea',this.$store.getters.gestiuni[0].id);
       }
        return this.$store.getters.gestiuni.map( item =>({
 

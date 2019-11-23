@@ -14,6 +14,7 @@
                     :selected.sync="selected"
                     :pagination.sync="pagination"
                     rows-per-page-label="Inregistrari pe pagina"
+                    @schimbagestiunea="alert('schimb gestiunea')"
         >
            <template v-slot:top>
 

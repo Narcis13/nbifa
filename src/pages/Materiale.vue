@@ -14,7 +14,7 @@
                     :selected.sync="selected"
                     :pagination.sync="pagination"
                     rows-per-page-label="Inregistrari pe pagina"
-                    @schimbagestiunea="alert('schimb gestiunea')"
+                    
         >
            <template v-slot:top>
 
@@ -129,7 +129,8 @@ export default {
     },
     created(){
            console.log('Gestiune curenta',this.$store.getters.gestiuneCurenta,'id user logat',this.$store.getters.userid)
-           const token=this.$store.getters.token;
+          this.$root.$on('schimbgestiunea',this.schimbaGestiunea)
+          const token=this.$store.getters.token;
 
         axios.get(process.env.host+`materiale/toate/${this.$store.getters.gestiuneCurenta.id}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
@@ -138,6 +139,9 @@ export default {
              this.materiale=[...res.data.materiale]
           }
         ).catch(err =>{})
+    },
+    beforeDestroy(){
+         this.$root.$off('schimbgestiunea',this.schimbaGestiunea)
     },
     methods:{
             editeaza(id,cheie,valoarenoua){
@@ -157,6 +161,18 @@ export default {
                             })
                 })
                 
+        },
+        schimbaGestiunea(id){
+          // alert('schimb gestiunea '+id)
+                    const token=this.$store.getters.token;
+
+            axios.get(process.env.host+`materiale/toate/${id}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+              res => {
+                console.log('Rspuns la toate materialele',res.data);
+                this.materiale=[...res.data.materiale]
+              }
+            ).catch(err =>{})
         },
       deleteRow(){
         console.log('Sterg material',this.selected)

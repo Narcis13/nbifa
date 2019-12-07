@@ -34,7 +34,10 @@
                         </q-td>
                         <q-td key="id" :props="props">{{ props.row.id }}</q-td>
                         <q-td key="denumire" :props="props">
-                          {{ props.row.denumire }}
+                               <div v-bind:style="{color:props.row.eNou? 'blue':'black'}">
+                                       {{ props.row.denumire }}
+                              </div>
+                       
                                 <q-popup-edit buttons v-model="props.row.denumire" @save="editeaza(props.row.id,'denumire',props.row.denumire)">
                                   <q-input v-model="props.row.denumire" dense autofocus  ></q-input>
                                 </q-popup-edit>
@@ -74,9 +77,7 @@
 
                   <template v-slot:body-cell="props">
                      <q-td :props="props">
-                        <div v-bind:style="{color:props.row.eNou? 'blue':'black'}">
-                             {{props.value}}
-                        </div>
+
 
                     </q-td>
                   </template>

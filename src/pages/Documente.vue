@@ -14,7 +14,7 @@
     </div>
     <div class="row">
         <div v-if="vreauLista" class="col-3 q-pa-sm" >
-             <q-scroll-area style="height: 80vh; ">
+             <q-scroll-area style="height: 85vh; ">
                 <q-list v-for="d in data" :key="d.name" bordered separator >
 
 
@@ -29,10 +29,10 @@
              </q-scroll-area>
         </div>
         <div v-if="vreauFormular" id="formular" class="col-9 q-pa-sm">
-            <div class="row  justify-around items-center">
+            <div class="row justify-around items-start content-start">
                 <q-select outlined v-model="model" :options="options" label="Tip document" style="min-width:200px;"/>
 
-                <q-input outlined v-model="date" mask="date" :rules="['date']">
+                <q-input outlined v-model="date" mask="date" :rules="['date']" >
                     <template v-slot:append>
                         <q-icon name="event" class="cursor-pointer">
                         <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
@@ -42,7 +42,23 @@
                     </template>
                 </q-input>
 
-                <q-input v-model="text" label="Nr. document" />
+                <q-input outlined v-model="text" label="Nr. document" />
+            </div>
+
+            <div class="row ">
+
+              <div class="col flex flex-center q-gutter-sm">
+                  <q-radio v-model="tipmaterial" val="mat" label="Materiale" />
+                  <q-radio v-model="tipmaterial" val="ob" label="Obiecte inventar" />
+                  <q-radio v-model="tipmaterial" val="mf" label="Mijloace fixe" />
+              </div>
+                <q-separator vertical inset />
+              <div class="col flex flex-center q-gutter-sm">
+                <q-radio v-model="tipoperatiune" val="in" label="Intrare" />
+                <q-radio v-model="tipoperatiune" val="out" label="Iesire" />
+                <q-radio v-model="tipoperatiune" val="trans" label="Transfer" />
+              </div>
+
             </div>
 
                     <q-btn  icon="create" @click="clickDocumente" color="secondary" flat label="Documente..." class="q-mb-md" />
@@ -57,6 +73,8 @@
 export default {
   data () {
     return {
+        tipmaterial:'mat',
+        tipoperatiune:'in',
         vreauGrid:true,
         vreauLista:false,
         vreauFormular:false,

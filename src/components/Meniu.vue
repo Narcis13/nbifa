@@ -117,8 +117,8 @@
                     clickable
                     v-if="esteLogat"
                     v-ripple
-                    :active="link === 'settings'"
-                    @click="link = 'settings'"
+                    :active="link === 'operatiunenoua'"
+                    @click="clickDocNou"
                     active-class="my-menu-link"
                     >
                     <q-item-section avatar>
@@ -168,6 +168,10 @@ export default {
       clickLocuri(e){
             this.link='locuri';
             this.$router.push('/locuri');
+      },
+      clickDocNou(e){
+           this.link='operatiunenoua';
+            this.$router.push('/documente');
       },
       clickMateriale(e){
             this.link='materiale';

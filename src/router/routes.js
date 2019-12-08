@@ -11,7 +11,8 @@ const routes = [
       { path: '/categorii', component: () => import('pages/Categorii.vue') },
       { path: '/conturi', component: () => import('pages/Conturi.vue') },
       { path: '/locuri', component: () => import('pages/Locuri.vue') },
-      { path: '/materiale', component: () => import('pages/Materiale.vue') }
+      { path: '/materiale', component: () => import('pages/Materiale.vue') },
+      { path: '/documente', component: () => import('pages/Documente.vue') }
     ]
   }
 ]

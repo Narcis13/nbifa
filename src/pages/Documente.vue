@@ -61,6 +61,148 @@
 
             </div>
 
+            <div class="row">
+              <div class="col-5 column flex flex-center q-gutter-sm">
+                  <div class="text-h6">Sursa</div>
+
+                  <q-select
+                      filled
+                      v-model="model"
+                      use-input
+                      hide-selected
+                      fill-input
+                      input-debounce="0"
+                      label="Loc dispunere"
+                      :options="options"
+                      @filter="filterFn"
+                      hint="Locatia din care iese reperul"
+                      style="width: 250px; padding-bottom: 32px"
+                    >
+                      <template v-slot:no-option>
+                        <q-item>
+                          <q-item-section class="text-grey">
+                            No results
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                  </q-select>
+
+                  <q-select
+                      filled
+                      v-model="model"
+                      use-input
+                      hide-selected
+                      fill-input
+                      input-debounce="0"
+                      label="Categorie reper"
+                      :options="options"
+                      @filter="filterFn"
+                      hint="Categorie"
+                      style="width: 250px; padding-bottom: 32px"
+                    >
+                      <template v-slot:no-option>
+                        <q-item>
+                          <q-item-section class="text-grey">
+                            No results
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                  </q-select>
+              </div>
+
+              <div class="col-2 flex flex-center q-gutter-sm">
+
+              </div>
+
+              <div class="col-5 column flex flex-center q-gutter-sm">
+                 <div class="text-h6">Destinatie</div>
+
+                  <q-select
+                      filled
+                      v-model="model"
+                      use-input
+                      hide-selected
+                      fill-input
+                      input-debounce="0"
+                      label="Loc dispunere"
+                      :options="options"
+                      @filter="filterFn"
+                      hint="Locatia din care iese reperul"
+                      style="width: 250px; padding-bottom: 32px"
+                    >
+                      <template v-slot:no-option>
+                        <q-item>
+                          <q-item-section class="text-grey">
+                            No results
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                  </q-select>
+
+                  <q-select
+                      filled
+                      v-model="model"
+                      use-input
+                      hide-selected
+                      fill-input
+                      input-debounce="0"
+                      label="Categorie reper"
+                      :options="options"
+                      @filter="filterFn"
+                      hint="Categorie"
+                      style="width: 250px; padding-bottom: 32px"
+                    >
+                      <template v-slot:no-option>
+                        <q-item>
+                          <q-item-section class="text-grey">
+                            No results
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                  </q-select>                 
+              </div>
+            </div>
+
+            <q-splitter
+                    v-model="splitterModel"
+                    style="margin-top: 25px;" 
+                  >
+
+                    <template v-slot:before>
+                      <q-tabs
+                        v-model="tab"
+                        vertical
+                        class="text-teal"
+                      >
+                        <q-tab name="mails" icon="mail" label="Repere" />
+                        <q-tab name="alarms" icon="alarm" label="Statistici" />
+                      </q-tabs>
+                    </template>
+
+                    <template v-slot:after>
+                      <q-tab-panels
+                        v-model="tab"
+                        animated
+                        transition-prev="jump-up"
+                        transition-next="jump-up"
+                      >
+                        <q-tab-panel name="mails">
+                          <div class="text-h4 q-mb-md">Repere</div>
+                          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
+                          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
+                        </q-tab-panel>
+
+                        <q-tab-panel name="alarms">
+                          <div class="text-h4 q-mb-md">Statistici</div>
+                          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
+                          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
+                        </q-tab-panel>
+
+                      </q-tab-panels>
+                    </template>
+
+            </q-splitter>
+
                     <q-btn  icon="create" @click="clickDocumente" color="secondary" flat label="Documente..." class="q-mb-md" />
         </div>
 
@@ -70,9 +212,16 @@
 </template>
 
 <script>
+
+const stringOptions = [
+  'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
+]
+
 export default {
   data () {
     return {
+            tab: 'mails',
+        splitterModel: 20,
         tipmaterial:'mat',
         tipoperatiune:'in',
         vreauGrid:true,
@@ -222,7 +371,13 @@ export default {
           this.vreauGrid=true;
           this.vreauLista=false;
           this.vreauFormular=false;
-      }
+      },
+      filterFn (val, update, abort) {
+          update(() => {
+            const needle = val.toLowerCase()
+            this.options = stringOptions.filter(v => v.toLowerCase().indexOf(needle) > -1)
+          })
+    }
   }
 }
 </script>

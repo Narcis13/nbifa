@@ -187,9 +187,7 @@
                         transition-next="jump-up"
                       >
                         <q-tab-panel name="mails">
-                          <div class="text-h4 q-mb-md">Repere</div>
-                          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
-                          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
+                          <Repere />
                         </q-tab-panel>
 
                         <q-tab-panel name="alarms">
@@ -202,8 +200,13 @@
                     </template>
 
             </q-splitter>
+            <div class="row q-pa-md justify-center">
+              <q-btn  icon="create" @click="clickDocumente" color="secondary" flat label="Salveaza"  />
+              <q-btn  icon="create" @click="clickDocumente" color="secondary" flat label="Reset"  />
+              <q-btn  icon="create" @click="clickDocumente" color="secondary" flat label="Documente..."  />
 
-                    <q-btn  icon="create" @click="clickDocumente" color="secondary" flat label="Documente..." class="q-mb-md" />
+            </div>
+                    
         </div>
 
     </div>
@@ -212,12 +215,15 @@
 </template>
 
 <script>
-
+import Repere from '../components/Repere'
 const stringOptions = [
   'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
 ]
 
 export default {
+  components:{
+    'Repere':Repere
+  },
   data () {
     return {
             tab: 'mails',

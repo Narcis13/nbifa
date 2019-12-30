@@ -62,7 +62,7 @@
             </div>
 
             <div class="row">
-              <div class="col-5 column flex flex-center q-gutter-sm">
+              <div class="col-5 column items-end q-px-md q-gutter-sm">
                   <div class="text-h6">Sursa</div>
 
                   <q-select
@@ -75,7 +75,7 @@
                       label="Loc dispunere"
                       :options="options"
                       @filter="filterFn"
-                      hint="Locatia din care iese reperul"
+
                       style="width: 250px; padding-bottom: 32px"
                     >
                       <template v-slot:no-option>
@@ -97,8 +97,7 @@
                       label="Categorie reper"
                       :options="options"
                       @filter="filterFn"
-                      hint="Categorie"
-                      style="width: 250px; padding-bottom: 32px"
+                      style="width: 250px; "
                     >
                       <template v-slot:no-option>
                         <q-item>
@@ -108,13 +107,19 @@
                         </q-item>
                       </template>
                   </q-select>
+
+                <div class="col flex flex-center q-gutter-sm">
+                  <q-radio v-model="starematerial" val="n" label="Nou" />
+                  <q-radio v-model="starematerial" val="f" label="Folosit" />
+                  <q-radio v-model="starematerial" val="c" label="Casare" />
+                </div>
               </div>
 
               <div class="col-2 flex flex-center q-gutter-sm">
-
+                    <q-icon name="fast_forward" class="text-red" style="font-size: 12rem;" ></q-icon>
               </div>
 
-              <div class="col-5 column flex flex-center q-gutter-sm">
+              <div class="col-5 column items-start q-px-md q-gutter-sm">
                  <div class="text-h6">Destinatie</div>
 
                   <q-select
@@ -127,7 +132,7 @@
                       label="Loc dispunere"
                       :options="options"
                       @filter="filterFn"
-                      hint="Locatia din care iese reperul"
+
                       style="width: 250px; padding-bottom: 32px"
                     >
                       <template v-slot:no-option>
@@ -148,9 +153,8 @@
                       input-debounce="0"
                       label="Categorie reper"
                       :options="options"
-                      @filter="filterFn"
-                      hint="Categorie"
-                      style="width: 250px; padding-bottom: 32px"
+
+                      style="width: 250px; "
                     >
                       <template v-slot:no-option>
                         <q-item>
@@ -159,7 +163,12 @@
                           </q-item-section>
                         </q-item>
                       </template>
-                  </q-select>                 
+                  </q-select>   
+                  <div class="col flex flex-center q-gutter-sm">
+                    <q-radio v-model="starematerial" val="n" label="Nou" />
+                    <q-radio v-model="starematerial" val="f" label="Folosit" />
+                   <q-radio v-model="starematerial" val="c" label="Casare" />
+                </div>              
               </div>
             </div>
 
@@ -229,6 +238,7 @@ export default {
             tab: 'mails',
         splitterModel: 20,
         tipmaterial:'mat',
+        starematerial:'n',
         tipoperatiune:'in',
         vreauGrid:true,
         vreauLista:false,

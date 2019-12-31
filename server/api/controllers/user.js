@@ -84,7 +84,7 @@ module.exports.user_login = (req, res, next) => {
       message: "Auth failed"
     });
   
-  }).catch(err =>{})
+  }).catch(err =>{console.log(err)})
   }
 
   

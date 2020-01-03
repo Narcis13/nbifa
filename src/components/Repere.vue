@@ -8,6 +8,7 @@
                   :data="data"
                   :columns="columns"
                   selection="multiple"
+                    :pagination.sync="pagination"
                   :selected.sync="selected"
                   row-key="name"
                 >
@@ -34,6 +35,12 @@ export default {
      data () {
         return {
             selected: [],
+        pagination: {
+
+                page: 1,
+                rowsPerPage: 10
+                // rowsNumber: xx if getting data from a server
+             },
           columns: [
             { name: 'categ', label: 'Categoria', field: 'categ',align: 'left',style: 'width: 200px', },
             {

@@ -69,7 +69,7 @@
                             transition-next="jump-up"
                           >
                             <q-tab-panel name="mails">
-                               <div class="q-gutter-sm q-pa-sm column">
+                               <div class="q-gutter-sm  column">
                                       <q-select
                                         filled
                                         dense
@@ -82,7 +82,7 @@
                                         :options="options"
                                         @filter="filterFn"
 
-                                        style="width: 250px;"
+                                        style="width: 225px;"
                                       >
                                         <template v-slot:no-option>
                                           <q-item>
@@ -104,7 +104,7 @@
                                         label="Categorie reper"
                                         :options="options"
                                         @filter="filterFn"
-                                        style="width: 250px; "
+                                        style="width: 225px; "
                                       >
                                         <template v-slot:no-option>
                                           <q-item>
@@ -125,7 +125,7 @@
                                       input-debounce="0"
                                       label="Denumire"
                                       :options="options"
-                                      style="width:275px;"
+                                      style="width:225px;"
                                       @filter="filterFn"
                                       
                                     
@@ -139,21 +139,90 @@
                                       </template>
                                   </q-select>  
 
-                                  <q-select dense outlined v-model="starematerial" :options="starimaterial" label="Stare material" />  
+                                  <q-select dense outlined v-model="starematerial" :options="starimaterial" label="Stare material" style="width:225px;"/>  
 
                                </div>
                             </q-tab-panel>
 
                             <q-tab-panel name="alarms">
-                               <div class="q-gutter-sm q-pa-sm column">
-                               
+                               <div class="q-gutter-sm  column">
+                                      <q-select
+                                        filled
+                                        dense
+                                        v-model="model"
+                                        use-input
+                                        hide-selected
+                                        fill-input
+                                        input-debounce="0"
+                                        label="Loc dispunere"
+                                        :options="options"
+                                        @filter="filterFn"
+
+                                        style="width: 225px;"
+                                      >
+                                        <template v-slot:no-option>
+                                          <q-item>
+                                            <q-item-section class="text-grey">
+                                              No results
+                                            </q-item-section>
+                                          </q-item>
+                                        </template>
+                                    </q-select>
+
+                                    <q-select
+                                        filled
+                                        v-model="model"
+                                        use-input
+                                        dense
+                                        hide-selected
+                                        fill-input
+                                        input-debounce="0"
+                                        label="Categorie reper"
+                                        :options="options"
+                                        @filter="filterFn"
+                                        style="width: 225px; "
+                                      >
+                                        <template v-slot:no-option>
+                                          <q-item>
+                                            <q-item-section class="text-grey">
+                                              No results
+                                            </q-item-section>
+                                          </q-item>
+                                        </template>
+                                    </q-select>
+
+                                    <q-select
+                                      filled
+                                      v-model="model"
+                                      use-input
+                                      hide-selected
+                                      dense
+                                      fill-input
+                                      input-debounce="0"
+                                      label="Denumire"
+                                      :options="options"
+                                      style="width:225px;"
+                                      @filter="filterFn"
+                                      
+                                    
+                                    >
+                                      <template v-slot:no-option>
+                                        <q-item>
+                                          <q-item-section class="text-grey">
+                                            No results
+                                          </q-item-section>
+                                        </q-item>
+                                      </template>
+                                  </q-select>  
+
+                                  <q-select dense outlined v-model="starematerial" :options="starimaterial" label="Stare material" style="width:225px;"/>                               
                                </div>
                               
                             </q-tab-panel>
 
                           </q-tab-panels>  
                           
-                          <div class="q-gutter-sm q-pa-sm column">
+                          <div class="q-gutter-sm q-pa-md column">
                           
                               <q-input  filled v-model="text" label="UM" style="width:100px;" :dense="dense" />
                               <q-input  filled v-model="text" label="Cantitate" style="width:150px;" :dense="dense" />

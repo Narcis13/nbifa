@@ -1,37 +1,6 @@
 <template>
    <div>
-        <div class="row q-gutter-md">
-                  <q-select
-                      filled
-                      v-model="model"
-                      use-input
-                      hide-selected
-                      fill-input
-                      input-debounce="0"
-                      label="Denumire"
-                      :options="options"
-                      style="width:275px;"
-                      @filter="filterFn"
-                      
-                    
-                    >
-                      <template v-slot:no-option>
-                        <q-item>
-                          <q-item-section class="text-grey">
-                            No results
-                          </q-item-section>
-                        </q-item>
-                      </template>
-                  </q-select>  
-               <q-input filled v-model="text" label="UM" style="width:100px;" :dense="dense" />
-               <q-input filled v-model="text" label="Cantitate" style="width:150px;" :dense="dense" />
-               <q-input filled v-model="text" label="Pret" style="width:150px;" :dense="dense" />
-               <div class="column q-pa-md items-center">
-                    <div class="text-h6 ">Valoare</div>
-                    <q-btn  icon="create"  color="secondary" flat label="Adauga" />
-               </div>
 
-        </div>
         <div class="row ">
               <q-table
                   dense

@@ -30,6 +30,9 @@
         </div>
         <div v-if="vreauFormular" id="formular" class="col-9 q-pa-sm">
             <div class="row justify-around items-start content-start">
+
+                 <q-select outlined v-model="tipmaterial" :options="tipurirepere" label="Tip material" />   
+
                 <q-select outlined v-model="model" :options="options" label="Tip document" style="min-width:200px;"/>
 
                 <q-input outlined v-model="date" mask="date" :rules="['date']" >
@@ -42,134 +45,7 @@
                     </template>
                 </q-input>
 
-                <q-input outlined v-model="text" label="Nr. document" />
-            </div>
-
-            <div class="row ">
-
-              <div class="col flex flex-center q-gutter-sm">
-                  <q-radio v-model="tipmaterial" val="mat" label="Materiale" />
-                  <q-radio v-model="tipmaterial" val="ob" label="Obiecte inventar" />
-                  <q-radio v-model="tipmaterial" val="mf" label="Mijloace fixe" />
-              </div>
-                <q-separator vertical inset />
-              <div class="col flex flex-center q-gutter-sm">
-                <q-radio v-model="tipoperatiune" val="in" label="Intrare" />
-                <q-radio v-model="tipoperatiune" val="out" label="Iesire" />
-                <q-radio v-model="tipoperatiune" val="trans" label="Transfer" />
-              </div>
-
-            </div>
-
-            <div class="row">
-              <div class="col-5 column items-end q-px-md q-gutter-sm">
-                  <div class="text-h6">Sursa</div>
-
-                  <q-select
-                      filled
-                      v-model="model"
-                      use-input
-                      hide-selected
-                      fill-input
-                      input-debounce="0"
-                      label="Loc dispunere"
-                      :options="options"
-                      @filter="filterFn"
-
-                      style="width: 250px; padding-bottom: 32px"
-                    >
-                      <template v-slot:no-option>
-                        <q-item>
-                          <q-item-section class="text-grey">
-                            No results
-                          </q-item-section>
-                        </q-item>
-                      </template>
-                  </q-select>
-
-                  <q-select
-                      filled
-                      v-model="model"
-                      use-input
-                      hide-selected
-                      fill-input
-                      input-debounce="0"
-                      label="Categorie reper"
-                      :options="options"
-                      @filter="filterFn"
-                      style="width: 250px; "
-                    >
-                      <template v-slot:no-option>
-                        <q-item>
-                          <q-item-section class="text-grey">
-                            No results
-                          </q-item-section>
-                        </q-item>
-                      </template>
-                  </q-select>
-
-                <div class="col flex flex-center q-gutter-sm">
-                  <q-radio v-model="starematerial" val="n" label="Nou" />
-                  <q-radio v-model="starematerial" val="f" label="Folosit" />
-                  <q-radio v-model="starematerial" val="c" label="Casare" />
-                </div>
-              </div>
-
-              <div class="col-2 flex flex-center q-gutter-sm">
-                    <q-icon name="fast_forward" class="text-red" style="font-size: 12rem;" ></q-icon>
-              </div>
-
-              <div class="col-5 column items-start q-px-md q-gutter-sm">
-                 <div class="text-h6">Destinatie</div>
-
-                  <q-select
-                      filled
-                      v-model="model"
-                      use-input
-                      hide-selected
-                      fill-input
-                      input-debounce="0"
-                      label="Loc dispunere"
-                      :options="options"
-                      @filter="filterFn"
-
-                      style="width: 250px; padding-bottom: 32px"
-                    >
-                      <template v-slot:no-option>
-                        <q-item>
-                          <q-item-section class="text-grey">
-                            No results
-                          </q-item-section>
-                        </q-item>
-                      </template>
-                  </q-select>
-
-                  <q-select
-                      filled
-                      v-model="model"
-                      use-input
-                      hide-selected
-                      fill-input
-                      input-debounce="0"
-                      label="Categorie reper"
-                      :options="options"
-
-                      style="width: 250px; "
-                    >
-                      <template v-slot:no-option>
-                        <q-item>
-                          <q-item-section class="text-grey">
-                            No results
-                          </q-item-section>
-                        </q-item>
-                      </template>
-                  </q-select>   
-                  <div class="col flex flex-center q-gutter-sm">
-                    <q-radio v-model="starematerial" val="n" label="Nou" />
-                    <q-radio v-model="starematerial" val="f" label="Folosit" />
-                   <q-radio v-model="starematerial" val="c" label="Casare" />
-                </div>              
-              </div>
+                <q-input outlined v-model="text" label="Nr. document" style="max-width:140px;"/>
             </div>
 
             <q-splitter
@@ -180,32 +56,118 @@
                     <template v-slot:before>
                       <q-tabs
                         v-model="tab"
-                        vertical
                         class="text-teal"
                       >
-                        <q-tab name="mails" icon="mail" label="Repere" />
-                        <q-tab name="alarms" icon="alarm" label="Statistici" />
+                        <q-tab name="mails" icon="mail" label="Iesire" />
+                        <q-tab name="alarms" icon="alarm" label="Intrare" />
                       </q-tabs>
+
+                          <q-tab-panels
+                            v-model="tab"
+                            animated
+                            transition-prev="jump-up"
+                            transition-next="jump-up"
+                          >
+                            <q-tab-panel name="mails">
+                               <div class="q-gutter-sm q-pa-sm column">
+                                      <q-select
+                                        filled
+                                        dense
+                                        v-model="model"
+                                        use-input
+                                        hide-selected
+                                        fill-input
+                                        input-debounce="0"
+                                        label="Loc dispunere"
+                                        :options="options"
+                                        @filter="filterFn"
+
+                                        style="width: 250px;"
+                                      >
+                                        <template v-slot:no-option>
+                                          <q-item>
+                                            <q-item-section class="text-grey">
+                                              No results
+                                            </q-item-section>
+                                          </q-item>
+                                        </template>
+                                    </q-select>
+
+                                    <q-select
+                                        filled
+                                        v-model="model"
+                                        use-input
+                                        dense
+                                        hide-selected
+                                        fill-input
+                                        input-debounce="0"
+                                        label="Categorie reper"
+                                        :options="options"
+                                        @filter="filterFn"
+                                        style="width: 250px; "
+                                      >
+                                        <template v-slot:no-option>
+                                          <q-item>
+                                            <q-item-section class="text-grey">
+                                              No results
+                                            </q-item-section>
+                                          </q-item>
+                                        </template>
+                                    </q-select>
+
+                                    <q-select
+                                      filled
+                                      v-model="model"
+                                      use-input
+                                      hide-selected
+                                      dense
+                                      fill-input
+                                      input-debounce="0"
+                                      label="Denumire"
+                                      :options="options"
+                                      style="width:275px;"
+                                      @filter="filterFn"
+                                      
+                                    
+                                    >
+                                      <template v-slot:no-option>
+                                        <q-item>
+                                          <q-item-section class="text-grey">
+                                            No results
+                                          </q-item-section>
+                                        </q-item>
+                                      </template>
+                                  </q-select>  
+
+                                  <q-select dense outlined v-model="starematerial" :options="starimaterial" label="Stare material" />  
+
+                               </div>
+                            </q-tab-panel>
+
+                            <q-tab-panel name="alarms">
+                               <div class="q-gutter-sm q-pa-sm column">
+                               
+                               </div>
+                              
+                            </q-tab-panel>
+
+                          </q-tab-panels>  
+                          
+                          <div class="q-gutter-sm q-pa-sm column">
+                          
+                              <q-input  filled v-model="text" label="UM" style="width:100px;" :dense="dense" />
+                              <q-input  filled v-model="text" label="Cantitate" style="width:150px;" :dense="dense" />
+                              <q-input  filled v-model="text" label="Pret" style="width:150px;" :dense="dense" />
+                              <div class="column q-pa-md items-center">
+                                    <div class="text-h6 ">Valoare</div>
+                                    <q-btn  icon="create"  color="secondary" flat label="Adauga" />
+                              </div>
+                           </div>                  
                     </template>
 
                     <template v-slot:after>
-                      <q-tab-panels
-                        v-model="tab"
-                        animated
-                        transition-prev="jump-up"
-                        transition-next="jump-up"
-                      >
-                        <q-tab-panel name="mails">
-                          <Repere />
-                        </q-tab-panel>
-
-                        <q-tab-panel name="alarms">
-                          <div class="text-h4 q-mb-md">Statistici</div>
-                          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
-                          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
-                        </q-tab-panel>
-
-                      </q-tab-panels>
+                      <div class="q-pa-md"><Repere /></div>
+                        
                     </template>
 
             </q-splitter>
@@ -237,10 +199,11 @@ export default {
     return {
             tab: 'mails',
         splitterModel: 20,
-        tipmaterial:'mat',
-        starematerial:'n',
+        tipmaterial:'MATERIALE',
+        starematerial:'NOU',
         tipoperatiune:'in',
         vreauGrid:true,
+        dense:true,
         vreauLista:false,
         vreauFormular:false,
         model: null,
@@ -248,6 +211,8 @@ export default {
       options: [
         'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
       ],
+      tipurirepere:['MATERIALE', 'OBIECTE INVENTAR', 'MIJLOACE FIXE'],
+      starimaterial:['NOU', 'FOLOSIT', 'CASARE'],
             pagination: {
                 sortBy: 'name',
                 descending: false,

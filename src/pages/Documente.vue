@@ -33,7 +33,7 @@
 
                  <q-select outlined v-model="tipmaterial" :options="tipurirepere" label="Tip material" />   
 
-                <q-select outlined v-model="model" :options="options" label="Tip document" style="min-width:200px;"/>
+                <q-select outlined use-input  input-debounce="0" v-model="tipdocument" :options="tipuridocumente" @input="tipdocumentselectat" label="Tip document" style="min-width:200px;"/>
 
                 <q-input outlined v-model="date" mask="date" :rules="['date']" >
                     <template v-slot:append>
@@ -58,8 +58,8 @@
                         v-model="tab"
                         class="text-teal"
                       >
-                        <q-tab name="mails" icon="mail" label="Iesire" />
-                        <q-tab name="alarms" icon="alarm" label="Intrare" />
+                        <q-tab v-if="iesirivizibile" name="mails" icon="mail" label="Iesire" />
+                        <q-tab v-if="intrarivizibile" name="alarms" icon="alarm" label="Intrare" />
                       </q-tabs>
 
                           <q-tab-panels
@@ -227,8 +227,9 @@
                               <q-input  filled v-model="text" label="UM" style="width:100px;" :dense="dense" />
                               <q-input  filled v-model="text" label="Cantitate" style="width:150px;" :dense="dense" />
                               <q-input  filled v-model="text" label="Pret" style="width:150px;" :dense="dense" />
+                              <div class="text-h6 ">Valoare</div>
                               <div class="column q-pa-md items-center">
-                                    <div class="text-h6 ">Valoare</div>
+                                    
                                     <q-btn  icon="create"  color="secondary" flat label="Adauga" />
                               </div>
                            </div>                  
@@ -268,6 +269,8 @@ export default {
     return {
             tab: 'mails',
         splitterModel: 20,
+        tipdocument:{label:'NRCD',value:'i'},
+        tipuridocumente:[{label:'NRCD',value:'i'},{label:'Bon consum',value:'e'},{label:'Bon predare transfer restiturire',value:'t'}],
         tipmaterial:'MATERIALE',
         starematerial:'NOU',
         tipoperatiune:'in',
@@ -411,11 +414,22 @@ export default {
       ]
     }
   },
+  computed:{
+      intrarivizibile(){
+          return this.tipdocument.value==='i'||this.tipdocument.value==='t'
+      },
+      iesirivizibile(){
+          return this.tipdocument.value==='e'||this.tipdocument.value==='t'
+      }
+  },
   methods:{
       docNou(){
           this.vreauGrid=false;
           this.vreauLista=true;
           this.vreauFormular=true;
+      },
+      tipdocumentselectat(){
+          console.log('Selectat',this.tipdocument);
       },
       clickDocumente(){
           this.vreauGrid=true;

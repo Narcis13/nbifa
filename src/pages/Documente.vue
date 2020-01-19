@@ -73,14 +73,14 @@
                                       <q-select
                                         filled
                                         dense
-                                        v-model="model"
+                                        v-model="lociesire"
                                         use-input
                                         hide-selected
                                         fill-input
                                         input-debounce="0"
                                         label="Loc dispunere"
-                                        :options="options"
-                                        @filter="filterFn"
+                                        :options="locuriiesire"
+                                        @filter="filterEFn"
 
                                         style="width: 225px;"
                                       >
@@ -139,7 +139,7 @@
                                       </template>
                                   </q-select>  
 
-                                  <q-select dense outlined v-model="starematerial" :options="starimaterial" label="Stare material" style="width:225px;"/>  
+                                  <q-select dense outlined v-model="staremateriale" :options="starimaterial" label="Stare material" style="width:225px;"/>  
 
                                </div>
                             </q-tab-panel>
@@ -149,14 +149,14 @@
                                       <q-select
                                         filled
                                         dense
-                                        v-model="model"
+                                        v-model="locintrare"
                                         use-input
                                         hide-selected
                                         fill-input
                                         input-debounce="0"
                                         label="Loc dispunere"
-                                        :options="options"
-                                        @filter="filterFn"
+                                        :options="locuriintrare"
+                                        @filter="filterIFn"
 
                                         style="width: 225px;"
                                       >
@@ -215,7 +215,7 @@
                                       </template>
                                   </q-select>  
 
-                                  <q-select dense outlined v-model="starematerial" :options="starimaterial" label="Stare material" style="width:225px;"/>                               
+                                  <q-select dense outlined v-model="staremateriali" :options="starimaterial" label="Stare material" style="width:225px;"/>                               
                                </div>
                               
                             </q-tab-panel>
@@ -257,9 +257,11 @@
 
 <script>
 import Repere from '../components/Repere'
+import axios from 'axios'
 const stringOptions = [
   'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
 ]
+var locuri=[];
 
 export default {
   components:{
@@ -269,10 +271,15 @@ export default {
     return {
             tab: 'mails',
         splitterModel: 20,
-        tipdocument:{label:'NRCD',value:'i'},
-        tipuridocumente:[{label:'NRCD',value:'i'},{label:'Bon consum',value:'e'},{label:'Bon predare transfer restiturire',value:'t'}],
+        tipdocument:null,
+        lociesire:null,
+        locintrare:null,
+        tipuridocumente:[],
+        locuriintrare:locuri,
+        locuriiesire:locuri,
         tipmaterial:'MATERIALE',
-        starematerial:'NOU',
+        staremateriali:'NOU',
+        staremateriale:'NOU',
         tipoperatiune:'in',
         vreauGrid:true,
         dense:true,
@@ -414,6 +421,41 @@ export default {
       ]
     }
   },
+  created(){
+     const token=this.$store.getters.token;
+
+      axios.get(process.env.host+'documente/tipuridocumente',{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+        res => {
+           console.log('Rspuns la toate tipurile de docs',res.data.tipuridocs);
+           res.data.tipuridocs.map(td=>{
+             this.tipuridocumente.push({
+               id:td.id,
+               label:td.denumire,
+               value:td.tip
+             })
+           })
+           this.tipdocument=this.tipuridocumente[0];
+          // this.gestiuni=[...res.data.gestiuni]
+        }
+      ).catch(err =>{})
+
+      axios.get(process.env.host+'locuri/toatelocurile',{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+        res => {
+           console.log('Rspuns la toate locurile',res.data.locuri);
+           res.data.locuri.map(loc=>{
+             this.locuriintrare.push({
+               id:loc.id,
+               label:loc.denumire,
+               value:loc.id
+             })
+           })
+           this.locuriiesire=[...this.locuriintrare];
+           locuri=[...this.locuriintrare];
+        }
+      ).catch(err =>{})
+  },
   computed:{
       intrarivizibile(){
           return this.tipdocument.value==='i'||this.tipdocument.value==='t'
@@ -436,12 +478,26 @@ export default {
           this.vreauLista=false;
           this.vreauFormular=false;
       },
-      filterFn (val, update, abort) {
+      filterIFn (val, update, abort) {
+        if (val.length < 2) {
+                  abort()
+                  return
+           }
           update(() => {
             const needle = val.toLowerCase()
-            this.options = stringOptions.filter(v => v.toLowerCase().indexOf(needle) > -1)
+            this.locuriintrare = locuri.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
           })
-    }
+    },
+       filterEFn (val, update, abort) {
+        if (val.length < 2) {
+                  abort()
+                  return
+           }
+          update(() => {
+            const needle = val.toLowerCase()
+            this.locuriiesire = locuri.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
+          })
+    }   
   }
 }
 </script>

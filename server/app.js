@@ -11,6 +11,7 @@ const categRoutes = require('./api/routes/categorie');
 const contRoutes = require('./api/routes/cont');
 const locRoutes = require('./api/routes/loc');
 const matRoutes = require('./api/routes/materiale');
+const docRoutes = require('./api/routes/documente');
 
 app.use(morgan('dev'));
 
@@ -39,6 +40,7 @@ app.use('/categ',categRoutes);
 app.use('/conturi',contRoutes);
 app.use('/locuri',locRoutes);
 app.use('/materiale',matRoutes);
+app.use('/documente',docRoutes);
 
 app.use((req,resp,next)=>{
     const error = new Error('Resursa nu poate fi gasita!!');

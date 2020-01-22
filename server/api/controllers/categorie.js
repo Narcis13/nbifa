@@ -56,10 +56,22 @@ module.exports.update_categorie = (req, res, next) => {
   }).catch(err =>{})
 };
 
+module.exports.categoriilegestiunii = (req,res,next) =>{
+  console.log('sunt in comntrolerul categorii actiunea categoriilegestiunii',req.params.idgest)
+  knex.select(['categorii.id', {gestiune:'gestiuni.denumire'}, 'categorii.denumire','categorii.idgestiune' ,'categorii.cont', 'categorii.contcheltuiala' ,'categorii.tipmaterial'])
+  .from('categorii')
+  .innerJoin('gestiuni','gestiuni.id','categorii.idgestiune').where({"categorii.stare":"activ","categorii.idgestiune":req.params.idgest}).orderBy('gestiuni.denumire').then((rows)=>{
+     return res.status(200).json({
+      message: "Toate CATEGORIILE",
+      categorii:rows
+    });
+   }).catch(err =>{})
+
+}
 
 module.exports.categorienoua = (req,res,next) =>{
 
-    console.log('sunt in comntrolerul categorii actiunea categorie noua')
+    console.log('sunt in comntrolerul categorii actiunea categorie noua',req.body)
   
     if(req.body.denumire===""||req.body.idgestiune==0){
       return res.status(401).json({
@@ -83,8 +95,8 @@ module.exports.categorienoua = (req,res,next) =>{
             contcheltuiala:req.body.contcheltuiala,
             tipmaterial:req.body.tipmaterial,
     
-            created_at:new Date().toISOString(),
-            updated_at:new Date().toISOString(),
+            created_at:knex.fn.now(),//new Date().toISOString(),
+            updated_at:knex.fn.now(),//new Date().toISOString(),
             stare:req.body.stare
             
         }).then((d)=>{

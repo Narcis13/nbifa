@@ -12,6 +12,7 @@ router.put("/:idcateg", /*checkaut,*/ CatController.update);
 router.patch("/:idcateg", /*checkaut,*/ CatController.update_categorie);
 
 router.get("/toate", /*checkaut,*/ CatController.toate); 
+router.get("/categoriilegestiunii/:idgest", /*checkaut,*/ CatController.categoriilegestiunii); 
 
 
 module.exports=router;

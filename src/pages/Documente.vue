@@ -94,25 +94,14 @@
                                     </q-select>
 
                                     <q-select
-                                        filled
-                                        v-model="model"
-                                        use-input
+                                        outlined
+                                        v-model="categoriee"
                                         dense
-                                        hide-selected
-                                        fill-input
-                                        input-debounce="0"
                                         label="Categorie reper"
-                                        :options="options"
-                                        @filter="filterFn"
+                                        :options="categorii"
                                         style="width: 225px; "
                                       >
-                                        <template v-slot:no-option>
-                                          <q-item>
-                                            <q-item-section class="text-grey">
-                                              No results
-                                            </q-item-section>
-                                          </q-item>
-                                        </template>
+
                                     </q-select>
 
                                     <q-select
@@ -170,25 +159,14 @@
                                     </q-select>
 
                                     <q-select
-                                        filled
-                                        v-model="model"
-                                        use-input
+                                        outlined
+                                        v-model="categoriei"
                                         dense
-                                        hide-selected
-                                        fill-input
-                                        input-debounce="0"
                                         label="Categorie reper"
-                                        :options="options"
-                                        @filter="filterFn"
+                                        :options="categorii"
                                         style="width: 225px; "
                                       >
-                                        <template v-slot:no-option>
-                                          <q-item>
-                                            <q-item-section class="text-grey">
-                                              No results
-                                            </q-item-section>
-                                          </q-item>
-                                        </template>
+
                                     </q-select>
 
                                     <q-select
@@ -280,6 +258,9 @@ export default {
         tipmaterial:'MATERIALE',
         staremateriali:'NOU',
         staremateriale:'NOU',
+        categoriee:null,
+        categoriei:null,
+        categorii:[],
         tipoperatiune:'in',
         vreauGrid:true,
         dense:true,
@@ -453,6 +434,23 @@ export default {
            })
            this.locuriiesire=[...this.locuriintrare];
            locuri=[...this.locuriintrare];
+           this.lociesire=locuri[0];
+           this.locintrare=locuri[0];
+        }
+      ).catch(err =>{})
+
+      axios.get(process.env.host+`categ/categoriilegestiunii/${this.$store.getters.gestiuneCurenta.id}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+        res => {
+           console.log('Rspuns la toate locurile',res.data.locuri);
+          // this.categorii=[...res.data.categorii]
+           res.data.categorii.map(c=>{
+             this.categorii.push({
+               id:c.id,
+               label:c.denumire,
+               value:c.id
+             })
+           })
         }
       ).catch(err =>{})
   },

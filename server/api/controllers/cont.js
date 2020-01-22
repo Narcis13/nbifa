@@ -74,7 +74,7 @@ module.exports.analiticnou = (req,res,next) =>{
 
 
 
-        knex('analitice').insert({
+      /*  knex('analitice').insert({
           cont:req.body.cont,
           idsintetic:req.body.idsintetic,
           explicatii:req.body.explicatii,
@@ -82,8 +82,8 @@ module.exports.analiticnou = (req,res,next) =>{
           updated_at:new Date().toISOString(),
           stare:req.body.stare
           
-      }).then((d)=>{
-            console.log('Ajung si aici sa adaug in conturi...',req.body.contcomplet);
+      }).then((d)=>{*/
+        //    console.log('Ajung si aici sa adaug in conturi...',req.body.contcomplet);
             knex('conturi').insert({
               cont:req.body.contcomplet,
               tip:"N",
@@ -100,7 +100,7 @@ module.exports.analiticnou = (req,res,next) =>{
             }).catch(err =>{})
        
   
-      }).catch(err =>{})
+   //   }).catch(err =>{})
                                                 
 
 }

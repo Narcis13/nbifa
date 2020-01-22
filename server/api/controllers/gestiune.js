@@ -90,8 +90,8 @@ module.exports.gestiunenoua = (req,res,next) =>{
           i_membru1:req.body.i_membru1,
           i_membru2:req.body.i_membru2,
           i_membru3:req.body.i_membru3,          
-          created_at:new Date().toISOString(),
-          updated_at:new Date().toISOString(),
+          created_at:knex.fn.now(),//new Date().toISOString(),
+          updated_at:knex.fn.now(),//new Date().toISOString(),
           stare:req.body.stare
           
       }).then((d)=>{

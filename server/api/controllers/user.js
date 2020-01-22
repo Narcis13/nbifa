@@ -23,8 +23,8 @@ module.exports.user_signup = (req, res, next) => {
           password:req.body.password,
           name:req.body.name,
           email:req.body.email,
-          created_at:new Date().toISOString(),
-          updated_at:new Date().toISOString(),
+          created_at:knex.fn.now(),//new Date().toISOString(),
+          updated_at:knex.fn.now(),//new Date().toISOString(),
           stare:req.body.stare,
           rol:req.body.rol
       }).then((d)=>{

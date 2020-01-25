@@ -106,16 +106,17 @@
 
                                     <q-select
                                       filled
-                                      v-model="model"
+                                      v-model="materialiesire"
                                       use-input
                                       hide-selected
                                       dense
                                       fill-input
                                       input-debounce="0"
                                       label="Denumire"
-                                      :options="options"
+                                      :options="materialeiesire"
                                       style="width:225px;"
-                                      @filter="filterFn"
+                                      @filter="filterMEFn"
+                                      @input="MaterialIesireSelectat"
                                       
                                     
                                     >
@@ -171,17 +172,17 @@
 
                                     <q-select
                                       filled
-                                      v-model="model"
+                                      v-model="materialintrare"
                                       use-input
                                       hide-selected
                                       dense
                                       fill-input
                                       input-debounce="0"
                                       label="Denumire"
-                                      :options="options"
+                                      :options="materialeintrare"
                                       style="width:225px;"
-                                      @filter="filterFn"
-                                      
+                                      @filter="filterMIFn"
+                                      @input="MaterialIntrareSelectat"
                                     
                                     >
                                       <template v-slot:no-option>
@@ -202,9 +203,9 @@
                           
                           <div class="q-gutter-sm q-pa-md column">
                           
-                              <q-input  filled v-model="text" label="UM" style="width:100px;" :dense="dense" />
-                              <q-input  filled v-model="text" label="Cantitate" style="width:150px;" :dense="dense" />
-                              <q-input  filled v-model="text" label="Pret" style="width:150px;" :dense="dense" />
+                              <q-input  readonly filled v-model="um" label="UM" style="width:100px;" :dense="dense" />
+                              <q-input  filled v-model="cantitate" label="Cantitate" style="width:150px;" :dense="dense" />
+                              <q-input  filled v-model="pretunitar" label="Pret" style="width:150px;" :dense="dense" />
                               <div class="text-h6 ">Valoare</div>
                               <div class="column q-pa-md items-center">
                                     
@@ -239,7 +240,7 @@ import axios from 'axios'
 const stringOptions = [
   'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
 ]
-var locuri=[];
+var locuri=[],materiale=[];
 
 export default {
   components:{
@@ -249,9 +250,16 @@ export default {
     return {
             tab: 'mails',
         splitterModel: 20,
+        um:'buc',
+        pretunitar:0,
+        cantitate:0,
         tipdocument:null,
         lociesire:null,
         locintrare:null,
+        materialintrare:null,
+        materialiesire:null,
+        materialeintrare:materiale,
+        materialeiesire:materiale,
         tipuridocumente:[],
         locuriintrare:locuri,
         locuriiesire:locuri,
@@ -439,6 +447,26 @@ export default {
         }
       ).catch(err =>{})
 
+      //materiale
+        axios.get(process.env.host+`materiale/toate/${this.$store.getters.gestiuneCurenta.id}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+        res => {
+           console.log('Rspuns la toate materialele',res.data);
+           res.data.materiale.map(m=>{
+             this.materialeintrare.push({
+               id:m.id,
+               label:m.denumire,
+               value:m.id,
+               um:m.um,
+               pretpredefinit:m.pretpredefinit
+             })
+           })
+           this.materialeiesire=[...this.materialeintrare];
+           materiale=[...this.materialeintrare];
+
+        }
+      ).catch(err =>{})
+
       axios.get(process.env.host+`categ/categoriilegestiunii/${this.$store.getters.gestiuneCurenta.id}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
         res => {
@@ -471,6 +499,15 @@ export default {
       tipdocumentselectat(){
           console.log('Selectat',this.tipdocument);
       },
+      MaterialIntrareSelectat(value){
+        console.log('material intrare selectat',value);
+           this.um=value.um;
+           this.pretunitar=value.pretpredefinit;
+
+      },
+      MaterialIesireSelectat(value){
+           this.um=value.um;
+      },
       clickDocumente(){
           this.vreauGrid=true;
           this.vreauLista=false;
@@ -495,7 +532,27 @@ export default {
             const needle = val.toLowerCase()
             this.locuriiesire = locuri.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
           })
-    }   
+    }   ,
+     filterMIFn (val, update, abort) {
+        if (val.length < 2) {
+                  abort()
+                  return
+           }
+          update(() => {
+            const needle = val.toLowerCase()
+            this.materialeintrare = materiale.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
+          })
+    },
+      filterMEFn (val, update, abort) {
+        if (val.length < 2) {
+                  abort()
+                  return
+           }
+          update(() => {
+            const needle = val.toLowerCase()
+            this.materialeiesire = materiale.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
+          })
+    }  
   }
 }
 </script>

@@ -58,8 +58,8 @@
                         v-model="tab"
                         class="text-teal"
                       >
-                        <q-tab v-if="iesirivizibile" name="mails" icon="mail" label="Iesire" />
-                        <q-tab v-if="intrarivizibile" name="alarms" icon="alarm" label="Intrare" />
+                        <q-tab v-if="iesirivizibile" name="tabiesiri" icon="mail" label="Iesire" />
+                        <q-tab v-if="intrarivizibile" name="tabintrari" icon="alarm" label="Intrare" />
                       </q-tabs>
 
                           <q-tab-panels
@@ -68,7 +68,7 @@
                             transition-prev="jump-up"
                             transition-next="jump-up"
                           >
-                            <q-tab-panel name="mails">
+                            <q-tab-panel name="tabiesiri">
                                <div class="q-gutter-sm  column">
                                       <q-select
                                         filled
@@ -134,7 +134,7 @@
                                </div>
                             </q-tab-panel>
 
-                            <q-tab-panel name="alarms">
+                            <q-tab-panel name="tabintrari">
                                <div class="q-gutter-sm  column">
                                       <q-select
                                         filled
@@ -153,7 +153,7 @@
                                         <template v-slot:no-option>
                                           <q-item>
                                             <q-item-section class="text-grey">
-                                              No results
+                                              Niciun rezultat
                                             </q-item-section>
                                           </q-item>
                                         </template>
@@ -172,6 +172,7 @@
 
                                     <q-select
                                       filled
+                                      clearable
                                       v-model="materialintrare"
                                       use-input
                                       hide-selected
@@ -188,7 +189,8 @@
                                       <template v-slot:no-option>
                                         <q-item>
                                           <q-item-section class="text-grey">
-                                            No results
+                                            Material inexistent
+                                             <material-add :data="materialeintrare"/>
                                           </q-item-section>
                                         </q-item>
                                       </template>
@@ -204,8 +206,11 @@
                           <div class="q-gutter-sm q-pa-md column">
                           
                               <q-input  readonly filled v-model="um" label="UM" style="width:100px;" :dense="dense" />
-                              <q-input  filled v-model="cantitate" label="Cantitate" style="width:150px;" :dense="dense" />
-                              <q-input  filled v-model="pretunitar" label="Pret" style="width:150px;" :dense="dense" />
+                              <q-input  type="number" filled v-model.number="cantitate" label="Cantitate" style="width:150px;" :dense="dense"         :rules="[
+                                    val => val !== null && val !== '' || 'Introduceti cantitatea',
+                                     val => val > 0 || 'Cantitatea nu poate fi negativa'
+                              ]"/>
+                              <q-input type="number" filled v-model.number="pretunitar" label="Pret" style="width:150px;" :dense="dense" />
                               <div class="text-h6 ">Valoare</div>
                               <div class="column q-pa-md items-center">
                                     
@@ -236,6 +241,7 @@
 
 <script>
 import Repere from '../components/Repere'
+import MaterialAdd from '../components/MaterialAdd'
 import axios from 'axios'
 const stringOptions = [
   'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
@@ -244,11 +250,12 @@ var locuri=[],materiale=[];
 
 export default {
   components:{
-    'Repere':Repere
+    'Repere':Repere,
+    'material-add':MaterialAdd
   },
   data () {
     return {
-            tab: 'mails',
+            tab: 'tabintrari',
         splitterModel: 20,
         um:'buc',
         pretunitar:0,
@@ -256,6 +263,7 @@ export default {
         tipdocument:null,
         lociesire:null,
         locintrare:null,
+        materiale:[],
         materialintrare:null,
         materialiesire:null,
         materialeintrare:materiale,

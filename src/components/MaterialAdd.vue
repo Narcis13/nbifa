@@ -61,8 +61,9 @@ export default {
                         position:'top',
                         color:'positive'
               });
-
-                that.data.unshift({id:res.data.id,denumire:this.nume_material,um:this.um_material,pretpredefinit:this.pret_predefinit,user:this.$store.getters.numeReal,gestiune:this.$store.getters.gestiuneCurenta.denumire,datacreere:new Date().toISOString(),datamodificare:new Date().toISOString(),eNou:true})
+                let mat_nou = {id:res.data.id,denumire:this.nume_material,um:this.um_material,pretpredefinit:this.pret_predefinit,user:this.$store.getters.numeReal,gestiune:this.$store.getters.gestiuneCurenta.denumire,datacreere:new Date().toISOString(),datamodificare:new Date().toISOString(),eNou:true};
+                this.$emit('materialnou',mat_nou);
+                that.data.unshift(mat_nou);
                 that.nume_material="";
                 that.pret_predefinit=1
                 that.um_material="buc";

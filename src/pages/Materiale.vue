@@ -1,7 +1,7 @@
 <template>
     <q-page padding>
-        <div class="q-gutter-md column items-start">
-        <material-add :data="materiale"/>
+        <div  class="q-gutter-md column items-start">
+        <material-add :data="materiale" @materialnou="materialAdaugat"/>
          <q-separator inset />
         <q-table
             title="Lista Materiale"
@@ -162,6 +162,9 @@ export default {
                             })
                 })
                 
+        },
+        materialAdaugat(e){
+             console.log('Sesizat eveniment material adaugat ',e);
         },
         schimbaGestiunea(id){
           // alert('schimb gestiunea '+id)

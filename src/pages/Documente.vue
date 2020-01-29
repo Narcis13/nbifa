@@ -190,7 +190,7 @@
                                         <q-item>
                                           <q-item-section class="text-grey">
                                             Material inexistent
-                                             <material-add :data="materialeintrare"/>
+                                             <material-add :data="materialeintrare" @materialnou="materialAdaugat"/>
                                           </q-item-section>
                                         </q-item>
                                       </template>
@@ -210,8 +210,10 @@
                                     val => val !== null && val !== '' || 'Introduceti cantitatea',
                                      val => val > 0 || 'Cantitatea nu poate fi negativa'
                               ]"/>
-                              <q-input type="number" filled v-model.number="pretunitar" label="Pret" style="width:150px;" :dense="dense" />
-                              <div class="text-h6 ">Valoare</div>
+                              <q-input type="number" filled v-model.number="pretunitar" label="Pret" style="width:150px;" :dense="dense" :rules="[
+                                    val => val !== null && val !== '' || 'Introduceti pretul unitar'
+                              ]"/>
+                              <div class="text-h6 ">{{valoareunitara}} lei</div>
                               <div class="column q-pa-md items-center">
                                     
                                     <q-btn  icon="create"  color="secondary" flat label="Adauga" />
@@ -420,7 +422,7 @@ export default {
   },
   created(){
      const token=this.$store.getters.token;
-
+     this.$root.$on('materialadaugat',this.materialAdaugat)
       axios.get(process.env.host+'documente/tipuridocumente',{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
         res => {
@@ -496,6 +498,9 @@ export default {
       },
       iesirivizibile(){
           return this.tipdocument.value==='e'||this.tipdocument.value==='t'
+      },
+      valoareunitara(){
+        return 'Valoare: '+(this.pretunitar*this.cantitate).toFixed(2);
       }
   },
   methods:{
@@ -503,6 +508,20 @@ export default {
           this.vreauGrid=false;
           this.vreauLista=true;
           this.vreauFormular=true;
+      },
+      materialAdaugat(e){
+        console.log('Material Adaugat...',e)
+           let mat_nou={
+               id:e.id,
+               label:e.denumire,
+               value:e.id,
+               um:e.um,
+               pretpredefinit:e.pretpredefinit
+             };
+
+             this.materialeintrare.push(mat_nou);
+             materiale.push(mat_nou);
+             this.materialintrare=mat_nou;
       },
       tipdocumentselectat(){
           console.log('Selectat',this.tipdocument);

@@ -63,6 +63,7 @@ export default {
               });
                 let mat_nou = {id:res.data.id,denumire:this.nume_material,um:this.um_material,pretpredefinit:this.pret_predefinit,user:this.$store.getters.numeReal,gestiune:this.$store.getters.gestiuneCurenta.denumire,datacreere:new Date().toISOString(),datamodificare:new Date().toISOString(),eNou:true};
                 this.$emit('materialnou',mat_nou);
+                this.$root.$emit('materialadaugat',mat_nou);
                 that.data.unshift(mat_nou);
                 that.nume_material="";
                 that.pret_predefinit=1

@@ -45,7 +45,9 @@
                     </template>
                 </q-input>
 
-                <q-input outlined v-model="text" label="Nr. document" style="max-width:140px;"/>
+                <q-input outlined v-model="nrdoc" label="Nr. document" style="max-width:140px;" :rules="[
+                                    val => val !== null && val !== '' || 'Cimpul nu poate fi vid!'
+                              ]"/>
             </div>
 
             <q-splitter
@@ -260,6 +262,7 @@ export default {
             tab: 'tabintrari',
         splitterModel: 20,
         um:'buc',
+        nrdoc:" ",
         pretunitar:0,
         cantitate:0,
         tipdocument:null,

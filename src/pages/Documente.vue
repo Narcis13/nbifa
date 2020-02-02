@@ -35,11 +35,11 @@
 
                 <q-select outlined use-input  input-debounce="0" v-model="tipdocument" :options="tipuridocumente" @input="tipdocumentselectat" label="Tip document" style="min-width:200px;"/>
 
-                <q-input outlined v-model="date" mask="date" :rules="['date']" >
+                <q-input outlined  v-model="datadoc"  :rules="['date']" >
                     <template v-slot:append>
                         <q-icon name="event" class="cursor-pointer">
                         <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                            <q-date v-model="date" @input="() => $refs.qDateProxy.hide()" />
+                            <q-date  v-model="datadoc" @input="() => $refs.qDateProxy.hide()" />
                         </q-popup-proxy>
                         </q-icon>
                     </template>
@@ -244,6 +244,7 @@
 </template>
 
 <script>
+import { date } from 'quasar'
 import Repere from '../components/Repere'
 import MaterialAdd from '../components/MaterialAdd'
 import axios from 'axios'
@@ -288,7 +289,7 @@ export default {
         vreauLista:false,
         vreauFormular:false,
         model: null,
-        date: '2019/02/01',
+        datadoc: new Date(),
       options: [
         'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
       ],
@@ -424,6 +425,8 @@ export default {
     }
   },
   created(){
+    let timeStamp = Date.now()
+this.datadoc= date.formatDate(timeStamp, 'YYYY/MM/DD')
      const token=this.$store.getters.token;
      this.$root.$on('materialadaugat',this.materialAdaugat)
       axios.get(process.env.host+'documente/tipuridocumente',{headers:{"Authorization" : `Bearer ${token}`}}).then(

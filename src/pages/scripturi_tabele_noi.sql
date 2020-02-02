@@ -9,3 +9,16 @@ CREATE TABLE `tipuridocumente` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 SELECT * FROM bifa.tipuridocumente;
 
+
+CREATE TABLE `bifa`.`operatiuni` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `idtipoperatiuni` INT NOT NULL,
+  `tipoperatiune` VARCHAR(15) NOT NULL,
+  `data` DATE NOT NULL,
+  `nrdoc` VARCHAR(25) NOT NULL,
+  `stare` VARCHAR(15) NOT NULL,
+  `datacreere` DATETIME NOT NULL,
+  `datamodificare` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);
+

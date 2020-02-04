@@ -35,11 +35,11 @@
 
                 <q-select outlined use-input  input-debounce="0" v-model="tipdocument" :options="tipuridocumente" @input="tipdocumentselectat" label="Tip document" style="min-width:200px;"/>
 
-                <q-input outlined  v-model="datadoc"  :rules="['date']" >
+                <q-input outlined readonly v-model="datadoc"   >
                     <template v-slot:append>
                         <q-icon name="event" class="cursor-pointer">
                         <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                            <q-date  v-model="datadoc" @input="() => $refs.qDateProxy.hide()" />
+                            <q-date  mask="DD/MM/YYYY" v-model="datadoc" @input="() => $refs.qDateProxy.hide()" />
                         </q-popup-proxy>
                         </q-icon>
                     </template>
@@ -230,7 +230,7 @@
 
             </q-splitter>
             <div class="row q-pa-md justify-center">
-              <q-btn  icon="create" @click="clickDocumente" color="secondary" flat label="Salveaza"  />
+              <q-btn  icon="create" @click="salveaza" color="secondary" flat label="Salveaza"  />
               <q-btn  icon="create" @click="clickDocumente" color="secondary" flat label="Reset"  />
               <q-btn  icon="create" @click="clickDocumente" color="secondary" flat label="Documente..."  />
 
@@ -289,7 +289,7 @@ export default {
         vreauLista:false,
         vreauFormular:false,
         model: null,
-        datadoc: new Date(),
+        datadoc: null,
       options: [
         'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
       ],
@@ -426,7 +426,7 @@ export default {
   },
   created(){
     let timeStamp = Date.now()
-this.datadoc= date.formatDate(timeStamp, 'YYYY/MM/DD')
+    this.datadoc= date.formatDate(timeStamp, 'DD/MM/YYYY');
      const token=this.$store.getters.token;
      this.$root.$on('materialadaugat',this.materialAdaugat)
       axios.get(process.env.host+'documente/tipuridocumente',{headers:{"Authorization" : `Bearer ${token}`}}).then(
@@ -514,6 +514,11 @@ this.datadoc= date.formatDate(timeStamp, 'YYYY/MM/DD')
           this.vreauGrid=false;
           this.vreauLista=true;
           this.vreauFormular=true;
+      },
+      salveaza(){
+        let data = date.extractDate(this.datadoc, 'DD/MM/YYYY')
+        let datacorecta=date.formatDate(data, 'YYYY-MM-DD');
+          console.log('Data doc', datacorecta);
       },
       materialAdaugat(e){
         console.log('Material Adaugat...',e)

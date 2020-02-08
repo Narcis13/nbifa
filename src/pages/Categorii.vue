@@ -54,9 +54,9 @@
                           {{ props.row.tipmaterial }}
                                 <q-popup-edit v-model="props.row.tipmaterial" @save="editeaza(props.row.id,'tipmaterial',props.row.tipmaterial)">
                                    
-                                      <q-radio v-model="props.row.tipmaterial" val="MAT." label="Material" />
-                                      <q-radio v-model="props.row.tipmaterial" val="OB. INV." label="Obiect inventar" />
-                                      <q-radio v-model="props.row.tipmaterial" val="M. FIX" label="Mijloc fix" />
+                                      <q-radio v-model="props.row.tipmaterial" val="M" label="Material" />
+                                      <q-radio v-model="props.row.tipmaterial" val="OB" label="Obiect inventar" />
+                                      <q-radio v-model="props.row.tipmaterial" val="MF" label="Mijloc fix" />
 
                                    
                                 </q-popup-edit>
@@ -115,9 +115,9 @@
                           </q-select>                    
 
                         <div class="q-mt-md q-gutter-sm">
-                            <q-radio v-model="tipmaterial" val="MAT." label="Material" />
-                            <q-radio v-model="tipmaterial" val="OB. INV." label="Obiect inventar" />
-                            <q-radio v-model="tipmaterial" val="M. FIX" label="Mijloc fix" />
+                            <q-radio v-model="tipmaterial" val="M" label="Material" />
+                            <q-radio v-model="tipmaterial" val="OB" label="Obiect inventar" />
+                            <q-radio v-model="tipmaterial" val="MF" label="Mijloc fix" />
 
                        </div>
                         <div class="row justify-center q-mt-md">
@@ -174,7 +174,7 @@ export default {
             idgestiune:0,
             cont:'',
             contcheltuiala:'',
-            tipmaterial:'MAT.',
+            tipmaterial:'M',
             pagination: {
                 sortBy: 'name',
                 descending: false,
@@ -273,7 +273,7 @@ export default {
             this.idgestiune=0;
             this.cont='';
             this.contcheltuiala='';
-            this.tipmaterial='MAT.';
+            this.tipmaterial='M';
         },
         gestSelectata(v){
           console.log(v);

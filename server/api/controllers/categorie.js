@@ -60,7 +60,7 @@ module.exports.categoriilegestiunii = (req,res,next) =>{
   console.log('sunt in comntrolerul categorii actiunea categoriilegestiunii',req.params.idgest)
   knex.select(['categorii.id', {gestiune:'gestiuni.denumire'}, 'categorii.denumire','categorii.idgestiune' ,'categorii.cont', 'categorii.contcheltuiala' ,'categorii.tipmaterial'])
   .from('categorii')
-  .innerJoin('gestiuni','gestiuni.id','categorii.idgestiune').where({"categorii.stare":"activ","categorii.idgestiune":req.params.idgest}).orderBy('gestiuni.denumire').then((rows)=>{
+  .innerJoin('gestiuni','gestiuni.id','categorii.idgestiune').where({"categorii.stare":"activ","categorii.idgestiune":req.params.idgest,"categorii.tipmaterial":req.params.tipmaterial}).orderBy('gestiuni.denumire').then((rows)=>{
      return res.status(200).json({
       message: "Toate CATEGORIILE",
       categorii:rows

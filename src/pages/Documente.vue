@@ -31,7 +31,7 @@
         <div v-if="vreauFormular" id="formular" class="col-9 q-pa-sm">
             <div class="row justify-around items-start content-start">
 
-                 <q-select outlined v-model="tipmaterial" :options="tipurirepere" label="Tip material" />   
+                 <q-select @input="schimbTipMaterial" outlined v-model="tipmaterial" :options="tipurirepere" label="Tip material" />   
 
                 <q-select outlined use-input  input-debounce="0" v-model="tipdocument" :options="tipuridocumente" @input="tipdocumentselectat" label="Tip document" style="min-width:200px;"/>
 
@@ -218,13 +218,13 @@
                               <div class="text-h6 ">{{valoareunitara}} lei</div>
                               <div class="column q-pa-md items-center">
                                     
-                                    <q-btn  icon="create"  color="secondary" flat label="Adauga" />
+                                    <q-btn  icon="create"  color="secondary" flat label="Adauga" @click="AdaugaReper"/>
                               </div>
                            </div>                  
                     </template>
 
                     <template v-slot:after>
-                      <div class="q-pa-md"><Repere /></div>
+                      <div class="q-pa-md"><Repere :repere="repere"/></div>
                         
                     </template>
 
@@ -269,6 +269,7 @@ export default {
         tipdocument:null,
         lociesire:null,
         locintrare:null,
+        repere:[],
         materiale:[],
         materialintrare:null,
         materialiesire:null,
@@ -277,7 +278,7 @@ export default {
         tipuridocumente:[],
         locuriintrare:locuri,
         locuriiesire:locuri,
-        tipmaterial:'MATERIALE',
+        tipmaterial:{label:'MATERIALE', value:'M'},
         staremateriali:'NOU',
         staremateriale:'NOU',
         categoriee:null,
@@ -293,7 +294,7 @@ export default {
       options: [
         'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
       ],
-      tipurirepere:['MATERIALE', 'OBIECTE INVENTAR', 'MIJLOACE FIXE'],
+      tipurirepere:[{label:'MATERIALE', value:'M'}, {label:'OBIECTE INVENTAR',value:'OB'}, {label:'MIJLOACE FIXE',value:'MF'}],
       starimaterial:['NOU', 'FOLOSIT', 'CASARE'],
             pagination: {
                 sortBy: 'name',
@@ -483,20 +484,7 @@ export default {
         }
       ).catch(err =>{})
 
-      axios.get(process.env.host+`categ/categoriilegestiunii/${this.$store.getters.gestiuneCurenta.id}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
-
-        res => {
-           console.log('Rspuns la toate locurile',res.data.locuri);
-          // this.categorii=[...res.data.categorii]
-           res.data.categorii.map(c=>{
-             this.categorii.push({
-               id:c.id,
-               label:c.denumire,
-               value:c.id
-             })
-           })
-        }
-      ).catch(err =>{})
+       this.categoriiPerGestiunePerTip();
   },
   computed:{
       intrarivizibile(){
@@ -510,6 +498,26 @@ export default {
       }
   },
   methods:{
+      categoriiPerGestiunePerTip(){
+       const token=this.$store.getters.token;
+
+       axios.get(process.env.host+`categ/categoriilegestiunii/${this.$store.getters.gestiuneCurenta.id}/${this.tipmaterial.value}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+        res => {
+           console.log('Raspuns la toate locurile',res.data.locuri);
+          // this.categorii=[...res.data.categorii]
+          this.categorii=[];
+           res.data.categorii.map(c=>{
+             this.categorii.push({
+               id:c.id,
+               label:c.denumire,
+               value:c.id
+             })
+           })
+        }
+      ).catch(err =>{})
+
+      },
       docNou(){
           this.vreauGrid=false;
           this.vreauLista=true;
@@ -546,10 +554,19 @@ export default {
       MaterialIesireSelectat(value){
            this.um=value.um;
       },
+      schimbTipMaterial(){
+          console.log('schimb tip material', this.tipmaterial)
+           this.categoriiPerGestiunePerTip();
+      },
       clickDocumente(){
           this.vreauGrid=true;
           this.vreauLista=false;
           this.vreauFormular=false;
+      },
+      AdaugaReper(){
+           this.repere.push({
+             categ:this.categoriei.label
+           })
       },
       filterIFn (val, update, abort) {
         if (val.length < 2) {

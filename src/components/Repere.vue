@@ -5,12 +5,14 @@
               <q-table
                   dense
                   separator="cell"
-                  :data="data"
+                  :data="repere"
                   :columns="columns"
                   selection="multiple"
                     :pagination.sync="pagination"
                   :selected.sync="selected"
+                  no-data-label="Niciun reper!"
                   row-key="name"
+
                 >
                       <template v-slot:top>
                           
@@ -31,9 +33,10 @@
 <script>
 export default {
      name:'Repere',
-     props:[],
+     props:['repere'],
      data () {
         return {
+          listarepere:this.repere,
             selected: [],
         pagination: {
 

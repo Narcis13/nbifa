@@ -218,19 +218,19 @@
                               <div class="text-h6 ">{{valoareunitara}} lei</div>
                               <div class="column q-pa-md items-center">
                                     
-                                    <q-btn  icon="create"  color="secondary" flat label="Adauga" @click="AdaugaReper"/>
+                                    <q-btn  :disable="!PotAdaugaReper" icon="create"  color="secondary" flat label="Adauga" @click="AdaugaReper"/>
                               </div>
                            </div>                  
                     </template>
 
                     <template v-slot:after>
-                      <div class="q-pa-md"><Repere :repere="repere"/></div>
+                      <div class="q-pa-md" style="min-width:600px"><Repere :repere="repere"/></div>
                         
                     </template>
 
             </q-splitter>
             <div class="row q-pa-md justify-center">
-              <q-btn  icon="create" @click="salveaza" color="secondary" flat label="Salveaza"  />
+              <q-btn :disable="!PotAdaugaDocument" icon="create" @click="salveaza" color="secondary" flat label="Salveaza"  />
               <q-btn  icon="create" @click="clickDocumente" color="secondary" flat label="Reset"  />
               <q-btn  icon="create" @click="clickDocumente" color="secondary" flat label="Documente..."  />
 
@@ -450,6 +450,9 @@ export default {
 
         res => {
            console.log('Rspuns la toate locurile',res.data.locuri);
+           this.locuriintrare=[];
+           this.locuriiesire=[];
+           locuri=[];
            res.data.locuri.map(loc=>{
              this.locuriintrare.push({
                id:loc.id,
@@ -469,6 +472,9 @@ export default {
 
         res => {
            console.log('Rspuns la toate materialele',res.data);
+           this.materialeintrare=[];
+           this.materialeiesire=[];
+           materiale=[];
            res.data.materiale.map(m=>{
              this.materialeintrare.push({
                id:m.id,
@@ -495,6 +501,15 @@ export default {
       },
       valoareunitara(){
         return 'Valoare: '+(this.pretunitar*this.cantitate).toFixed(2);
+      },
+      doarvaloare(){
+        return (this.pretunitar*this.cantitate).toFixed(2);
+      },
+      PotAdaugaReper(){
+        return (this.categoriei||this.categoriee)&&(this.materialintrare||this.materialiesire)&&this.cantitate>0
+      },
+      PotAdaugaDocument(){
+        return this.repere.length>0&&this.nrdoc.length>1
       }
   },
   methods:{
@@ -526,7 +541,7 @@ export default {
       salveaza(){
         let data = date.extractDate(this.datadoc, 'DD/MM/YYYY')
         let datacorecta=date.formatDate(data, 'YYYY-MM-DD');
-          console.log('Data doc', datacorecta);
+          console.log('Data doc', datacorecta,this.repere);
       },
       materialAdaugat(e){
         console.log('Material Adaugat...',e)
@@ -544,6 +559,13 @@ export default {
       },
       tipdocumentselectat(){
           console.log('Selectat',this.tipdocument);
+          if(this.tipdocument.value=="e"||this.tipdocument.value=="t"){
+            this.tab="tabiesiri";
+          }
+          else
+            this.tab="tabintrari";
+            this.resetRepere();
+            this.resetLocCategorieStare();
       },
       MaterialIntrareSelectat(value){
         console.log('material intrare selectat',value);
@@ -557,6 +579,8 @@ export default {
       schimbTipMaterial(){
           console.log('schimb tip material', this.tipmaterial)
            this.categoriiPerGestiunePerTip();
+           this.resetRepere();
+           this.resetLocCategorieStare();
       },
       clickDocumente(){
           this.vreauGrid=true;
@@ -564,9 +588,18 @@ export default {
           this.vreauFormular=false;
       },
       AdaugaReper(){
+      
            this.repere.push({
-             categ:this.categoriei.label
+             categ:this.tipdocument.value==='i'? this.categoriei.label:this.categoriee.label,
+             id_categ:this.tipdocument.value==='i'? this.categoriei.value:this.categoriee.value,
+             denumire_reper:this.tipdocument.value==='i'? this.materialintrare.label:this.materialiesire.label,
+             id_reper:this.tipdocument.value==='i'? this.materialintrare.value:this.materialiesire.value,
+             um:this.um,
+             cantitate:this.cantitate,
+             pret:this.pretunitar,
+             valoare:this.doarvaloare
            })
+           this.resetRepere();
       },
       filterIFn (val, update, abort) {
         if (val.length < 2) {
@@ -607,6 +640,21 @@ export default {
             const needle = val.toLowerCase()
             this.materialeiesire = materiale.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
           })
+    },
+    resetRepere(){
+
+      this.cantitate=1;
+      this.pretunitar=0;
+      this.materialintrare=null;
+      this.materialiesire=null;
+    },
+    resetLocCategorieStare(){
+        this.staremateriali='NOU';
+        this.staremateriale='NOU';
+        this.categoriee=null;
+        this.categoriei=null;
+        this.lociesire=locuri[0];
+        this.locintrare=locuri[0];
     }  
   }
 }

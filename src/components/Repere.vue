@@ -1,7 +1,7 @@
 <template>
    <div>
 
-        <div class="row ">
+        <div class="row " style="min-width:600px;">
               <q-table
                   dense
                   separator="cell"
@@ -24,6 +24,13 @@
                             </template>
                           </q-input>
                       </template>
+                      <template v-slot:bottom-row>
+                        <q-tr>
+                          <q-td style="text-align: right;" colspan="100%">
+                            Total {{valoaretotala}} lei
+                          </q-td>
+                        </q-tr>
+                     </template>
               </q-table>        
         </div>
          
@@ -45,22 +52,22 @@ export default {
                 // rowsNumber: xx if getting data from a server
              },
           columns: [
-            { name: 'categ', label: 'Categoria', field: 'categ',align: 'left',style: 'width: 200px', },
+            { name: 'categ', label: 'Categoria', field: 'categ',align: 'left',style: 'width: 180px', },
             {
-              name: 'name',
+              name: 'denumire_reper',
               required: true,
                style: 'width: 220px',
               label: 'Denumire reper',
               align: 'left',
-              field: row => row.name,
+              field: 'denumire_reper',
               format: val => `${val}`,
               sortable: true
             },
-            { name: 'calories', align: 'center', label: 'U/M', field: 'calories', sortable: true },
-            { name: 'stare', align: 'center', label: 'Stare', field: 'stare', sortable: true },
-            { name: 'fat', label: 'Cantitate', field: 'fat', sortable: true ,align: 'right'},
-            { name: 'carbs', label: 'Pret', field: 'carbs',align: 'right',style: 'width: 100px', },
-            { name: 'protein', label: 'Valoare', field: 'protein',align: 'right',style: 'width: 125px', }
+            { name: 'um', align: 'center', label: 'U/M', field: 'um', sortable: true },
+           // { name: 'stare', align: 'center', label: 'Stare', field: 'stare', sortable: true },
+            { name: 'cantitate', label: 'Cantitate', field: 'cantitate', sortable: true ,align: 'right'},
+            { name: 'pret', label: 'Pret', field: 'pret',align: 'right',style: 'width: 100px', },
+            { name: 'valoare', label: 'Valoare', field: 'valoare',align: 'right',style: 'width: 125px', }
             
           ],
           data: [
@@ -176,6 +183,16 @@ export default {
             }
           ]
         }
-  }          
+  } ,
+  computed:{
+
+        valoaretotala(){
+          let total=0;
+          this.repere.map(reper=>{
+            total+=parseFloat(reper.valoare)
+          })
+          return total.toFixed(2);
+        }
+  }         
 }
 </script>

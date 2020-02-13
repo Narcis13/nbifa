@@ -4,7 +4,7 @@ const router = express.Router();
 const DocumenteController =require('../controllers/documente');
 //const checkAuth = require('../middleware/check-auth');
 
-//router.post("/materialnou", MaterialeController.materialnou);
+router.post("/documentnou", DocumenteController.documentnou);
 
 //router.post("/login", UserController.user_login);
 

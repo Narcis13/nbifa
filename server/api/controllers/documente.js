@@ -11,3 +11,10 @@ module.exports.tipuridocumente = (req, res, next) => {
       }).catch(err =>{})
 
 }
+
+module.exports.documentnou = (req,res,next) => {
+
+  console.log("sunt in controllerul documente actiunea document nou");
+
+  
+}

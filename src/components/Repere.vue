@@ -1,7 +1,7 @@
 <template>
    <div>
 
-        <div class="row " style="min-width:600px;">
+        <div class="row q-pa-sm" style="min-width:600px;">
               <q-table
                   dense
                   separator="cell"

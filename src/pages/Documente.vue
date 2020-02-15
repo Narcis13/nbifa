@@ -438,7 +438,8 @@ export default {
              this.tipuridocumente.push({
                id:td.id,
                label:td.denumire,
-               value:td.tip
+               value:td.tip,
+               scurta:td.denumire_scurta
              })
            })
            this.tipdocument=this.tipuridocumente[0];
@@ -539,9 +540,38 @@ export default {
           this.vreauFormular=true;
       },
       salveaza(){
+        const token=this.$store.getters.token;
         let data = date.extractDate(this.datadoc, 'DD/MM/YYYY')
         let datacorecta=date.formatDate(data, 'YYYY-MM-DD');
-          console.log('Data doc', datacorecta,this.repere);
+        console.log('Data doc', datacorecta,this.repere,this.tipdocument);
+
+        axios.post(process.env.host+'documente/documentnou',{
+            "idtipoperatiuni":this.tipdocument.id,
+             "tipoperatiune":this.tipdocument.scurta,
+            "data":datacorecta,
+            "nrdoc":this.nrdoc,
+            "stare":"ACTIV"
+        },{headers:{"Authorization" : `Bearer ${token}`}}).then(
+            res => {
+              console.log('Am primit idul,',res.data,numenou)
+              // aici procesez raspunsul de la adaug documente
+              
+              
+
+
+
+            }
+       ).catch(err=>{
+             console.log('Eroare.............',err.response.data.message)
+              this.$q.notify({
+                    color: 'negative',
+                    timeout:1500,
+                    position:'top',
+                    icon: 'delete',
+                    message: `ATENTIE! ${err.response.data.message}`
+                  })
+       });
+
       },
       materialAdaugat(e){
         console.log('Material Adaugat...',e)

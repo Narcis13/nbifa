@@ -2,7 +2,8 @@
 
 <q-page padding>
     <div class="flex flex-center column ">
-    <q-btn v-if="vreauGrid" icon="create" @click="docNou" color="secondary" flat label="Document nou..." class="q-mb-md" />
+  
+    <bara-interval-documente v-if="vreauGrid" />
     <q-table
       v-if="vreauGrid"
       :data="documente"
@@ -11,6 +12,12 @@
       row-key="name"
     />
     </div>
+
+    <q-page-sticky v-if="vreauGrid" position="bottom-right" :offset="[24, 24]">
+            <q-btn fab   icon="add" color="accent" @click="docNou"  />
+    </q-page-sticky>
+
+
     <div class="row">
         <div v-if="vreauLista" class="col-3 q-pa-sm" >
              <q-scroll-area style="height: 85vh; ">
@@ -246,6 +253,7 @@
 import { date } from 'quasar'
 import Repere from '../components/Repere'
 import MaterialAdd from '../components/MaterialAdd'
+import BaraIntervalDocumente from '../components/BaraIntervalDocumente'
 import axios from 'axios'
 const stringOptions = [
   'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
@@ -255,7 +263,8 @@ var locuri=[],materiale=[];
 export default {
   components:{
     'Repere':Repere,
-    'material-add':MaterialAdd
+    'material-add':MaterialAdd,
+    'bara-interval-documente':BaraIntervalDocumente
   },
   data () {
     return {

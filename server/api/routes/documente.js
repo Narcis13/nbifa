@@ -6,7 +6,7 @@ const DocumenteController =require('../controllers/documente');
 
 router.post("/documentnou", DocumenteController.documentnou);
 
-//router.post("/login", UserController.user_login);
+router.post("/documenteinterval", DocumenteController.documenteinterval);
 
 //router.delete("/:userId", /*checkaut,*/ UserController.user_delete);
 //router.put("/:idmaterial", /*checkaut,*/ MaterialeController.update);

@@ -23,7 +23,7 @@ module.exports.documentnou = (req,res,next) => {
     "data":req.body.data,
     "nrdoc":req.body.nrdoc,
     "stare":"ACTIV",
-        
+     "idgestiune":req.body.idgestiune,   
     datacreere:knex.fn.now(),//new Date().toISOString(),
     datamodificare:knex.fn.now()//new Date().toISOString()
 
@@ -35,4 +35,14 @@ module.exports.documentnou = (req,res,next) => {
     id:d[0]
   })
 }).catch(err =>{ console.log(err)})
+}
+
+module.exports.documenteinterval = (req,res,next) => {
+  console.log("sunt in controllerul documente actiunea documenteinterval",req.body);
+  knex('operatiuni').where('data','>=',req.body.inceput).andWhere('data','<=',req.body.sfirsit).andWhere("idgestiune",req.body.idgestiune).then((rows)=>{
+        return res.status(200).json({
+               message: "Documente in interval",
+               documente:rows
+             });
+  }).catch(err =>{})
 }

@@ -46,20 +46,55 @@
 
 <script>
 import { date } from 'quasar'
+import axios from 'axios'
 export default {
     name:'BaraIntervalDocumente',
+    props:['docs'],
     data(){
         return {
             datainceput: '2019/02/01',
-            datasfirsit:'2019/02/01'
+            datasfirsit:'2019/02/01',
+            listadocumente:this.docs,
         }
     },
     created(){
+     this.$root.$on('schimbgestiunea',this.schimbaGestiunea)
+     this.SchimbaInterval(0)  ;
 
-     this.SchimbaInterval(0)     
+     //this.DocumenteInInterval();
+
     },
     methods:{
+      schimbaGestiunea(id){
+        this.SchimbaInterval(0)  ;
 
+      },
+      DocumenteInInterval(){
+          const token=this.$store.getters.token;
+          var that=this;
+          axios.post(process.env.host+'documente/documenteinterval',{
+              "inceput":this.datainceput,
+              "sfirsit":this.datasfirsit,
+              "idgestiune":this.$store.getters.gestiuneCurenta.id
+
+           },{headers:{"Authorization" : `Bearer ${token}`}}).then(
+             res => {
+                 // aici raspuns de la documente
+                 console.log('Raspuns la documente in interval',res);
+                 this.$emit("new-data", res.data.documente);
+               //  that.docs=[...res.data.documente]
+              }
+           ).catch(err=>{
+                   console.log('Eroare.............',err.response.data.message)
+                    this.$q.notify({
+                        color: 'negative',
+                        timeout:1500,
+                        position:'top',
+                        icon: 'delete',
+                        message: `ATENTIE! ${err.response.data.message}`
+                     })
+             })
+      },
       SchimbaInterval(p){
          var azi = new Date(); 
         // 0 -> luna curenta  
@@ -92,6 +127,8 @@ export default {
 
        this.datainceput=date.formatDate(firstDay, 'YYYY/MM/DD');
        this.datasfirsit=date.formatDate(lastDay, 'YYYY/MM/DD');    
+
+       this.DocumenteInInterval();
 
       }
     }

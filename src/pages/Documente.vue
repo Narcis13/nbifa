@@ -3,13 +3,15 @@
 <q-page padding>
     <div class="flex flex-center column ">
   
-    <bara-interval-documente v-if="vreauGrid" />
+    <bara-interval-documente v-if="vreauGrid" @new-data="newData" />
     <q-table
       v-if="vreauGrid"
       :data="documente"
       :columns="columns"
       :pagination.sync="pagination"
-      row-key="name"
+      row-key="id"
+      selection="single"
+      :selected.sync="documenteselectate"
     />
     </div>
 
@@ -277,6 +279,7 @@ export default {
         tipdocument:null,
         lociesire:null,
         locintrare:null,
+        documenteselectate:[],
         documente:[],
         repere:[],
         materiale:[],
@@ -313,22 +316,13 @@ export default {
                 // rowsNumber: xx if getting data from a server
              },
       columns: [
-        {
-          name: 'name',
-          required: true,
-          label: 'Dessert (100g serving)',
-          align: 'left',
-          field: row => row.name,
-          format: val => `${val}`,
-          sortable: true
-        },
-        { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-        { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-        { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-        { name: 'protein', label: 'Protein (g)', field: 'protein' },
-        { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-        { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-        { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
+        {name:'id',field:'id'},
+        { name: 'tipoperatiune', align: 'left', label: 'Tip document', field: 'tipoperatiune', sortable: true },
+        { name: 'data', label: 'Data document', field: 'data', sortable: true,format: (val, row) => date.formatDate(val, 'DD/MM/YYYY') },
+        { name: 'nrdoc', label: 'Numar document', field: 'nrdoc' },
+        { name: 'debit', label: 'DEBIT', field: 'debit' },
+        { name: 'credit', label: 'CREDIT', field: 'credit' },
+        { name: 'datamodificare', label: 'Ultima modificare', field: 'datamodificare' ,format: (val, row) => date.formatDate(val, 'DD/MM/YYYY HH:mm')}
       ]
 
     }
@@ -430,7 +424,7 @@ export default {
        axios.get(process.env.host+`categ/categoriilegestiunii/${this.$store.getters.gestiuneCurenta.id}/${this.tipmaterial.value}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
         res => {
-           console.log('Raspuns la toate locurile',res.data.locuri);
+          // console.log('Raspuns la toate locurile',res.data.locuri);
           // this.categorii=[...res.data.categorii]
           this.categorii=[];
            res.data.categorii.map(c=>{
@@ -453,13 +447,14 @@ export default {
         const token=this.$store.getters.token;
         let data = date.extractDate(this.datadoc, 'DD/MM/YYYY')
         let datacorecta=date.formatDate(data, 'YYYY-MM-DD');
-        console.log('Data doc', datacorecta,this.repere,this.tipdocument);
+        console.log('Data doc', datacorecta,this.$store.getters.gestiuneCurenta.id);
 
         axios.post(process.env.host+'documente/documentnou',{
             "idtipoperatiuni":this.tipdocument.id,
              "tipoperatiune":this.tipdocument.scurta,
             "data":datacorecta,
             "nrdoc":this.nrdoc,
+            "idgestiune":this.$store.getters.gestiuneCurenta.id,
             "stare":"ACTIV"
         },{headers:{"Authorization" : `Bearer ${token}`}}).then(
             res => {
@@ -580,6 +575,10 @@ export default {
             const needle = val.toLowerCase()
             this.materialeiesire = materiale.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
           })
+    },
+    newData(d){
+           this.documente=[];
+           this.documente=[...d];
     },
     resetRepere(){
 

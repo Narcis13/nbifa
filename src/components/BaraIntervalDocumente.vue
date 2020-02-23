@@ -65,6 +65,9 @@ export default {
 
     },
     methods:{
+      test(){
+        alert('Metoda test implementata in comp Bara Interval!')
+      },
       schimbaGestiunea(id){
         this.SchimbaInterval(0)  ;
 

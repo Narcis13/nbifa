@@ -1,6 +1,6 @@
 <template>
 
-          <q-list  padding class="text-primary">
+          <q-list  padding class="text-primary" style="width:230px">
               <q-item-label v-if="isAdmin" header>Administrare</q-item-label>
                     <q-item
                     clickable

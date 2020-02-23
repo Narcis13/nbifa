@@ -3,7 +3,7 @@
 <q-page padding>
     <div class="flex flex-center column ">
   
-    <bara-interval-documente v-if="vreauGrid" @new-data="newData" />
+    <bara-interval-documente ref="barainterval" v-if="vreauGrid" @new-data="newData" />
     <q-table
       v-if="vreauGrid"
       :data="documente"
@@ -21,22 +21,21 @@
 
 
     <div class="row">
-        <div v-if="vreauLista" class="col-3 q-pa-sm" >
+        <div v-if="vreauLista" class="col-2 q-pa-sm" >
              <q-scroll-area style="height: 85vh; ">
-                <q-list v-for="d in data" :key="d.name" bordered separator >
+                <q-list v-for="d in documente" :key="d.id" bordered separator >
 
 
                 <q-item clickable v-ripple>
                     <q-item-section>
-                    <q-item-label overline>{{d.name}}</q-item-label>
-                    <q-item-label>{{d.calories}}</q-item-label>
-                     <q-item-label>Calciu: {{d.calcium}}</q-item-label>
+                    <q-item-label overline>{{d.tipoperatiune}} {{d.nrdoc}}</q-item-label>
+                    <q-item-label>{{d.data}}</q-item-label>
                     </q-item-section>
                 </q-item>
                 </q-list>
              </q-scroll-area>
         </div>
-        <div v-if="vreauFormular" id="formular" class="col-9 q-pa-sm">
+        <div v-if="vreauFormular" id="formular" class="col-10 q-pa-sm">
             <div class="row justify-around items-start content-start">
 
                  <q-select @input="schimbTipMaterial" outlined v-model="tipmaterial" :options="tipurirepere" label="Tip material" />   
@@ -67,6 +66,7 @@
                       <q-tabs
                         v-model="tab"
                         class="text-teal"
+                        style="width:240px"
                       >
                         <q-tab v-if="iesirivizibile" name="tabiesiri" icon="mail" label="Iesire" />
                         <q-tab v-if="intrarivizibile" name="tabintrari" icon="alarm" label="Intrare" />
@@ -232,14 +232,14 @@
                     </template>
 
                     <template v-slot:after>
-                      <div class="q-pa-md" style="min-width:600px"><Repere :repere="repere"/></div>
+                      <div class="q-pa-md" style="min-width:450px"><Repere :repere="repere"/></div>
                         
                     </template>
 
             </q-splitter>
             <div class="row q-pa-md justify-center">
               <q-btn :disable="!PotAdaugaDocument" icon="create" @click="salveaza" color="secondary" flat label="Salveaza"  />
-              <q-btn  icon="create" @click="clickDocumente" color="secondary" flat label="Reset"  />
+              <q-btn  icon="create" @click="schimbaGestiunea" color="secondary" flat label="Reset"  />
               <q-btn  icon="create" @click="clickDocumente" color="secondary" flat label="Documente..."  />
 
             </div>
@@ -332,6 +332,7 @@ export default {
     this.datadoc= date.formatDate(timeStamp, 'DD/MM/YYYY');
      const token=this.$store.getters.token;
      this.$root.$on('materialadaugat',this.materialAdaugat)
+     this.$root.$on('schimbgestiunea',this.schimbaGestiunea)
 
      
       axios.get(process.env.host+'documente/tipuridocumente',{headers:{"Authorization" : `Bearer ${token}`}}).then(
@@ -594,7 +595,11 @@ export default {
         this.categoriei=null;
         this.lociesire=locuri[0];
         this.locintrare=locuri[0];
-    }  
+    } ,
+    schimbaGestiunea(){
+
+       this.$refs.barainterval.schimbaGestiunea();
+    } 
   }
 }
 </script>

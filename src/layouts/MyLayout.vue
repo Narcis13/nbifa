@@ -62,7 +62,7 @@
       </q-toolbar>
     </q-header>
 
-   <q-drawer v-model="left" side="left" bordered>
+   <q-drawer :width="230" v-model="left" side="left" bordered>
     <Meniu :rol="rolUtilizator" :logat="userAutentificat"/>
       
     </q-drawer>

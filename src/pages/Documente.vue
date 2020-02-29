@@ -398,6 +398,9 @@ export default {
 
        this.categoriiPerGestiunePerTip();
   },
+      beforeDestroy(){
+         this.$root.$off('schimbgestiunea',this.schimbaGestiunea)
+    },
   computed:{
       intrarivizibile(){
           return this.tipdocument.value==='i'||this.tipdocument.value==='t'
@@ -596,9 +599,9 @@ export default {
         this.lociesire=locuri[0];
         this.locintrare=locuri[0];
     } ,
-    schimbaGestiunea(){
+    schimbaGestiunea(id){
 
-       this.$refs.barainterval.schimbaGestiunea();
+       this.$refs.barainterval.schimbaGestiunea(id);
     } 
   }
 }

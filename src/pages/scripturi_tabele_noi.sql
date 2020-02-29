@@ -22,3 +22,21 @@ CREATE TABLE `bifa`.`operatiuni` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);
 
+CREATE TABLE `bifa`.`tranzactii` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `idAntet` INT NOT NULL,
+  `id_categ` INT NOT NULL,
+  `id_reper` INT NOT NULL,
+  `id_gestiune` INT NOT NULL,
+  `id_locdispunere` INT NOT NULL,
+  `um` VARCHAR(20) NOT NULL,
+  `cantitate_debit` DECIMAL(10,2) NOT NULL,
+  `cantitate_credit` DECIMAL(10,2) NOT NULL,
+  `pret` DECIMAL(12,4) NOT NULL,
+  `debit` DECIMAL(12,4) NOT NULL,
+  `credit` DECIMAL(12,4) NOT NULL,
+  `stare_material` VARCHAR(15) NOT NULL,
+  `stare` VARCHAR(15) NOT NULL,
+  `datacreere` DATETIME NULL,
+  `datamodificare` DATETIME NULL,
+  PRIMARY KEY (`id`));

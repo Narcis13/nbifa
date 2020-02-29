@@ -40,6 +40,7 @@ module.exports.documentnou = (req,res,next) => {
 module.exports.documenteinterval = (req,res,next) => {
   console.log("sunt in controllerul documente actiunea documenteinterval",req.body);
   knex('operatiuni').where('data','>=',req.body.inceput).andWhere('data','<=',req.body.sfirsit).andWhere("idgestiune",req.body.idgestiune).then((rows)=>{
+    
         return res.status(200).json({
                message: "Documente in interval",
                documente:rows

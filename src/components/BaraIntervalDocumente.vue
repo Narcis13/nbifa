@@ -69,20 +69,24 @@ export default {
         alert('Metoda test implementata in comp Bara Interval!')
       },
       schimbaGestiunea(id){
-        this.SchimbaInterval(0)  ;
+        this.SchimbaInterval(0,id)  ;
 
       },
-      DocumenteInInterval(){
+      DocumenteInInterval(idgest){
           const token=this.$store.getters.token;
           var that=this;
           axios.post(process.env.host+'documente/documenteinterval',{
               "inceput":this.datainceput,
               "sfirsit":this.datasfirsit,
-              "idgestiune":this.$store.getters.gestiuneCurenta.id
+              "idgestiune":idgest
 
            },{headers:{"Authorization" : `Bearer ${token}`}}).then(
              res => {
                  // aici raspuns de la documente
+
+                 for(var i=0;i<res.data.documente.length;i++){
+                   res.data.documente[i].data=date.formatDate(res.data.documente[i].data, 'YYYY/MM/DD');
+                 }
                  console.log('Raspuns la documente in interval',res);
                  this.$emit("new-data", res.data.documente);
                //  that.docs=[...res.data.documente]
@@ -98,8 +102,9 @@ export default {
                      })
              })
       },
-      SchimbaInterval(p){
+      SchimbaInterval(p,idgest){
          var azi = new Date(); 
+         idgest=idgest||this.$store.getters.gestiuneCurenta.id
         // 0 -> luna curenta  
         if(p==0) {
                 var firstDay =  
@@ -131,7 +136,7 @@ export default {
        this.datainceput=date.formatDate(firstDay, 'YYYY/MM/DD');
        this.datasfirsit=date.formatDate(lastDay, 'YYYY/MM/DD');    
 
-       this.DocumenteInInterval();
+       this.DocumenteInInterval(idgest);
 
       }
     }

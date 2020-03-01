@@ -449,6 +449,7 @@ export default {
       },
       salveaza(){
         const token=this.$store.getters.token;
+        var that=this;
         let data = date.extractDate(this.datadoc, 'DD/MM/YYYY')
         let datacorecta=date.formatDate(data, 'YYYY-MM-DD');
         console.log('Data doc', datacorecta,this.$store.getters.gestiuneCurenta.id);
@@ -462,8 +463,32 @@ export default {
             "stare":"ACTIV"
         },{headers:{"Authorization" : `Bearer ${token}`}}).then(
             res => {
-              console.log('Am primit idul,',res.data,numenou)
-              // aici procesez raspunsul de la adaug documente
+              console.log('Am primit raspunsul de la adaug antet documente,',res,that.materialintrare)
+              // aici procesez raspunsul de la adaug documente CICLEZ PRIN REPERE....
+              let info={};
+              let tip=that.tipdocument.value;
+              let tranzactii=[];
+              that.repere.map(r=>{
+                tranzactii.push({
+                          id_categ_intrare:tip=="i"?r.id_categ:null,
+                          id_categ_iesire:tip!=="i"?r.id_categ:null,
+                          idAntet:res.data.id,
+                          id_reper:r.id_reper,
+                          id_locintrare:tip=="i"?that.locintrare.id:null,
+                          id_lociesire:tip!=="i"?that.lociesire.id:null,
+                          id_gestiune:that.$store.getters.gestiuneCurenta.id,
+                          um:r.um,
+                          cantitate:r.cantitate,
+                          pret:r.pret,
+                          valoare:r.valoare,
+                          stare_material_intrare:tip=="i"?that.staremateriali:null,
+                          stare_material_iesire:tip!=="i"?that.staremateriale:null,
+                          tip
+                })
+              })
+
+
+              console.log('de postat',tranzactii);
               
               
 
@@ -471,13 +496,13 @@ export default {
 
             }
        ).catch(err=>{
-             console.log('Eroare.............',err.response.data.message)
+             console.log('Eroare.............',err)
               this.$q.notify({
                     color: 'negative',
                     timeout:1500,
                     position:'top',
                     icon: 'delete',
-                    message: `ATENTIE! ${err.response.data.message}`
+                    message: `ATENTIE! `
                   })
        });
 

@@ -467,6 +467,7 @@ export default {
               // aici procesez raspunsul de la adaug documente CICLEZ PRIN REPERE....
               let info={};
               let tip=that.tipdocument.value;
+              var antet=res.data;
               let tranzactii=[];
               that.repere.map(r=>{
                 tranzactii.push({
@@ -489,7 +490,39 @@ export default {
 
 
               console.log('de postat',tranzactii);
-              
+              axios.post(process.env.host+'documente/tranzactienoua',{
+                    tranzactii
+              },{headers:{"Authorization" : `Bearer ${token}`}}).then(res =>{
+                          this.$q.notify({
+                                          message:`Tranzactia a fost adaugata cu succes!`,
+                                          timeout:1500,
+                                          position:'top',
+                                          color:'positive'
+                         })
+                         that.repere=[];
+                        // that.resetRepere();
+                         //that.resetLocCategorieStare();
+                         //console.log('ma pregatest sa adaug documentul cu antetul ',antet);
+                         that.documente.push({
+                                            id:antet.id,
+                                            idtipoperatiuni:that.tipdocument.id,
+                                            tipoperatiune:that.tipdocument.scurta,
+                                            data:datacorecta,
+                                            nrdoc:that.nrdoc,
+                                            idgestiune:that.$store.getters.gestiuneCurenta.id,
+                                          //  datacreere:antet.datacreere,
+                                         //   datamodificare:antet.datamodificare,
+                                            stare:"ACTIV"
+                         })
+                         that.nrdoc=" ";
+                         that.tipdocument=that.tipuridocumente[0];
+                         that.tipmaterial={label:'MATERIALE', value:'M'}
+                         that.schimbTipMaterial();
+
+
+              }).catch(err=>{
+                
+              })
               
 
 

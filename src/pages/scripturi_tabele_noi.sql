@@ -40,3 +40,7 @@ CREATE TABLE `bifa`.`tranzactii` (
   `datacreere` DATETIME NULL,
   `datamodificare` DATETIME NULL,
   PRIMARY KEY (`id`));
+
+SELECT o.id,o.idtipoperatiuni,o.tipoperatiune,o.data,o.nrdoc,o.datacreere,o.datamodificare,o.stare,sum(t.debit) debit,sum(t.credit) credit FROM bifa.operatiuni o
+inner join tranzactii t on t.idAntet=o.id
+group by t.idAntet

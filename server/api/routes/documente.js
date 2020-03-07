@@ -5,6 +5,7 @@ const DocumenteController =require('../controllers/documente');
 //const checkAuth = require('../middleware/check-auth');
 
 router.post("/documentnou", DocumenteController.documentnou);
+router.post("/tranzactienoua", DocumenteController.tranzactienoua);
 
 router.post("/documenteinterval", DocumenteController.documenteinterval);
 

@@ -45,7 +45,7 @@ module.exports.documenteinterval = (req,res,next) => {
   knex.select(['operatiuni.id', 'operatiuni.idtipoperatiuni', 'operatiuni.tipoperatiune','operatiuni.data' ,'operatiuni.nrdoc', 'operatiuni.stare','operatiuni.datacreere','operatiuni.datamodificare'])
    .from('operatiuni')
    .innerJoin('tranzactii','operatiuni.id','tranzactii.idAntet').sum('tranzactii.debit as debit').sum('tranzactii.credit as credit')
-  // .where('operatiuni.data','>=',req.body.inceput).andWhere('operatiuni.data','<=',req.body.sfirsit).andWhere("operatiuni.idgestiune",req.body.idgestiune)
+   .where(function(){this.where('operatiuni.data','>=',req.body.inceput)/*.andWhere('operatiuni.data','<=',req.body.sfirsit).andWhere("operatiuni.idgestiune",req.body.idgestiune)*/})
    .groupBy('tranzactii.idAntet')
    .then((rows)=>{
     

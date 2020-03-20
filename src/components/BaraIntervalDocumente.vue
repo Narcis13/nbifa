@@ -32,7 +32,7 @@
       </q-card-section>
 
       <q-card-actions vertical>
-        <q-btn flat v-close-popup>Selecteaza</q-btn>
+        <q-btn flat v-close-popup @click="SchimbaInterval(-1)">Selecteaza</q-btn>
 
       </q-card-actions>
     </q-card>
@@ -46,6 +46,7 @@
 
 <script>
 import { date } from 'quasar'
+import {saveAs} from 'file-saver'
 import axios from 'axios'
 export default {
     name:'BaraIntervalDocumente',
@@ -71,6 +72,35 @@ export default {
       schimbaGestiunea(id){
         this.SchimbaInterval(0,id)  ;
 
+      },
+      raportToateDocumentele(idgest){
+          const token=this.$store.getters.token;
+          var that=this;
+          axios.post(process.env.host+'rapoarte/documenteinterval',{
+              "inceput":this.datainceput,
+              "sfirsit":this.datasfirsit,
+              "idgestiune":idgest
+
+           },{responseType:'blob',headers:{"Authorization" : `Bearer ${token}`}}).then(
+             res => {
+                 // aici raspuns de la documente
+                 //console.log('BLOB',res)
+                  const file = new Blob([res.data], {
+                            type: "application/pdf"
+                          });
+
+                 saveAs(file,'pdfNou.pdf');
+              }
+           ).catch(err=>{
+                 //  console.log('Eroare.............',err.response.data.message)
+                    this.$q.notify({
+                        color: 'negative',
+                        timeout:1500,
+                        position:'top',
+                        icon: 'delete',
+                        message: `ATENTIE! `
+                     })
+             })
       },
       DocumenteInInterval(idgest){
           const token=this.$store.getters.token;
@@ -105,6 +135,13 @@ export default {
       SchimbaInterval(p,idgest){
          var azi = new Date(); 
          idgest=idgest||this.$store.getters.gestiuneCurenta.id
+         //custom period
+        if(p==-1){
+           this.DocumenteInInterval(idgest);
+           return;
+          
+        }
+
         // 0 -> luna curenta  
         if(p==0) {
                 var firstDay =  

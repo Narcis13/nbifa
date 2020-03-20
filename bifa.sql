@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 8.0.15, for macos10.14 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: bifa
+-- Host: 127.0.0.1    Database: bifa
 -- ------------------------------------------------------
--- Server version	8.0.17
+-- Server version	5.7.24
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
- SET NAMES utf8 ;
+/*!40101 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,7 +21,7 @@
 
 DROP TABLE IF EXISTS `analitice`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `analitice` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `cont` varchar(255) DEFAULT NULL,
@@ -50,7 +50,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `categorii`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `categorii` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `denumire` varchar(255) DEFAULT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE `categorii` (
   `idcont` int(11) DEFAULT NULL,
   `idcontchelt` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,7 +74,7 @@ CREATE TABLE `categorii` (
 
 LOCK TABLES `categorii` WRITE;
 /*!40000 ALTER TABLE `categorii` DISABLE KEYS */;
-INSERT INTO `categorii` VALUES (1,'Medicamente',2,'300medicamente','600010203654741FFF1478','M.FIX.','sdcsxdczxczX','activ',NULL,NULL,NULL,NULL),(2,'Materiale sanitare',4,'300matsanit','66566565656','OB. INV.',NULL,'activ','2019-03-02 15:32:27','2019-03-02 17:52:14',NULL,NULL),(3,'Reactivi',4,'dfsfsdfsdfsdf','sdfsdfsdfsdf','MAT.',NULL,'inactiv','2019-03-02 15:37:26','2019-03-02 16:20:30',NULL,NULL),(4,'Dezinf',4,'99999999','6dfsdsgdfgdfgdf','OB. INV.',NULL,'activ','2019-03-02 15:38:55','2019-03-02 17:35:50',NULL,NULL),(5,'TESTE',3,'131.001 Fondulet de rulment','131.77777 si acesta e de sters','MAT.',NULL,'activ','2019-09-29 15:26:34','2019-09-29 15:26:34',1865,1868),(6,'PIESE SCHIMB INFO',1,'302.04.00001 Piese de schimb INFO','302.04.00001 Piese de schimb INFO','MAT.',NULL,'activ','2020-02-02 10:12:50','2020-02-02 10:12:50',1871,1871),(7,'CONSUMABILE PC',1,'302.01.00001 TONERE si CONS','302.01.00001 TONERE si CONS','MAT.',NULL,'activ','2020-02-02 10:13:23','2020-02-02 10:13:23',1872,1872),(8,'OB INVENTAR INFO',1,'303.01.00005 OB INVENTAR DEPOZIT INFO','303.01.00005 OB INVENTAR DEPOZIT INFO','OB. INV.',NULL,'activ','2020-02-02 10:13:46','2020-02-02 10:13:46',1873,1873);
+INSERT INTO `categorii` VALUES (1,'Medicamente',2,'300medicamente','600010203654741FFF1478','M.FIX.','sdcsxdczxczX','activ',NULL,NULL,NULL,NULL),(2,'Materiale sanitare',4,'300matsanit','66566565656','OB. INV.',NULL,'activ','2019-03-02 15:32:27','2019-03-02 17:52:14',NULL,NULL),(3,'Reactivi',4,'dfsfsdfsdfsdf','sdfsdfsdfsdf','MAT.',NULL,'inactiv','2019-03-02 15:37:26','2019-03-02 16:20:30',NULL,NULL),(4,'Dezinf',4,'99999999','6dfsdsgdfgdfgdf','OB. INV.',NULL,'activ','2019-03-02 15:38:55','2019-03-02 17:35:50',NULL,NULL),(5,'TESTE',3,'131.001 Fondulet de rulment','131.77777 si acesta e de sters','MAT.',NULL,'activ','2019-09-29 15:26:34','2019-09-29 15:26:34',1865,1868),(6,'PIESE SCHIMB INFO',1,'302.04.00001 Piese de schimb INFO','302.04.00001 Piese de schimb INFO','MAT.',NULL,'activ','2020-02-02 10:12:50','2020-02-02 10:12:50',1871,1871),(7,'CONSUMABILE PC',1,'302.01.00001 TONERE si CONS','302.01.00001 TONERE si CONS','MAT.',NULL,'activ','2020-02-02 10:13:23','2020-02-02 10:13:23',1872,1872),(8,'OB INVENTAR INFO',1,'303.01.00005 OB INVENTAR DEPOZIT INFO','303.01.00005 OB INVENTAR DEPOZIT INFO','OB. INV.',NULL,'activ','2020-02-02 10:13:46','2020-02-02 10:13:46',1873,1873),(9,'TONERE',1,'302.01.00001 TONERE si CONS','302.01.00001 TONERE si CONS','M',NULL,'activ','2020-02-14 18:09:59','2020-02-14 18:09:59',1872,1872);
 /*!40000 ALTER TABLE `categorii` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,7 +84,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `conturi`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `conturi` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `cont` varchar(35) NOT NULL,
@@ -112,7 +112,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `gestiuni`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `gestiuni` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `denumire` varchar(255) DEFAULT NULL,
@@ -149,7 +149,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `knex_migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `knex_migrations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -175,7 +175,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `knex_migrations_lock`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `knex_migrations_lock` (
   `index` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `is_locked` int(11) DEFAULT NULL,
@@ -199,7 +199,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `locuri`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `locuri` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `denumire` varchar(45) NOT NULL DEFAULT 'DEPOZIT',
@@ -226,7 +226,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `materiale`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `materiale` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `denumire` varchar(45) NOT NULL DEFAULT 'generic',
@@ -238,7 +238,7 @@ CREATE TABLE `materiale` (
   `datacreere` datetime DEFAULT NULL,
   `datamodificare` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -247,7 +247,7 @@ CREATE TABLE `materiale` (
 
 LOCK TABLES `materiale` WRITE;
 /*!40000 ALTER TABLE `materiale` DISABLE KEYS */;
-INSERT INTO `materiale` VALUES (1,'PALETI DIN FAG TRATAT SUPERIOR','buc',100.00,1,1,'activ',NULL,NULL),(2,'coca cola zero zahar','buc',1.00,1,3,'activ','2019-11-03 13:01:32','2019-11-17 12:45:53'),(3,'zapacenii modificat din noucc','litri',13222.00,1,3,'activ','2019-11-03 13:02:02','2019-11-17 13:01:37'),(4,'ceva tehnic','buc',17.00,2,3,'activ','2019-11-24 09:22:34','2019-11-24 09:22:34'),(5,'altceva tehnic 2','litri',16.00,2,3,'activ','2019-11-24 09:22:56','2019-11-24 09:22:56'),(6,'oarescce','buc',32.00,1,3,'activ','2019-12-08 09:37:41','2019-12-08 09:37:41'),(7,'Produs XX','buc',12.00,1,3,'activ','2020-01-26 11:02:36','2020-01-26 11:02:36');
+INSERT INTO `materiale` VALUES (1,'PALETI DIN FAG TRATAT SUPERIOR','buc',100.00,1,1,'activ',NULL,NULL),(2,'coca cola zero zahar','buc',1.00,1,3,'activ','2019-11-03 13:01:32','2019-11-17 12:45:53'),(3,'zapacenii modificat din noucc','litri',13222.00,1,3,'activ','2019-11-03 13:02:02','2019-11-17 13:01:37'),(4,'ceva tehnic','buc',17.00,2,3,'activ','2019-11-24 09:22:34','2019-11-24 09:22:34'),(5,'altceva tehnic 2','litri',16.00,2,3,'activ','2019-11-24 09:22:56','2019-11-24 09:22:56'),(6,'oarescce','buc',32.00,1,3,'activ','2019-12-08 09:37:41','2019-12-08 09:37:41'),(7,'Produs XX','buc',12.00,1,3,'activ','2020-01-26 11:02:36','2020-01-26 11:02:36'),(8,'TONER Q2612','buc',13.00,1,3,'activ','2020-02-14 18:10:26','2020-02-14 18:10:26');
 /*!40000 ALTER TABLE `materiale` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -257,7 +257,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `operatiuni`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `operatiuni` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `idtipoperatiuni` int(11) NOT NULL,
@@ -267,9 +267,10 @@ CREATE TABLE `operatiuni` (
   `stare` varchar(15) NOT NULL,
   `datacreere` datetime NOT NULL,
   `datamodificare` datetime NOT NULL,
+  `idgestiune` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -278,6 +279,7 @@ CREATE TABLE `operatiuni` (
 
 LOCK TABLES `operatiuni` WRITE;
 /*!40000 ALTER TABLE `operatiuni` DISABLE KEYS */;
+INSERT INTO `operatiuni` VALUES (12,1,'NRCD','2020-03-07',' 45455','ACTIV','2020-03-07 16:54:34','2020-03-07 16:54:34',1),(13,2,'BC','2020-03-07',' BC444','ACTIV','2020-03-07 17:09:11','2020-03-07 17:09:11',1),(14,1,'NRCD','2020-03-07',' A1q33','ACTIV','2020-03-07 17:26:11','2020-03-07 17:26:11',1),(15,2,'BC','2020-04-15',' c4343','ACTIV','2020-03-10 19:39:14','2020-03-10 19:39:14',1),(16,3,'BPTR','2020-03-11',' 7777','ACTIV','2020-03-11 19:36:13','2020-03-11 19:36:13',1),(17,3,'BPTR','2020-03-14',' 99','ACTIV','2020-03-14 19:21:00','2020-03-14 19:21:00',1),(18,3,'BPTR','2020-03-14',' 7411','ACTIV','2020-03-14 19:27:52','2020-03-14 19:27:52',1);
 /*!40000 ALTER TABLE `operatiuni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -287,7 +289,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tipuridocumente`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipuridocumente` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `denumire` varchar(45) NOT NULL,
@@ -296,7 +298,7 @@ CREATE TABLE `tipuridocumente` (
   `prioritate` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -305,8 +307,46 @@ CREATE TABLE `tipuridocumente` (
 
 LOCK TABLES `tipuridocumente` WRITE;
 /*!40000 ALTER TABLE `tipuridocumente` DISABLE KEYS */;
-INSERT INTO `tipuridocumente` VALUES (1,'NOTA DE RECEPTIE','i','N.R.C.D.',1),(2,'BON DE PREDARE TRANSFER','t','B.P.T.R.',30),(3,'BON DE CONSUM','e','B.C.',20);
+INSERT INTO `tipuridocumente` VALUES (1,'NOTA DE RECEPTIE','i','NRCD',1),(2,'BON DE CONSUM','e','BC',20),(3,'BON DE PREDARE TRANSFER','t','BPTR',30);
 /*!40000 ALTER TABLE `tipuridocumente` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tranzactii`
+--
+
+DROP TABLE IF EXISTS `tranzactii`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tranzactii` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `idAntet` int(11) NOT NULL,
+  `id_categ` int(11) NOT NULL,
+  `id_reper` int(11) NOT NULL,
+  `id_gestiune` int(11) NOT NULL,
+  `id_locdispunere` int(11) NOT NULL,
+  `um` varchar(20) NOT NULL,
+  `cantitate_debit` decimal(10,2) NOT NULL,
+  `cantitate_credit` decimal(10,2) NOT NULL,
+  `pret` decimal(12,4) NOT NULL,
+  `debit` decimal(12,4) NOT NULL,
+  `credit` decimal(12,4) NOT NULL,
+  `stare_material` varchar(15) NOT NULL,
+  `stare` varchar(15) NOT NULL,
+  `datacreere` datetime DEFAULT NULL,
+  `datamodificare` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tranzactii`
+--
+
+LOCK TABLES `tranzactii` WRITE;
+/*!40000 ALTER TABLE `tranzactii` DISABLE KEYS */;
+INSERT INTO `tranzactii` VALUES (5,12,9,8,1,1,'buc',3.00,0.00,13.0000,39.0000,0.0000,'NOU','ACTIV','2020-03-07 16:54:34','2020-03-07 16:54:34'),(6,13,9,8,1,1,'buc',0.00,2.00,33.0000,0.0000,66.0000,'NOU','ACTIV','2020-03-07 17:09:11','2020-03-07 17:09:11'),(7,14,9,8,1,1,'buc',2.00,0.00,13.0000,26.0000,0.0000,'NOU','ACTIV','2020-03-07 17:26:11','2020-03-07 17:26:11'),(8,14,9,8,1,1,'buc',3.00,0.00,13.0000,39.0000,0.0000,'NOU','ACTIV','2020-03-07 17:26:11','2020-03-07 17:26:11'),(9,15,9,8,1,1,'buc',0.00,5.00,20.0000,0.0000,100.0000,'NOU','ACTIV','2020-03-10 19:39:14','2020-03-10 19:39:14'),(10,18,9,8,1,1,'buc',0.00,1.00,13.0000,0.0000,13.0000,'NOU','ACTIV','2020-03-14 19:27:52','2020-03-14 19:27:52'),(11,18,9,8,1,6,'buc',1.00,0.00,13.0000,13.0000,0.0000,'FOLOSIT','ACTIV','2020-03-14 19:27:52','2020-03-14 19:27:52'),(12,18,9,8,1,1,'buc',0.00,2.00,13.0000,0.0000,26.0000,'NOU','ACTIV','2020-03-14 19:27:52','2020-03-14 19:27:52'),(13,18,9,8,1,6,'buc',2.00,0.00,13.0000,26.0000,0.0000,'FOLOSIT','ACTIV','2020-03-14 19:27:52','2020-03-14 19:27:52');
+/*!40000 ALTER TABLE `tranzactii` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -315,7 +355,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `public_id` varchar(50) DEFAULT NULL,
@@ -343,7 +383,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `utilizatori`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `utilizatori` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(255) DEFAULT NULL,
@@ -364,7 +404,7 @@ CREATE TABLE `utilizatori` (
 
 LOCK TABLES `utilizatori` WRITE;
 /*!40000 ALTER TABLE `utilizatori` DISABLE KEYS */;
-INSERT INTO `utilizatori` VALUES (1,'test','test1','Administrator','iemail',NULL,NULL,NULL,'admin'),(2,'test2','test2','fdsasdasdf','asdfasdfasdfasd',NULL,NULL,'asdfasdfasdf','contabil'),(3,'Miki','123456','zcxvxcvx','xzcvxcvzz','2018-10-19 14:58:47','2018-10-19 14:58:47','activ','admin'),(6,'Petrica','erwertwwertwerte','wertwertwertwer','wertwertwertwert','2018-10-28 14:33:09','2018-10-28 14:33:09','activ','wertwertwertwertwert'),(7,'Cici','123456','fdfdfgsdgsdfg','sdfgsdgsdfgsdfg','2019-01-19 17:57:52','2019-01-19 17:57:52','activ','admin'),(8,'Cola','12345','sdfasdfsd asdfasdfasdf','asdfasdf asdf asdf asdf','2019-02-18 17:33:15','2019-02-18 17:33:15','activ','cva');
+INSERT INTO `utilizatori` VALUES (1,'test','test1','Narcis','iemail',NULL,NULL,NULL,'admin'),(2,'test2','test2','fdsasdasdf','asdfasdfasdfasd',NULL,NULL,'asdfasdfasdf','contabil'),(3,'Miki','123456','zcxvxcvx','xzcvxcvzz','2018-10-19 14:58:47','2018-10-19 14:58:47','activ','admin'),(6,'Petrica','erwertwwertwerte','wertwertwertwer','wertwertwertwert','2018-10-28 14:33:09','2018-10-28 14:33:09','activ','wertwertwertwertwert'),(7,'Cici','123456','fdfdfgsdgsdfg','sdfgsdgsdfgsdfg','2019-01-19 17:57:52','2019-01-19 17:57:52','activ','admin'),(8,'Cola','12345','sdfasdfsd asdfasdfasdf','asdfasdf asdf asdf asdf','2019-02-18 17:33:15','2019-02-18 17:33:15','activ','cva');
 /*!40000 ALTER TABLE `utilizatori` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -377,4 +417,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-02 13:01:56
+-- Dump completed on 2020-03-15 18:08:35

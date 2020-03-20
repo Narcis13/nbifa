@@ -6,13 +6,36 @@
     <bara-interval-documente ref="barainterval" v-if="vreauGrid" @new-data="newData" />
     <q-table
       v-if="vreauGrid"
+      dense
+      separator="cell"
       :data="documente"
       :columns="columns"
+      :filter="filter"
       :pagination.sync="pagination"
       row-key="id"
       selection="single"
       :selected.sync="documenteselectate"
-    />
+      no-data-label="Niciun document in intervalul selectat!"
+    >
+                      <template v-slot:top>
+                          
+                          <q-btn class="on-right" flat dense color="primary"  label="Sterge" @click="stergDoc" />
+                          <q-btn class="on-right" flat dense color="green"  :label="lblPrint" @click="raportDocInterval" />
+                          <q-space />
+                          <q-input  dense debounce="300" color="primary" v-model="filter">
+                            <template v-slot:append>
+                              <q-icon name="search" />
+                            </template>
+                          </q-input>
+                      </template>
+                      <template v-slot:bottom-row>
+                        <q-tr>
+                          <q-td style="text-align: center;" colspan="100%">
+                            Total debit: {{totaldebit}} lei    |    Total credit: {{totalcredit}} lei 
+                          </q-td>
+                        </q-tr>
+                     </template>
+    </q-table>
     </div>
 
     <q-page-sticky v-if="vreauGrid" position="bottom-right" :offset="[24, 24]">
@@ -30,6 +53,14 @@
                     <q-item-section>
                     <q-item-label overline>{{d.tipoperatiune}} {{d.nrdoc}}</q-item-label>
                     <q-item-label>{{d.data}}</q-item-label>
+
+
+                            <q-item-label>{{d.valoare}} lei</q-item-label>
+
+                    
+                    </q-item-section>
+                    <q-item-section side>
+                                <q-icon color="primary" :name="d.icon" />
                     </q-item-section>
                 </q-item>
                 </q-list>
@@ -190,6 +221,7 @@
                                       fill-input
                                       input-debounce="0"
                                       label="Denumire"
+                                      :readonly="eTransfer"
                                       :options="materialeintrare"
                                       style="width:225px;"
                                       @filter="filterMIFn"
@@ -272,6 +304,7 @@ export default {
     return {
             tab: 'tabintrari',
         splitterModel: 20,
+        filter:'',
         um:'buc',
         nrdoc:" ",
         pretunitar:0,
@@ -320,8 +353,8 @@ export default {
         { name: 'tipoperatiune', align: 'left', label: 'Tip document', field: 'tipoperatiune', sortable: true },
         { name: 'data', label: 'Data document', field: 'data', sortable: true,format: (val, row) => date.formatDate(val, 'DD/MM/YYYY') },
         { name: 'nrdoc', label: 'Numar document', field: 'nrdoc' },
-        { name: 'debit', label: 'DEBIT', field: 'debit' },
-        { name: 'credit', label: 'CREDIT', field: 'credit' },
+        { name: 'debit', label: 'DEBIT', field: 'debit',format: (val, row) => parseFloat(val).toFixed(2) },
+        { name: 'credit', label: 'CREDIT', field: 'credit' ,format: (val, row) => parseFloat(val).toFixed(2)},
         { name: 'datamodificare', label: 'Ultima modificare', field: 'datamodificare' ,format: (val, row) => date.formatDate(val, 'DD/MM/YYYY HH:mm')}
       ]
 
@@ -414,6 +447,26 @@ export default {
       doarvaloare(){
         return (this.pretunitar*this.cantitate).toFixed(2);
       },
+      lblPrint(){
+         return this.documenteselectate.length===0?'Printeaza toate':'Printeaza'    
+      },
+      eTransfer(){
+           return this.tipdocument.value==="t"
+      },
+      totaldebit(){
+        let t=0;
+        this.documente.map(d=>{
+          t+=parseFloat(d.debit)
+        })
+        return t.toFixed(2);
+      },
+      totalcredit(){
+        let t=0;
+        this.documente.map(d=>{
+          t+=parseFloat(d.credit)
+        })
+        return t.toFixed(2);
+      },
       PotAdaugaReper(){
         return (this.categoriei||this.categoriee)&&(this.materialintrare||this.materialiesire)&&this.cantitate>0
       },
@@ -450,6 +503,7 @@ export default {
       salveaza(){
         const token=this.$store.getters.token;
         var that=this;
+        let tip=that.tipdocument.value;
         let data = date.extractDate(this.datadoc, 'DD/MM/YYYY')
         let datacorecta=date.formatDate(data, 'YYYY-MM-DD');
         console.log('Data doc', datacorecta,this.$store.getters.gestiuneCurenta.id);
@@ -466,11 +520,36 @@ export default {
               console.log('Am primit raspunsul de la adaug antet documente,',res,that.materialintrare)
               // aici procesez raspunsul de la adaug documente CICLEZ PRIN REPERE....
               let info={};
-              let tip=that.tipdocument.value;
+              
               var antet=res.data;
               let tranzactii=[];
-              that.repere.map(r=>{
-                tranzactii.push({
+              if(tip==="t"){
+                //transfer
+                    that.repere.map(r=>{
+
+                       tranzactii.push({
+                          id_categ_intrare:that.categoriei.value,
+                          id_categ_iesire:that.categoriee.value,
+                          idAntet:res.data.id,
+                          id_reper:r.id_reper,
+                          id_locintrare:that.locintrare.id,
+                          id_lociesire:that.lociesire.id,
+                          id_gestiune:that.$store.getters.gestiuneCurenta.id,
+                          um:r.um,
+                          cantitate:r.cantitate,
+                          pret:r.pret,
+                          valoare:r.valoare,
+                          stare_material_intrare:that.staremateriali,
+                          stare_material_iesire:that.staremateriale,
+                          tip
+                       })
+
+                    })
+
+              } else
+              {
+                that.repere.map(r=>{
+                 tranzactii.push({
                           id_categ_intrare:tip=="i"?r.id_categ:null,
                           id_categ_iesire:tip!=="i"?r.id_categ:null,
                           idAntet:res.data.id,
@@ -487,7 +566,7 @@ export default {
                           tip
                 })
               })
-
+              }
 
               console.log('de postat',tranzactii);
               axios.post(process.env.host+'documente/tranzactienoua',{
@@ -499,10 +578,15 @@ export default {
                                           position:'top',
                                           color:'positive'
                          })
+                         let val=0;
+                         that.repere.map(r=>{
+                              val+=parseFloat(r.valoare);
+                         })
                          that.repere=[];
                         // that.resetRepere();
                          //that.resetLocCategorieStare();
                          //console.log('ma pregatest sa adaug documentul cu antetul ',antet);
+                         let iconText=tip==="t"?'refresh':(tip==="i")?'subdirectory_arrow_right':'subdirectory_arrow_left'
                          that.documente.push({
                                             id:antet.id,
                                             idtipoperatiuni:that.tipdocument.id,
@@ -510,6 +594,8 @@ export default {
                                             data:datacorecta,
                                             nrdoc:that.nrdoc,
                                             idgestiune:that.$store.getters.gestiuneCurenta.id,
+                                            valoare:val,
+                                            icon:iconText,
                                           //  datacreere:antet.datacreere,
                                          //   datamodificare:antet.datamodificare,
                                             stare:"ACTIV"
@@ -572,6 +658,7 @@ export default {
       },
       MaterialIesireSelectat(value){
            this.um=value.um;
+           if(this.tipdocument.value==="t") this.materialintrare=value;
       },
       schimbTipMaterial(){
           console.log('schimb tip material', this.tipmaterial)
@@ -587,6 +674,7 @@ export default {
       AdaugaReper(){
       
            this.repere.push({
+             nrcrt:this.repere.length+1,
              categ:this.tipdocument.value==='i'? this.categoriei.label:this.categoriee.label,
              id_categ:this.tipdocument.value==='i'? this.categoriei.value:this.categoriee.value,
              denumire_reper:this.tipdocument.value==='i'? this.materialintrare.label:this.materialiesire.label,
@@ -638,9 +726,69 @@ export default {
             this.materialeiesire = materiale.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
           })
     },
+    raportDocInterval(){
+      const token=this.$store.getters.token;
+  
+         if(this.documenteselectate.length===0){
+              this.$refs.barainterval.raportToateDocumentele(this.$store.getters.gestiuneCurenta.id);
+         }
+         else
+         {
+
+         }
+    },
+    stergDoc(){
+            const token=this.$store.getters.token;
+            var that = this;
+             if(this.documenteselectate.length==1){
+                  
+                   console.log('doc selectat', this.documenteselectate[0]);
+
+                axios.patch(process.env.host+`documente/${this.documenteselectate[0].id}`,{}
+                ,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+                      res => {
+           
+                         //aici trebuie cumva sa scot documentul din array that.categorii = removeByKey(that.categorii,{key:'id',value:that.selected[0].id});
+                          that.documente.some(function(item, index) {
+                              return ( that.documente[index]["id"] === that.documenteselectate[0].id) ? !!( that.documente.splice(index, 1)) : false;
+                          }); 
+                          this.$q.notify({
+                                message:`Documentul selectat a fost invalidat!`,
+                                timeout:1500,
+                                position:'top',
+                                color:'positive'
+                        })
+                })
+
+             }
+             else {
+                   this.$q.notify({
+                    color: 'negative',
+                    timeout:1500,
+                    position:'top',
+                    icon: 'delete',
+                    message: `Selectati un document`
+                  })
+             }
+    },
     newData(d){
            this.documente=[];
+           
            this.documente=[...d];
+           for(var i=0;i<this.documente.length;i++){
+             if (this.documente[i].debit==this.documente[i].credit){
+               this.documente[i].valoare=parseFloat(this.documente[i].debit).toFixed(2);
+               this.documente[i].icon='refresh'
+             }
+             else if(this.documente[i].debit>0){
+               this.documente[i].valoare=parseFloat(this.documente[i].debit).toFixed(2);
+               this.documente[i].icon='subdirectory_arrow_right';
+             } else {
+               this.documente[i].valoare=parseFloat(this.documente[i].credit).toFixed(2);
+               this.documente[i].icon='subdirectory_arrow_left';
+             }
+
+           }
     },
     resetRepere(){
 

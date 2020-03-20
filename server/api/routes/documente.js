@@ -8,7 +8,7 @@ router.post("/documentnou", DocumenteController.documentnou);
 router.post("/tranzactienoua", DocumenteController.tranzactienoua);
 
 router.post("/documenteinterval", DocumenteController.documenteinterval);
-
+router.patch("/:iddoc", /*checkaut,*/ DocumenteController.invalidez_document);
 //router.delete("/:userId", /*checkaut,*/ UserController.user_delete);
 //router.put("/:idmaterial", /*checkaut,*/ MaterialeController.update);
 //router.patch("/sterg/:id", /*checkaut,*/ MaterialeController.sterg_material);

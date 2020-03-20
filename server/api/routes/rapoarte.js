@@ -1,0 +1,17 @@
+const express =require("express");
+const router = express.Router();
+const checkaut =require('../middleware/check-aut');
+const RapoarteController =require('../controllers/rapoarte');
+//const checkAuth = require('../middleware/check-auth');
+
+router.post("/documenteinterval", RapoarteController.documente_interval);
+
+//router.post("/login", UserController.user_login);
+
+//router.delete("/:userId", /*checkaut,*/ UserController.user_delete);
+//router.put("/:idmaterial", /*checkaut,*/ MaterialeController.update);
+//router.patch("/sterg/:id", /*checkaut,*/ MaterialeController.sterg_material);
+//router.get("/toate/:idgest", /*checkaut,*/ MaterialeController.toate); 
+
+
+module.exports=router;

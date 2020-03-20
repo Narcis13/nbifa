@@ -56,7 +56,7 @@ module.exports = function (ctx) {
 
     build: {
       scopeHoisting: true,
-      env:{host:JSON.stringify('http://localhost:3003/')},
+      env:{host:JSON.stringify('http://localhost:3333/')},
       // vueRouterMode: 'history',
       // vueCompiler: true,
       // gzip: true,

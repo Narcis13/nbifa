@@ -5,13 +5,14 @@ const RapoarteController =require('../controllers/rapoarte');
 //const checkAuth = require('../middleware/check-auth');
 
 router.post("/documenteinterval", RapoarteController.documente_interval);
+router.get("/undocument/:iddoc",  RapoarteController.un_document);
 
 //router.post("/login", UserController.user_login);
 
 //router.delete("/:userId", /*checkaut,*/ UserController.user_delete);
 //router.put("/:idmaterial", /*checkaut,*/ MaterialeController.update);
 //router.patch("/sterg/:id", /*checkaut,*/ MaterialeController.sterg_material);
-//router.get("/toate/:idgest", /*checkaut,*/ MaterialeController.toate); 
+//router.get("/lab"/*/:idgest"*/, /*checkaut,*/ RapoarteController.toate); 
 
 
 module.exports=router;

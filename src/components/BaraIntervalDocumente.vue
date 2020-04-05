@@ -46,7 +46,7 @@
 
 <script>
 import { date } from 'quasar'
-import {saveAs} from 'file-saver'
+//import {saveAs} from 'file-saver'
 import axios from 'axios'
 export default {
     name:'BaraIntervalDocumente',
@@ -73,6 +73,9 @@ export default {
         this.SchimbaInterval(0,id)  ;
 
       },
+      raportUnDocument(id){
+             window.open(process.env.host+'rapoarte/undocument/'+id,'_blank');
+      },
       raportToateDocumentele(idgest){
           const token=this.$store.getters.token;
           var that=this;
@@ -89,7 +92,13 @@ export default {
                             type: "application/pdf"
                           });
 
-                 saveAs(file,'pdfNou.pdf');
+                // saveAs(file,'pdfNou.pdf');
+                let newWindow = window.open('/','documenteInterval')
+                newWindow.onload = () => {
+                        newWindow.location = URL.createObjectURL(file);
+                        
+                      };
+                newWindow.document.title="Situatie documente in interval"      
               }
            ).catch(err=>{
                  //  console.log('Eroare.............',err.response.data.message)

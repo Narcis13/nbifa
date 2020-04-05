@@ -49,7 +49,7 @@
                 <q-list v-for="d in documente" :key="d.id" bordered separator >
 
 
-                <q-item clickable v-ripple>
+                <q-item clickable v-ripple @click="rapDoc(d.id)">
                     <q-item-section>
                     <q-item-label overline>{{d.tipoperatiune}} {{d.nrdoc}}</q-item-label>
                     <q-item-label>{{d.data}}</q-item-label>
@@ -734,8 +734,11 @@ export default {
          }
          else
          {
-
+              this.$refs.barainterval.raportUnDocument(this.documenteselectate[0].id);
          }
+    },
+    rapDoc(id){
+          window.open(process.env.host+'rapoarte/undocument/'+id,'_blank');
     },
     stergDoc(){
             const token=this.$store.getters.token;

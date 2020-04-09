@@ -12,6 +12,41 @@ module.exports.tipuridocumente = (req, res, next) => {
 
 }
 
+module.exports.stocPretMediu = (req,res,next) => {
+
+  console.log("sunt in controllerul documente actiunea stoc pret mediu",req.body);
+
+  let sql=`SELECT 
+m.denumire,
+m.um,
+tranzactii.id_reper,
+    sum(tranzactii.cantitate_debit) as ti,
+    sum(tranzactii.cantitate_credit) as te,
+
+    sum(tranzactii.debit) as vi,
+    sum(tranzactii.credit) as ve,
+    sum(tranzactii.cantitate_debit)-sum(tranzactii.cantitate_credit) as stoc,
+    sum(tranzactii.debit)-sum(tranzactii.credit) as valoarestoc,
+    (sum(tranzactii.debit)-sum(tranzactii.credit))/(sum(tranzactii.cantitate_debit)-sum(tranzactii.cantitate_credit)) as pretmediu
+
+FROM bifa.tranzactii
+inner join materiale m on m.id=id_reper
+where id_categ= ? and tranzactii.stare='ACTIV' and id_gestiune= ? and id_locdispunere= ?
+group by id_reper
+having stoc>0`;
+
+  knex.raw(sql,[9,1,1]).then(
+    r=>{
+     // console.log("Raspuns de la query stoc pret mediu",r)
+     return res.status(200).json({
+      message: "Stoc la pret mediu",
+      stocuri:r
+    });
+    }
+  ).catch(err =>{console.log(err)})
+}
+
+
 module.exports.documentnou = (req,res,next) => {
 
   console.log("sunt in controllerul documente actiunea document nou",req.body);
@@ -173,3 +208,6 @@ console.log('Ma pregatesc sa inserez linii',linii)
 
 }
 
+/*
+
+*/

@@ -139,6 +139,7 @@
                                         v-model="categoriee"
                                         dense
                                         label="Categorie reper"
+                                        @input="selectezCategorieIesire"
                                         :options="categorii"
                                         style="width: 225px; "
                                       >
@@ -156,6 +157,7 @@
                                       label="Denumire"
                                       :options="materialeiesire"
                                       style="width:225px;"
+                                      options-selected-class="text-deep-orange"
                                       @filter="filterMEFn"
                                       @input="MaterialIesireSelectat"
                                       
@@ -168,6 +170,18 @@
                                           </q-item-section>
                                         </q-item>
                                       </template>
+                                      <template v-slot:option="scope">
+                                              <q-item
+                                                v-bind="scope.itemProps"
+                                                v-on="scope.itemEvents"
+                                              >
+
+                                                <q-item-section>
+                                                  <q-item-label >{{ scope.opt.label }} ({{scope.opt.um}})</q-item-label>
+                                                  <q-item-label >Pret mediu: {{ scope.opt.pretpredefinit }} Stoc curent: {{scope.opt.stoc}}</q-item-label>
+                                                </q-item-section>
+                                              </q-item>
+                                  </template>
                                   </q-select>  
 
                                   <q-select dense outlined v-model="staremateriale" :options="starimaterial" label="Stare material" style="width:225px;"/>  
@@ -248,11 +262,8 @@
                           <div class="q-gutter-sm q-pa-md column">
                           
                               <q-input  readonly filled v-model="um" label="UM" style="width:100px;" :dense="dense" />
-                              <q-input  type="number" filled v-model.number="cantitate" label="Cantitate" style="width:150px;" :dense="dense"         :rules="[
-                                    val => val !== null && val !== '' || 'Introduceti cantitatea',
-                                     val => val > 0 || 'Cantitatea nu poate fi negativa'
-                              ]"/>
-                              <q-input type="number" filled v-model.number="pretunitar" label="Pret" style="width:150px;" :dense="dense" :rules="[
+                              <q-input  type="number" filled ref="ed_cantitate" v-model.number="cantitate" label="Cantitate" style="width:150px;" :dense="dense" error-message="Cantitate invalida!"  :error="!cantitateValida"/>
+                              <q-input :readonly="iesirivizibile" type="number" filled v-model.number="pretunitar" label="Pret" style="width:150px;" :dense="dense" :rules="[
                                     val => val !== null && val !== '' || 'Introduceti pretul unitar'
                               ]"/>
                               <div class="text-h6 ">{{valoareunitara}} lei</div>
@@ -308,6 +319,7 @@ export default {
         um:'buc',
         nrdoc:" ",
         pretunitar:0,
+        cantitate_maxima:999,
         cantitate:0,
         tipdocument:null,
         lociesire:null,
@@ -420,7 +432,8 @@ export default {
                label:m.denumire,
                value:m.id,
                um:m.um,
-               pretpredefinit:m.pretpredefinit
+               pretpredefinit:m.pretpredefinit,
+               stoc:9999
              })
            })
            this.materialeiesire=[...this.materialeintrare];
@@ -435,6 +448,9 @@ export default {
          this.$root.$off('schimbgestiunea',this.schimbaGestiunea)
     },
   computed:{
+      cantitateValida(){
+          return this.cantitate!==''&&this.cantitate>0&&this.cantitate<=this.cantitate_maxima
+      },
       intrarivizibile(){
           return this.tipdocument.value==='i'||this.tipdocument.value==='t'
       },
@@ -468,7 +484,7 @@ export default {
         return t.toFixed(2);
       },
       PotAdaugaReper(){
-        return (this.categoriei||this.categoriee)&&(this.materialintrare||this.materialiesire)&&this.cantitate>0
+        return (this.categoriei||this.categoriee)&&(this.materialintrare||this.materialiesire)&&this.cantitate>0&&this.cantitate<=this.cantitate_maxima
       },
       PotAdaugaDocument(){
         return this.repere.length>0&&this.nrdoc.length>1
@@ -659,6 +675,10 @@ export default {
       MaterialIesireSelectat(value){
            this.um=value.um;
            if(this.tipdocument.value==="t") this.materialintrare=value;
+           this.pretunitar=value.pretpredefinit;
+           this.cantitate_maxima=value.stoc;
+           this.cantitate=value.stoc;
+           this.$refs['ed_cantitate'].focus();
       },
       schimbTipMaterial(){
           console.log('schimb tip material', this.tipmaterial)
@@ -808,6 +828,41 @@ export default {
         this.lociesire=locuri[0];
         this.locintrare=locuri[0];
     } ,
+    selectezCategorieIesire(){
+          console.log('selectezCategorieIesire');
+          const token=this.$store.getters.token;
+         axios.post(process.env.host+'documente/stocpretmediu',{
+            "id_categ":this.categoriee.id,
+            "idgestiune":this.$store.getters.gestiuneCurenta.id,
+            "idloc":this.lociesire.id
+        },{headers:{"Authorization" : `Bearer ${token}`}}).then(res=>{
+          //aici raspunsul de la pret mediu si stoc
+          console.log(res);
+          materiale=[];
+                     res.data.stocuri[0].map(s=>{
+             materiale.push({
+               id:s.id_reper,
+               label:s.denumire,
+               value:s.id_reper,
+               um:s.um,
+               pretpredefinit:parseFloat(s.pretmediu).toFixed(2),
+               stoc:s.stoc
+             })
+           })
+
+        })
+        .catch(err=>{
+             console.log('Eroare.............',err)
+              this.$q.notify({
+                    color: 'negative',
+                    timeout:1500,
+                    position:'top',
+                    icon: 'delete',
+                    message: `ATENTIE! `
+                  })
+       });
+
+    },
     schimbaGestiunea(id){
 
        this.$refs.barainterval.schimbaGestiunea(id);

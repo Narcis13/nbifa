@@ -250,8 +250,21 @@
                                           </q-item-section>
                                         </q-item>
                                       </template>
-                                  </q-select>  
 
+                                      <template v-slot:option="scope">
+                                              <q-item
+                                                v-bind="scope.itemProps"
+                                                v-on="scope.itemEvents"
+                                              >
+
+                                                <q-item-section>
+                                                  <q-item-label >{{ scope.opt.label }} ({{scope.opt.um}})</q-item-label>
+                                                  
+                                                </q-item-section>
+                                              </q-item>
+                                  </template>
+                                  </q-select>  
+        
                                   <q-select dense outlined v-model="staremateriali" :options="starimaterial" label="Stare material" style="width:225px;"/>                               
                                </div>
                               

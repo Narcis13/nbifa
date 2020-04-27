@@ -18,7 +18,7 @@
         >
            <template v-slot:top>
 
-                    <q-btn class="on-right"  outline rounded  color="primary"  label="Sterge" @click="deleteRow" ></q-btn>
+                    <q-btn class="on-right"  outline rounded  color="primary" icon="delete_sweep" label="Sterge" @click="deleteRow" ></q-btn>
                     <q-space ></q-space>
                     <q-input borderless dense debounce="300" color="primary" v-model="filter" placeholder="Cauta">
                         <template v-slot:append>

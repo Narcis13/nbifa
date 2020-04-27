@@ -19,6 +19,7 @@ module.exports.stocPretMediu = (req,res,next) => {
   let sql=`SELECT 
 m.denumire,
 m.um,
+tranzactii.stare_material,
 tranzactii.id_reper,
     sum(tranzactii.cantitate_debit) as ti,
     sum(tranzactii.cantitate_credit) as te,
@@ -32,10 +33,10 @@ tranzactii.id_reper,
 FROM bifa.tranzactii
 inner join materiale m on m.id=id_reper
 where id_categ= ? and tranzactii.stare='ACTIV' and id_gestiune= ? and id_locdispunere= ?
-group by id_reper
+group by id_reper,tranzactii.stare_material
 having stoc>0`;
 
-  knex.raw(sql,[9,1,1]).then(
+  knex.raw(sql,[req.body.id_categ,req.body.idgestiune,req.body.idloc]).then(
     r=>{
      // console.log("Raspuns de la query stoc pret mediu",r)
      return res.status(200).json({

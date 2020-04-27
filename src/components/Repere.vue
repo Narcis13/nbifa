@@ -7,6 +7,7 @@
                   separator="cell"
                   :data="repere"
                   :columns="columns"
+                  :filter="filter"
                   selection="single"
                     :pagination.sync="pagination"
                   :selected.sync="selected"
@@ -16,7 +17,7 @@
                 >
                       <template v-slot:top>
                           
-                          <q-btn class="on-right" flat dense color="primary" :disable="loading" label="Sterge" @click="removeRow" />
+                          <q-btn class="on-right" icon="delete_sweep" flat dense color="primary"  label="Sterge" @click="removeRow" />
                           <q-space />
                           <q-input  dense debounce="300" color="primary" v-model="filter">
                             <template v-slot:append>
@@ -43,6 +44,7 @@ export default {
      props:['repere'],
      data () {
         return {
+          filter:'',
           listarepere:this.repere,
             selected: [],
         pagination: {

@@ -17,10 +17,10 @@
         </q-btn>
 
         <q-toolbar-title>
-          BIFA Gestiune
+          BIFA Gestiune (Preview)
           
         </q-toolbar-title>
-        <q-btn v-if="!userAutentificat" flat dense @click="doLogin">Autentificare!</q-btn>
+        <q-btn v-if="!userAutentificat" icon="lock" flat dense @click="doLogin">Autentificare!</q-btn>
               <q-btn-dropdown
                   class="glossy"
                   color="purple"
@@ -42,7 +42,7 @@
 
                     <div class="column items-center">
                       <q-avatar size="72px">
-                        <img src="https://cdn.quasar-framework.org/img/boy-avatar.png">
+                        <img src="~assets/user.svg">
                       </q-avatar>
 
                       <div class="text-subtitle1 q-mt-md q-mb-xs">{{numeUtilizator}} {{gestiuneaCurenta}}</div>
@@ -58,7 +58,7 @@
                     </div>
                   </div>
                 </q-btn-dropdown>
-        <q-btn class="q-ml-md" v-if="userAutentificat" flat dense @click="doLogout">Iesire!</q-btn>
+        <q-btn  v-if="userAutentificat" icon="backspace" flat  @click="doLogout"> Iesire!</q-btn>
       </q-toolbar>
     </q-header>
 

@@ -12,7 +12,8 @@ const routes = [
       { path: '/conturi', component: () => import('pages/Conturi.vue') },
       { path: '/locuri', component: () => import('pages/Locuri.vue') },
       { path: '/materiale', component: () => import('pages/Materiale.vue') },
-      { path: '/documente', component: () => import('pages/Documente.vue') }
+      { path: '/documente', component: () => import('pages/Documente.vue') },
+      { path: '/rap', component: () => import('pages/Rapoarte.vue') }
     ]
   }
 ]

@@ -45,7 +45,7 @@ module.exports.update_categorie = (req, res, next) => {
     id: req.params.idcateg
   }).update({
          
-    updated_at:new Date().toISOString(),
+    updated_at:knex.fn.now(),
     stare:"inactiv"
   })
   .then(()=>{

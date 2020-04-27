@@ -19,8 +19,8 @@
     >
                       <template v-slot:top>
                           
-                          <q-btn class="on-right" flat dense color="primary"  label="Sterge" @click="stergDoc" />
-                          <q-btn class="on-right" flat dense color="green"  :label="lblPrint" @click="raportDocInterval" />
+                          <q-btn class="on-right" icon="delete_sweep" flat dense color="primary"  label="Sterge" @click="stergDoc" />
+                          <q-btn class="on-right" icon="print" flat dense color="green"  :label="lblPrint" @click="raportDocInterval" />
                           <q-space />
                           <q-input  dense debounce="300" color="primary" v-model="filter">
                             <template v-slot:append>
@@ -99,8 +99,8 @@
                         class="text-teal"
                         style="width:240px"
                       >
-                        <q-tab v-if="iesirivizibile" name="tabiesiri" icon="mail" label="Iesire" />
-                        <q-tab v-if="intrarivizibile" name="tabintrari" icon="alarm" label="Intrare" />
+                        <q-tab v-if="iesirivizibile" name="tabiesiri" icon="fast_rewind" label="Iesire" />
+                        <q-tab v-if="intrarivizibile" name="tabintrari" icon="fast_forward" label="Intrare" />
                       </q-tabs>
 
                           <q-tab-panels
@@ -177,7 +177,7 @@
                                               >
 
                                                 <q-item-section>
-                                                  <q-item-label >{{ scope.opt.label }} ({{scope.opt.um}})</q-item-label>
+                                                  <q-item-label >{{ scope.opt.label }} ({{scope.opt.um}}) - {{scope.opt.stare}}</q-item-label>
                                                   <q-item-label >Pret mediu: {{ scope.opt.pretpredefinit }} Stoc curent: {{scope.opt.stoc}}</q-item-label>
                                                 </q-item-section>
                                               </q-item>
@@ -294,9 +294,9 @@
 
             </q-splitter>
             <div class="row q-pa-md justify-center">
-              <q-btn :disable="!PotAdaugaDocument" icon="create" @click="salveaza" color="secondary" flat label="Salveaza"  />
-              <q-btn  icon="create" @click="schimbaGestiunea" color="secondary" flat label="Reset"  />
-              <q-btn  icon="create" @click="clickDocumente" color="secondary" flat label="Documente..."  />
+              <q-btn :disable="!PotAdaugaDocument" icon="save_alt" @click="salveaza" color="secondary" flat label="Salveaza"  />
+              <q-btn  icon="repeat" @click="schimbaGestiunea" color="secondary" flat label="Reset"  />
+              <q-btn  icon="description" @click="clickDocumente" color="secondary" flat label="Documente..."  />
 
             </div>
                     
@@ -832,6 +832,7 @@ export default {
       this.pretunitar=0;
       this.materialintrare=null;
       this.materialiesire=null;
+      if(this.tipdocument.value==="t") this.tab="tabiesiri";
     },
     resetLocCategorieStare(){
         this.staremateriali='NOU';
@@ -859,7 +860,8 @@ export default {
                value:s.id_reper,
                um:s.um,
                pretpredefinit:parseFloat(s.pretmediu).toFixed(2),
-               stoc:s.stoc
+               stoc:s.stoc,
+               stare:s.stare_material
              })
            })
 

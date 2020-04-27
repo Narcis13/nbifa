@@ -1,6 +1,6 @@
 <template>
     <q-page padding>
-        <q-btn icon="create" @click="opened=true" color="secondary" flat label="Adauga" class="q-mr-sm" />
+        <q-btn icon="add_circle" @click="opened=true" color="secondary" flat label="Adauga" class="q-mr-sm" />
         <q-table
             :data="tableData"
             :columns="columns"

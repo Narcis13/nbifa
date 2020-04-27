@@ -14,8 +14,8 @@
 
              >
              <template v-slot:top>
-                    <q-btn  outline rounded  color="primary"  label="Adauga" @click="opened=true" ></q-btn>
-                    <q-btn class="on-right"  outline rounded  color="primary"  label="Sterge" @click="stergCateg" ></q-btn>
+                    <q-btn  outline rounded  color="primary"  icon="add_box" label="Adauga" @click="opened=true" ></q-btn>
+                    <q-btn class="on-right" icon="delete_sweep"  outline rounded  color="primary"  label="Sterge" @click="stergCateg" ></q-btn>
                     <q-space ></q-space>
                     <q-input borderless dense debounce="300" color="primary" v-model="filter" placeholder="Cauta">
                         <template v-slot:append>

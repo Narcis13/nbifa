@@ -11,7 +11,7 @@
                     active-class="my-menu-link"
                     >
                     <q-item-section avatar>
-                        <q-icon name="inbox" ></q-icon>
+                        <q-icon name="contacts" ></q-icon>
                     </q-item-section>
             
                     <q-item-section>Utilizatori</q-item-section>
@@ -26,7 +26,7 @@
                     active-class="my-menu-link"
                     >
                     <q-item-section avatar>
-                        <q-icon name="send" ></q-icon>
+                        <q-icon name="list_alt" ></q-icon>
                     </q-item-section>
             
                     <q-item-section>Gestiuni</q-item-section>
@@ -41,7 +41,7 @@
                         active-class="my-menu-link"
                     >
                     <q-item-section avatar>
-                        <q-icon name="send" ></q-icon>
+                        <q-icon name="sort" ></q-icon>
                     </q-item-section>
             
                     <q-item-section>Plan Conturi</q-item-section>
@@ -57,7 +57,7 @@
                     active-class="my-menu-link"
                     >
                     <q-item-section avatar>
-                        <q-icon name="delete" ></q-icon>
+                        <q-icon name="ballot" ></q-icon>
                     </q-item-section>
             
                     <q-item-section>Categorii repere</q-item-section>
@@ -87,7 +87,7 @@
                     active-class="my-menu-link"
                     >
                     <q-item-section avatar>
-                        <q-icon name="settings" ></q-icon>
+                        <q-icon name="library_books" ></q-icon>
                     </q-item-section>
             
                     <q-item-section>Locuri de dispunere</q-item-section>
@@ -102,7 +102,7 @@
                     active-class="my-menu-link"
                     >
                     <q-item-section avatar>
-                        <q-icon name="help" ></q-icon>
+                        <q-icon name="dns" ></q-icon>
                     </q-item-section>
             
                     <q-item-section>Materiale</q-item-section>
@@ -122,7 +122,7 @@
                     active-class="my-menu-link"
                     >
                     <q-item-section avatar>
-                        <q-icon name="settings" ></q-icon>
+                        <q-icon name="note_add" ></q-icon>
                     </q-item-section>
             
                     <q-item-section>Operatiune noua...</q-item-section>
@@ -131,12 +131,12 @@
                     <q-item
                     clickable
                     v-ripple
-                    :active="link === 'help'"
-                    @click="link = 'help'"
+                    :active="link === 'rapoarte'"
+                    @click="clickRapoarte"
                     active-class="my-menu-link"
                     >
                     <q-item-section avatar>
-                        <q-icon name="help" ></q-icon>
+                        <q-icon name="assignment" ></q-icon>
                     </q-item-section>
             
                     <q-item-section>Rapoarte</q-item-section>
@@ -151,9 +151,9 @@ export default {
     props: ['rol','logat'],
     data: function () {
         return {
-            link:'inbox',
-            rol: this.rol,
-            logat:this.logat
+            link:'inbox'//,
+           // rol: this.rol,
+         //   logat:this.logat
         }
     },
     methods:{
@@ -193,6 +193,10 @@ export default {
       clickCategorii(e){
             this.link='trash';
           this.$router.push('/categorii');
+      },
+      clickRapoarte(e){
+            this.link='rapoarte';
+          this.$router.push('/rap');
       }
     },
     computed:{

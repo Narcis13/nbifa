@@ -34,8 +34,8 @@
                   </q-card-section>
 
                   <q-card-actions align="right">
-                    <q-btn flat label="Abandon" color="primary" v-close-dialog />
-                    <q-btn flat label="Sterge" color="primary" @click="sterg" v-close-dialog />
+                    <q-btn flat label="Abandon" color="primary" v-close-popup />
+                    <q-btn flat label="Sterge" color="primary" @click="sterg" v-close-popup />
                   </q-card-actions>
                 </q-card>
               </q-dialog>

@@ -29,13 +29,13 @@
             icon="add"
             style="right: 48px; bottom: 64px"
     >
-            <q-popup-edit v-model="numenou" content-class="bg-accent text-white">
-                <q-input dark color="white" v-model="numenou" dense autofocus counter @blur="adLoc">
+            <q-popup-edit v-model="numenou" content-class="bg-accent text-white" buttons @save="adLoc">
+                <q-input dark color="white" v-model="numenou" dense autofocus counter >
                     <template v-slot:append>
                             <q-icon name="edit" />
                     </template>
                 </q-input>
-        </q-popup-edit>
+            </q-popup-edit>
     </q-btn>
      </div>
 </q-page>

@@ -15,6 +15,7 @@ const matRoutes = require('./api/routes/materiale');
 const docRoutes = require('./api/routes/documente');
 const rapRoutes = require('./api/routes/rapoarte');
 const labRoutes = require('./api/routes/lab');
+const balRoutes = require('./api/routes/balante');
 
 app.use(morgan('dev'));
 
@@ -47,6 +48,7 @@ app.use('/materiale',matRoutes);
 app.use('/documente',docRoutes);
 app.use('/rapoarte',rapRoutes);
 app.use('/lab',labRoutes);
+app.use('/balante',balRoutes);
 
 app.use((req,resp,next)=>{
     const error = new Error('Resursa nu poate fi gasita!!');

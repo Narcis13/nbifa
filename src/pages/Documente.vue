@@ -560,6 +560,7 @@ export default {
                           id_categ_intrare:that.categoriei.value,
                           id_categ_iesire:that.categoriee.value,
                           idAntet:res.data.id,
+                          tip_material:r.tipmaterial,
                           id_reper:r.id_reper,
                           id_locintrare:that.locintrare.id,
                           id_lociesire:that.lociesire.id,
@@ -581,6 +582,7 @@ export default {
                  tranzactii.push({
                           id_categ_intrare:tip=="i"?r.id_categ:null,
                           id_categ_iesire:tip!=="i"?r.id_categ:null,
+                          tip_material:r.tipmaterial,
                           idAntet:res.data.id,
                           id_reper:r.id_reper,
                           id_locintrare:tip=="i"?that.locintrare.id:null,
@@ -715,7 +717,8 @@ export default {
              um:this.um,
              cantitate:this.cantitate,
              pret:this.pretunitar,
-             valoare:this.doarvaloare
+             valoare:this.doarvaloare,
+             tipmaterial:this.tipmaterial.value
            })
            this.resetRepere();
       },

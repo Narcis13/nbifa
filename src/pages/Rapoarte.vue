@@ -91,7 +91,7 @@
         <!-- Aici vine divul cu butoanele -->
        <div class="q-pa-md flex flex-center column ">
             <q-btn-group rounded>
-              <q-btn color="amber" rounded glossy icon-right="update" label="BALANTA ANALITICA DE GESTIUNE" />
+              <q-btn @click="genBalanta" color="amber" rounded glossy icon-right="update" label="BALANTA ANALITICA DE GESTIUNE" />
               <q-btn color="amber" rounded glossy icon-right="update" label="LISTA DE INVENTARIERE" />
             </q-btn-group>
        </div>
@@ -271,6 +271,13 @@ export default {
       this.categoriiPerGestiunePerTip()
   },
   methods:{
+    genBalanta(){
+         let categorii=this.toatecategoriile? '*':this.categoriei.value;
+         //tipmaterial
+         let locuri=this.toatelocurile? '*':this.locselectat.value;
+         let stari=this.toatestarile? '*':this.staremateriali;
+         console.log('GENEREZ BALANTA',categorii,this.tipmaterial.value,locuri,stari,this.datainceput,this.datasfirsit);
+    },
     categoriiPerGestiunePerTip(){
        const token=this.$store.getters.token;
 

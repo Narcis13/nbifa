@@ -1,9 +1,6 @@
-upgrade quasar
+- dupa ce mai lucrez la balanta incliusvi documentul tiparit, ma bag la MODIFICAT documente deja salvate.....
+- apoi Lista de inventariere
+- apoi reevaluare baza de date + curatenie
+- in paralel cu teste ....probabil de la 01.06.2020 si fisa de cont analitica sa fie dezvoltata!!!
 
-
-D:\proiecte\nbifa>npm upgrade -g @quasar/cli
-
-D:\proiecte\nbifa>npm upgrade @quasar/app quasar
-
-
-If you upgrade your global @quasar/cli package (highly recommended) --- $ npm install @quasar/cli@latest, you can then run $ quasar upgrade inside your v1 projects and it will auto upgrade all project quasar related packages automatically (non breaking changes).
+SUCCES!

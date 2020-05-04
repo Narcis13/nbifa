@@ -92,15 +92,12 @@
        <div class="q-pa-md flex flex-center column ">
             <q-btn-group rounded>
               <q-btn @click="genBalanta" color="amber" rounded glossy icon-right="update" label="BALANTA ANALITICA DE GESTIUNE" />
-              <q-btn color="amber" rounded glossy icon-right="update" label="LISTA DE INVENTARIERE" />
+              <q-btn @click="genLI" color="amber" rounded glossy icon-right="update" label="LISTA DE INVENTARIERE" />
             </q-btn-group>
        </div>
-    <q-table
-      title="Treats"
-      :data="data"
-      :columns="columns"
-      row-key="name"
-    />
+       
+      <lista-inventar v-if="afisezListaInventariere" />
+      <balanta v-if="afisezBalanta" />
 
 
     </div>
@@ -109,14 +106,23 @@
 
 <script>
 import axios from 'axios';
+import BalantaAnalitica from '../components/Balanta'
+import ListaInventariere from '../components/ListaInventariere'
 var locuri=[];
 export default {
+    components:{
+    'balanta':BalantaAnalitica,
+    'lista-inventar':ListaInventariere
+
+  },
   data () {
     return {
        tipurirepere:[{label:'MATERIALE', value:'M'}, {label:'OBIECTE INVENTAR',value:'OB'}, {label:'MIJLOACE FIXE',value:'MF'}],
         tipmaterial:{label:'MATERIALE', value:'M'},
         toatecategoriile:true,
         toatelocurile:true,
+        afisezBalanta:false,
+        afisezListaInventariere:false,
         toatestarile:true,
         locselectat:null,
         categoriei:null,
@@ -125,126 +131,7 @@ export default {
         datasfirsit:'2020/04/27',
         starimaterial:['NOU', 'FOLOSIT', 'CASARE'],
         staremateriali:'NOU',
-      columns: [
-        {
-          name: 'name',
-          required: true,
-          label: 'Dessert (100g serving)',
-          align: 'left',
-          field: row => row.name,
-          format: val => `${val}`,
-          sortable: true
-        },
-        { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-        { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-        { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-        { name: 'protein', label: 'Protein (g)', field: 'protein' },
-        { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-        { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-        { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
-      ],
-      data: [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          sodium: 87,
-          calcium: '14%',
-          iron: '1%'
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          sodium: 129,
-          calcium: '8%',
-          iron: '1%'
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          sodium: 337,
-          calcium: '6%',
-          iron: '7%'
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          sodium: 413,
-          calcium: '3%',
-          iron: '8%'
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          sodium: 327,
-          calcium: '7%',
-          iron: '16%'
-        },
-        {
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          sodium: 50,
-          calcium: '0%',
-          iron: '0%'
-        },
-        {
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          sodium: 38,
-          calcium: '0%',
-          iron: '2%'
-        },
-        {
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          sodium: 562,
-          calcium: '0%',
-          iron: '45%'
-        },
-        {
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          sodium: 326,
-          calcium: '2%',
-          iron: '22%'
-        },
-        {
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          sodium: 54,
-          calcium: '12%',
-          iron: '6%'
-        }
-      ]
+      
     }
   },
   created(){
@@ -271,12 +158,42 @@ export default {
       this.categoriiPerGestiunePerTip()
   },
   methods:{
+    genLI(){
+        this.afisezBalanta=false;
+        this.afisezListaInventariere=true;
+    },
     genBalanta(){
+         const token=this.$store.getters.token;
          let categorii=this.toatecategoriile? '*':this.categoriei.value;
          //tipmaterial
          let locuri=this.toatelocurile? '*':this.locselectat.value;
          let stari=this.toatestarile? '*':this.staremateriali;
          console.log('GENEREZ BALANTA',categorii,this.tipmaterial.value,locuri,stari,this.datainceput,this.datasfirsit);
+         var that=this; 
+         axios.post(process.env.host+'balante/balantanoua',{
+            "tipmaterial":this.tipmaterial.value,
+             "datainceput":this.datainceput,
+             "datasfirsit":this.datasfirsit,
+            "idgestiune":this.$store.getters.gestiuneCurenta.id,
+            categorii,
+            locuri,
+            stari
+        },{headers:{"Authorization" : `Bearer ${token}`}}).then(
+            res => {
+              console.log('A sosit balanta...',res)
+              that.afisezBalanta=true;
+              that.afisezListaInventariere=false;
+            }
+        ).catch(err =>{
+                  this.$q.notify({
+                    color: 'negative',
+                    timeout:1500,
+                    position:'top',
+                    icon: 'delete',
+                    message: `EROARE GENERICA! `
+                  })
+        })
+
     },
     categoriiPerGestiunePerTip(){
        const token=this.$store.getters.token;

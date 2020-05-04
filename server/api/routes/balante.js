@@ -4,7 +4,7 @@ const router = express.Router();
 const BalController =require('../controllers/balante');
 
 
-//router.post("/categorienoua", CatController.categorienoua);
+router.post("/balantanoua", BalController.analitica);
 
 //router.delete("/:idgest", /*checkaut,*/ GestController.sterg_gestiune);
 //router.put("/:idcateg", /*checkaut,*/ CatController.update);

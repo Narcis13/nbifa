@@ -5,6 +5,7 @@ const BalController =require('../controllers/balante');
 
 
 router.post("/balantanoua", BalController.analitica);
+router.post("/rapanalitica", BalController.raportanalitica);
 
 //router.delete("/:idgest", /*checkaut,*/ GestController.sterg_gestiune);
 //router.put("/:idcateg", /*checkaut,*/ CatController.update);

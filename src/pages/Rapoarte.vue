@@ -97,7 +97,7 @@
        </div>
        
       <lista-inventar v-if="afisezListaInventariere" />
-      <balanta v-if="afisezBalanta" />
+      <balanta v-if="afisezBalanta" :setdate="datebalanta" :total="totalstocfinal" :parametrii="parametrii_balanta"/>
 
 
     </div>
@@ -131,7 +131,9 @@ export default {
         datasfirsit:'2020/04/27',
         starimaterial:['NOU', 'FOLOSIT', 'CASARE'],
         staremateriali:'NOU',
-      
+        datebalanta:[] ,
+        parametrii_balanta:{},
+        totalstocfinal:0
     }
   },
   created(){
@@ -170,7 +172,7 @@ export default {
          let stari=this.toatestarile? '*':this.staremateriali;
          console.log('GENEREZ BALANTA',categorii,this.tipmaterial.value,locuri,stari,this.datainceput,this.datasfirsit);
          var that=this; 
-         axios.post(process.env.host+'balante/balantanoua',{
+         this.parametrii_balanta={
             "tipmaterial":this.tipmaterial.value,
              "datainceput":this.datainceput,
              "datasfirsit":this.datasfirsit,
@@ -178,11 +180,35 @@ export default {
             categorii,
             locuri,
             stari
-        },{headers:{"Authorization" : `Bearer ${token}`}}).then(
+        };
+         axios.post(process.env.host+'balante/balantanoua',this.parametrii_balanta,{headers:{"Authorization" : `Bearer ${token}`}}).then(
             res => {
-              console.log('A sosit balanta...',res)
-              that.afisezBalanta=true;
-              that.afisezListaInventariere=false;
+              console.log('A sosit balanta...',that.datebalanta)
+              that.datebalanta=[];
+              let nrcrt=1,totalstoc=0;
+              res.data.balanta[0].map((linie=>{
+                that.datebalanta.push({
+                    nrcrt,
+                    id_reper:linie.id_reper,
+                    denumire:linie.denumire,
+                    um:linie.um,
+                    stocinitial:linie.stocinitial,
+                    ti:linie.ti,
+                    te:linie.te,
+                    stocfinal:linie.stocfinal,
+                    valoarestocinitial:parseFloat(linie.valoarestocinitial).toFixed(2),
+                     vi:parseFloat(linie.vi).toFixed(2),
+                      ve:parseFloat(linie.ve).toFixed(2),
+                       valoarestoc:parseFloat(linie.valoarestoc).toFixed(2),
+
+                })
+                 nrcrt++;
+                 totalstoc+=parseFloat(linie.valoarestoc);
+              }))
+             that.afisezBalanta=true;
+             that.totalstocfinal=totalstoc.toFixed(2);
+             console.log('A sosit balanta...',that.datebalanta)
+             that.afisezListaInventariere=false;
             }
         ).catch(err =>{
                   this.$q.notify({

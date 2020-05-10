@@ -44,7 +44,7 @@ module.exports.raportanalitica = (req,res,next)=>{
     
     
   var ejs_template = fs.readFileSync(path.join(__dirname,'reports','analitica.ejs'),'utf8'),
-       style=fs.readFileSync(path.join(__dirname,'reports','styles.css'),'utf8');
+       style=fs.readFileSync(path.join(__dirname,'reports','analitica_styles.css'),'utf8');
 
        const html = ejs.render(ejs_template, {set_date,style,config});
        res.send(html);

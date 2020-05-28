@@ -174,9 +174,13 @@ export default {
          var that=this; 
          this.parametrii_balanta={
             "tipmaterial":this.tipmaterial.value,
+            denumiretipmaterial:this.tipmaterial.label,
+            denumireloc:this.toatelocurile?'Toate Locurile':this.locselectat.label,
+            denumirecategorie:this.toatecategoriile?'Toate Categoriile':this.categoriei.label,
              "datainceput":this.datainceput,
              "datasfirsit":this.datasfirsit,
             "idgestiune":this.$store.getters.gestiuneCurenta.id,
+            "gestiune":this.$store.getters.gestiuni[0].denumire,
             categorii,
             locuri,
             stari

@@ -1,141 +1,233 @@
 <template>
-    <q-table
-      title="Lista de inventariere"
-      :data="data"
-      :columns="columns"
-      row-key="name"
-    />
+      <q-group-table :loading="loading" dense dark :group-on="group" :title="niceTitle" :data="users" :columns="column_defs"  selection="single" :selected.sync="selected" @select="get_selection($event)">
+      <template v-slot:top>
+        <q-btn dense dark color="primary" :disable="loading" label="Add row" @click="addrow" />
+        <q-space />
+        <q-input outlined dense dark debounce="300" color="primary" v-model="filter">
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+      </template>
+      </q-group-table>
 </template>
 
 <script>
 export default {
      name:'ListaInventariere',
      props:['setdate'],
- data () {
+ methods: {
+            get_selection(selection) {
+              
+                this.selected = selection
+            },
+            addrow(){
+                  alert('CUSTOM TOP SLOT IS WORKING!')
+            },
+            remove(){
+           
+              this.users.shift();
+            }
+  },
+  created(){
+     let that=this;
+     this.loading=true;
+     setTimeout(()=>{
+         that.users=[...that.lazyusers];
+         that.loading=false;
+     },3000)
+  },
+  data(){
     return {
-
-      columns: [
-        {
-          name: 'name',
-          required: true,
-          label: 'Dessert (100g serving)',
-          align: 'left',
-          field: row => row.name,
-          format: val => `${val}`,
-          sortable: true
-        },
-        { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-        { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-        { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-        { name: 'protein', label: 'Protein (g)', field: 'protein' },
-        { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-        { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-        { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
+      selected:[],
+      loading:false,
+      filter:'',
+       group: 'eyecolor',
+       options: [
+          {
+            label: 'Ungrouped',
+            value: ':nothing'
+          },
+          {
+            label: 'Eye Color',
+            value: 'eyecolor'
+          },
+          {
+            label: 'Company',
+            value: 'company'
+          },
+          {
+            label: 'Gender',
+            value: 'gender'
+          }
       ],
-      data: [
+      niceTitle:'Employees',
+      column_defs:[    
+        { name: 'index', align: 'center', label: 'Index', field: 'index' },
+        { name: 'balance', label: 'Balance', field: 'balance',align: 'center' },
+        { name: 'eyecolor', label: 'Eye Color', field: 'eyecolor',align: 'center',formatGroupHeader:(value,count)=>`Stuff with ${value} eyes (${count} people)` },
+        { name: 'name', label: 'Name', field: 'name',align: 'left' },
+        { name: 'gender', label: 'Gender', field: 'gender',align: 'center' },
+        { name: 'company', label: 'Company', field: 'company',align: 'left',formatGroupHeader:(value,count)=>`${count} people in ${value} company` }
+        
+        ],
+        users:[],
+      lazyusers:[
         {
-          name: 'Frozen Yogurt',
-          calories: 9999,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          sodium: 87,
-          calcium: '14%',
-          iron: '1%'
+          index: 0,
+          balance: "$3,091.58",
+          eyecolor: "green",
+          name: "Stafford Mathews",
+          gender: "male",
+          company: "APPLE"
         },
         {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          sodium: 129,
-          calcium: '8%',
-          iron: '1%'
+          index: 1,
+          balance: "$3,305.95",
+          eyecolor: "brown",
+          name: "Darlene Harvey",
+          gender: "female",
+          company: "AMAZON"
         },
         {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          sodium: 337,
-          calcium: '6%',
-          iron: '7%'
+          index: 2,
+          balance: "$2,943.30",
+          eyecolor: "brown",
+          name: "Rochelle Morse",
+          gender: "female",
+          company: "GOOGLE"
         },
         {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          sodium: 413,
-          calcium: '3%',
-          iron: '8%'
+          index: 3,
+          balance: "$1,228.44",
+          eyecolor: "brown",
+          name: "Holloway Joseph",
+          gender: "male",
+          company: "GOOGLE"
         },
         {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          sodium: 327,
-          calcium: '7%',
-          iron: '16%'
+          index: 4,
+          balance: "$3,501.66",
+          eyecolor: "green",
+          name: "Leona Alford",
+          gender: "female",
+          company: "GOOGLE"
         },
         {
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          sodium: 50,
-          calcium: '0%',
-          iron: '0%'
+          index: 5,
+          balance: "$3,615.24",
+          eyecolor: "brown",
+          name: "Rojas Madden",
+          gender: "male",
+          company: "AMAZON"
         },
         {
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          sodium: 38,
-          calcium: '0%',
-          iron: '2%'
+          index: 6,
+          balance: "$1,942.56",
+          eyecolor: "blue",
+          name: "Mann Lloyd",
+          gender: "male",
+          company: "GOOGLE"
         },
         {
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          sodium: 562,
-          calcium: '0%',
-          iron: '45%'
+          index: 7,
+          balance: "$1,640.86",
+          eyecolor: "brown",
+          name: "Jeannine Trevino",
+          gender: "female",
+          company: "APPLE"
         },
         {
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          sodium: 326,
-          calcium: '2%',
-          iron: '22%'
+          index: 8,
+          balance: "$1,472.26",
+          eyecolor: "green",
+          name: "Reba Sellers",
+          gender: "female",
+          company: "APPLE"
         },
         {
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          sodium: 54,
-          calcium: '12%',
-          iron: '6%'
+          index: 9,
+          balance: "$1,824.55",
+          eyecolor: "brown",
+          name: "Osborn Stein",
+          gender: "male",
+          company: "GOOGLE"
+        },
+        {
+          index: 10,
+          balance: "$1,057.34",
+          eyecolor: "blue",
+          name: "Sarah Cantrell",
+          gender: "female",
+          company: "AMAZON"
+        },       
+        {
+          index: 11,
+          balance: "$1,328.18",
+          eyecolor: "blue",
+          name: "Traci Mcguire",
+          gender: "female",
+          company: "GOOGLE"
+        },
+        {
+          index: 12,
+          balance: "$2,848.73",
+          eyecolor: "brown",
+          name: "Karina Rose",
+          gender: "female",
+          company: "GOOGLE"
+        },       
+        {
+          index: 13,
+          balance: "$1,379.99",
+          eyecolor: "green",
+          name: "Caroline Lamb",
+          gender: "female",
+          company: "GOOGLE"
+        },
+        {
+          index: 14,
+          balance: "$3,593.06",
+          eyecolor: "brown",
+          name: "Trudy Savage",
+          gender: "female",
+          company: "AMAZON"
+        },
+        {
+          index: 15,
+          balance: "$2,207.32",
+          eyecolor: "brown",
+          name: "Elinor Burch",
+          gender: "female",
+          company: "GOOGLE"
+        },
+        {
+          index: 16,
+          balance: "$1,493.05",
+          eyecolor: "green",
+          name: "Walls Sawyer",
+          gender: "male",
+          company: "AMAZON"
+        },
+        {
+          index: 17,
+          balance: "$3,149.86",
+          eyecolor: "blue",
+          name: "Porter Ayala",
+          gender: "male",
+          company: "GOOGLE"
+        },
+        {
+          index: 18,
+          balance: "$3,773.37",
+          eyecolor: "blue",
+          name: "Mooney Frederick",
+          gender: "male",
+          company: "AMAZON"
         }
-      ]
+    ]
     }
- }
+  }
 }
 </script>
 

@@ -332,7 +332,7 @@ export default {
         um:'buc',
         nrdoc:" ",
         pretunitar:0,
-        cantitate_maxima:999,
+        cantitate_maxima:999999999,
         cantitate:0,
         tipdocument:null,
         lociesire:null,

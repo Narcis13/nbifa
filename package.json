@@ -24,10 +24,10 @@
     "moment": "^2.24.0",
     "mysql2": "^1.6.5",
     "puppeteer": "^2.1.1",
-    "quasar": "^1.11.3"
+    "quasar": "^1.12.0"
   },
   "devDependencies": {
-    "@quasar/app": "^1.8.10",
+    "@quasar/app": "^1.9.2",
     "morgan": "^1.9.1",
     "nodemon": "^1.18.10",
     "quasar-app-extension-q-grouped-table": "^0.1.0",

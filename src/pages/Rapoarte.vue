@@ -93,6 +93,34 @@
             <q-btn-group rounded>
               <q-btn @click="genBalanta" color="amber" rounded glossy icon-right="update" label="BALANTA ANALITICA DE GESTIUNE" />
               <q-btn @click="genLI" color="amber" rounded glossy icon-right="update" label="LISTA DE INVENTARIERE" />
+              <q-btn-dropdown  glossy rounded color="amber" label="Fisa de cont" >
+                <q-card>
+                  <q-card-section>
+                     <div class="q-gutter-md row">
+                            <q-select
+                              filled
+                              v-model="model"
+                              use-input
+                              hide-selected
+                              fill-input
+                              input-debounce="0"
+                              :options="options"
+                              @filter="filterFn"
+                              hint="Mininum 2 characters to trigger filtering"
+                              style="width: 250px; padding-bottom: 32px"
+                            >
+                              <template v-slot:no-option>
+                                <q-item>
+                                  <q-item-section class="text-grey">
+                                    No results
+                                  </q-item-section>
+                                </q-item>
+                              </template>
+                            </q-select>
+                          </div>
+                  </q-card-section>
+                </q-card>
+              </q-btn-dropdown>
             </q-btn-group>
        </div>
        

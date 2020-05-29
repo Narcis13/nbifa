@@ -39,7 +39,7 @@
     </div>
 
     <q-page-sticky v-if="vreauGrid" position="bottom-right" :offset="[24, 24]">
-            <q-btn fab   icon="add" color="accent" @click="docNou"  />
+            <q-btn fab   :icon="PotAdaugaDocument?'warning':'add'" color="accent" @click="docNou"  />
     </q-page-sticky>
 
 
@@ -295,7 +295,7 @@
             </q-splitter>
             <div class="row q-pa-md justify-center">
               <q-btn :disable="!PotAdaugaDocument" icon="save_alt" @click="salveaza" color="secondary" flat label="Salveaza"  />
-              <q-btn  icon="repeat" @click="schimbaGestiunea" color="secondary" flat label="Reset"  />
+              <q-btn  icon="repeat" @click="resetDocument" color="secondary" flat label="Reset"  />
               <q-btn  icon="description" @click="clickDocumente" color="secondary" flat label="Documente..."  />
 
             </div>
@@ -828,6 +828,13 @@ export default {
              }
 
            }
+    },
+    resetDocument(){
+      this.repere=[];
+      this.nrdoc=" ";
+      this.tipdocument=this.tipuridocumente[0];
+      this.tipmaterial={label:'MATERIALE', value:'M'}
+      this.schimbTipMaterial();
     },
     resetRepere(){
 

@@ -19,7 +19,8 @@
     >
                       <template v-slot:top>
                           
-                          <q-btn class="on-right" icon="delete_sweep" flat dense color="primary"  label="Sterge" @click="stergDoc" />
+                          <q-btn  v-show="!documenteselectate.length==0" icon="low_priority" flat dense color="primary"  label="Modifica" @click="moDoc" />
+                          <q-btn v-show="!documenteselectate.length==0" class="on-right" icon="delete_sweep" flat dense color="primary"  label="Sterge" @click="stergDoc" />
                           <q-btn class="on-right" icon="print" flat dense color="green"  :label="lblPrint" @click="raportDocInterval" />
                           <q-space />
                           <q-input  dense debounce="300" color="primary" v-model="filter">
@@ -324,6 +325,14 @@ export default {
     'material-add':MaterialAdd,
     'bara-interval-documente':BaraIntervalDocumente
   },
+  watch:{
+       repere:function(val){
+         if(val.length>0) 
+            this.$store.dispatch('comutaDocumentInLucru',true)
+         else
+            this.$store.dispatch('comutaDocumentInLucru',false)   
+       }
+  },
   data () {
     return {
             tab: 'tabintrari',
@@ -504,6 +513,58 @@ export default {
       }
   },
   methods:{
+      moDoc(){
+           console.log('Modific document')
+           const token=this.$store.getters.token;
+           let eTransfer = (this.documenteselectate[0].debit==this.documenteselectate[0].credit)?true:false;
+           let that=this;
+       axios.get(process.env.host+'documente/modificdocument/'+this.documenteselectate[0].id,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+        res => {
+          
+           that.repere=[];
+           let resdatadoc=[];
+
+           resdatadoc=eTransfer?res.data.doc.filter((item,index) => index%2==0):[...res.data.doc]
+     
+           for (var i=0;i<resdatadoc.length;i++){
+              that.repere.push({
+                  nrcrt:i+1,
+                  categ:resdatadoc[i].categorie,
+                  id_categ:resdatadoc[i].id_categ,
+                  denumire_reper:resdatadoc[i].material,
+                 id_reper:resdatadoc[i].id_material,
+                  um:resdatadoc[i].um,
+                  cantitate:parseFloat(resdatadoc[i].cantitate_debit)+parseFloat(resdatadoc[i].cantitate_credit),
+                  pret:parseFloat(resdatadoc[i].pret).toFixed(2),
+                  valoare:parseFloat(resdatadoc[i].debit)+parseFloat(resdatadoc[i].credit),
+                 tipmaterial:resdatadoc[i].tip_material
+                })
+     
+           
+           }
+         that.tipuridocumente.map((item,index)=>{
+               if(item.scurta==resdatadoc[0].tipoperatiune){
+                 that.tipdocument=item;
+               //  console.log('tip doc ',item)
+                if(item.value=="e"||item.value=="t"){
+                    that.tab="tabiesiri";
+                }
+                else
+                     that.tab="tabintrari";
+
+               }
+         })
+          that.nrdoc=resdatadoc[0].nrdoc;
+          that.datadoc=date.formatDate(resdatadoc[0].data, 'DD/MM/YYYY');//format date.formatDate(resdatadoc[0].data, 'YYYY/MM/DD')
+          that.vreauGrid=false;
+          that.vreauLista=true;
+          that.vreauFormular=true;
+            console.log('raspuns la mod docu',resdatadoc,that.repere);
+        }
+      ).catch(err =>{})
+
+      } ,  
       categoriiPerGestiunePerTip(){
        const token=this.$store.getters.token;
 

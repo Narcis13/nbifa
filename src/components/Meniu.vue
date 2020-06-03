@@ -1,5 +1,5 @@
 <template>
-
+<div>
           <q-list  padding class="text-primary" style="width:230px">
               <q-item-label v-if="isAdmin" header>Administrare</q-item-label>
                     <q-item
@@ -131,7 +131,7 @@
                     <q-item
                     clickable
                     v-ripple
-                    :active="link === 'rapoarte'"
+                    :active="link === 'rap'"
                     @click="clickRapoarte"
                     active-class="my-menu-link"
                     >
@@ -142,6 +142,20 @@
                     <q-item-section>Rapoarte</q-item-section>
                     </q-item>
       </q-list>
+    <q-dialog v-model="confirm" persistent>
+                <q-card>
+                  <q-card-section class="row items-center">
+                    <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
+                    <span class="q-ml-sm">Aveti un document in lucru! Renuntati la document si pierdeti datele introduse?</span>
+                  </q-card-section>
+
+                  <q-card-actions align="right">
+                    <q-btn flat label="DA" @click="abandoneazaSiMergiMaiDeparte" color="primary" v-close-popup />
+                    <q-btn flat label="NU" color="primary"  v-close-popup />
+                  </q-card-actions>
+                </q-card>
+              </q-dialog>
+ </div>             
 </template>
 
 <script>
@@ -151,12 +165,21 @@ export default {
     props: ['rol','logat'],
     data: function () {
         return {
-            link:'inbox'//,
+            link:'inbox',
+            ruta:'',
+            confirm:false,
+            ok:false//,
+
            // rol: this.rol,
          //   logat:this.logat
         }
     },
     methods:{
+       abandoneazaSiMergiMaiDeparte(){
+                    this.$store.dispatch('comutaDocumentInLucru',false)   
+                    this.link=this.ruta;
+                    this.$router.push('/'+this.ruta);
+       } ,
       clickUtilizatori(e){
           //alert('Click Utilizatori');
           this.link='inbox';
@@ -166,16 +189,29 @@ export default {
           this.$router.push('/test');
       },
       clickLocuri(e){
-            this.link='locuri';
-            this.$router.push('/locuri');
+           
+            this.ruta='locuri';
+            if (this.inLucru){
+                this.confirm=true;
+            } else {
+                this.abandoneazaSiMergiMaiDeparte();
+            }
+
+
       },
       clickDocNou(e){
            this.link='operatiunenoua';
             this.$router.push('/documente');
       },
       clickMateriale(e){
-            this.link='materiale';
-            this.$router.push('/materiale');
+          /*  this.link='materiale';
+            this.$router.push('/materiale');*/
+            this.ruta='materiale';
+            if (this.inLucru){
+                this.confirm=true;
+            } else {
+                this.abandoneazaSiMergiMaiDeparte();
+            }
       },
       clickGestiuni(e){
             this.link='outbox';
@@ -195,13 +231,23 @@ export default {
           this.$router.push('/categorii');
       },
       clickRapoarte(e){
-            this.link='rapoarte';
-          this.$router.push('/rap');
+        /*   this.link='rap';
+          this.$router.push('/rap');*/
+        this.ruta='rap';
+            if (this.inLucru){
+                this.confirm=true;
+            } else {
+                this.abandoneazaSiMergiMaiDeparte();
+            }
+
       }
     },
     computed:{
         isAdmin(){
             return this.rol==='admin'
+        },
+        inLucru(){
+                return this.$store.getters.documentInLucru;
         },
         esteLogat(){
              return this.logat

@@ -76,6 +76,9 @@ export default {
       raportUnDocument(id){
              window.open(process.env.host+'rapoarte/undocument/'+id,'_blank');
       },
+      modificaUnDocument(id){
+          
+      },
       raportToateDocumentele(idgest){
           const token=this.$store.getters.token;
           var that=this;

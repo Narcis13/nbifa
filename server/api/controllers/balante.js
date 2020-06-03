@@ -27,7 +27,7 @@ ifnull(sum(case when op.data <= '${req.body.datasfirsit}' then tranzactii.debit-
 FROM bifa.tranzactii 
 inner join materiale m on m.id=id_reper
 inner join operatiuni  op on op.id=tranzactii.idAntet
-where tranzactii.stare_material LIKE '${sql_stari}' and tranzactii.tip_material='${req.body.tipmaterial}'  and id_categ${sql_categ} and tranzactii.stare='ACTIV' and id_gestiune=${req.body.idgestiune} and id_locdispunere${sql_locuri}
+where tranzactii.stare_material LIKE '${sql_stari}' and tranzactii.tip_material='${req.body.tipmaterial}'  and id_categ${sql_categ} and op.stare='ACTIV' and tranzactii.stare='ACTIV' and id_gestiune=${req.body.idgestiune} and id_locdispunere${sql_locuri}
 group by id_reper
 having stocinitial>0 or stocfinal>0`;
 
@@ -77,7 +77,7 @@ module.exports.raportanalitica = (req,res,next)=>{
      FROM bifa.tranzactii 
      inner join materiale m on m.id=id_reper
      inner join operatiuni  op on op.id=tranzactii.idAntet
-     where tranzactii.stare_material LIKE '${sql_stari}' and tranzactii.tip_material='${req.body.tipmaterial}'  and id_categ${sql_categ} and tranzactii.stare='ACTIV' and id_gestiune=${req.body.idgestiune} and id_locdispunere${sql_locuri}
+     where tranzactii.stare_material LIKE '${sql_stari}' and tranzactii.tip_material='${req.body.tipmaterial}'  and id_categ${sql_categ} and op.stare='ACTIV' and tranzactii.stare='ACTIV' and id_gestiune=${req.body.idgestiune} and id_locdispunere${sql_locuri}
      group by id_reper
      having stocinitial>0 or stocfinal>0`;
      let nrcrt=1,tsf=0,tsi=0,rd=0,rc=0,linii=[];

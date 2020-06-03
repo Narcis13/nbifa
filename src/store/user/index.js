@@ -6,6 +6,7 @@ export default {
       rol:null,
       numereal:'',
       gestiuni:null,
+      document_in_lucru:false,
       gestiuneCurenta:{id:0,denumire:''}
     },
     mutations: {
@@ -44,6 +45,9 @@ export default {
       },
       setGestiuneCurenta (state,payload){
         state.gestiuneCurenta = payload;
+      },
+      setDocumentInLucru(state,payload){
+        state.document_in_lucru=payload;
       }
     },
     actions: {
@@ -112,6 +116,9 @@ export default {
         commit('setGestiuneCurenta', payload);
         
       },
+      comutaDocumentInLucru ({commit}, payload) {
+        commit('setDocumentInLucru', payload);
+      },
       autoSignIn ({commit}, payload) {
         commit('setUser', {
           id: payload.uid,
@@ -167,6 +174,9 @@ export default {
       },
       gestiuneCurenta(state){
         return state.gestiuneCurenta
+      },
+      documentInLucru(state){
+          return state.document_in_lucru
       },
       numeReal(state){
         return state.numereal

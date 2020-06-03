@@ -12,6 +12,31 @@ module.exports.tipuridocumente = (req, res, next) => {
 
 }
 
+module.exports.modoc = (req,res,next) =>{
+console.log('Sunt in controllerul documente actiunea modofoca document',req.params.iddoc)
+
+knex.select(['operatiuni.idtipoperatiuni', 'operatiuni.tipoperatiune', 'operatiuni.data' ,'operatiuni.nrdoc', {categorie:'categorii.denumire'}, {gestiune:'gestiuni.denumire'}, {loc:'locuri.denumire'}, {material:'materiale.denumire'},'tranzactii.um','tranzactii.cantitate_debit','tranzactii.cantitate_credit','tranzactii.pret','tranzactii.debit','tranzactii.credit','tranzactii.stare_material','tranzactii.tip_material','tranzactii.id_categ',{id_material:'materiale.id'}])
+.from('tranzactii')
+.innerJoin('operatiuni','operatiuni.id','tranzactii.idAntet')
+.innerJoin('categorii','categorii.id','tranzactii.id_categ')
+.innerJoin('gestiuni','gestiuni.id','tranzactii.id_gestiune')
+.innerJoin('locuri','locuri.id','tranzactii.id_locdispunere')
+.innerJoin('materiale','materiale.id','tranzactii.id_reper')
+.whereRaw('tranzactii.stare=? and tranzactii.idAntet = ? ',['ACTIV',req.params.iddoc])
+.then( rows=>{
+    //console.log(rows)
+    return res.status(200).json({
+      message: "Document pentru modificat",
+      doc:rows
+    });
+ 
+
+})
+.catch(err =>{console.log(err)})
+
+}
+
+
 module.exports.stocPretMediu = (req,res,next) => {
 
   console.log("sunt in controllerul documente actiunea stoc pret mediu",req.body);

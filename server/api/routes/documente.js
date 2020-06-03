@@ -14,6 +14,7 @@ router.patch("/:iddoc", /*checkaut,*/ DocumenteController.invalidez_document);
 //router.put("/:idmaterial", /*checkaut,*/ MaterialeController.update);
 //router.patch("/sterg/:id", /*checkaut,*/ MaterialeController.sterg_material);
 router.get("/tipuridocumente", /*checkaut,*/ DocumenteController.tipuridocumente); 
+router.get("/modificdocument/:iddoc", /*checkaut,*/ DocumenteController.modoc); 
 
 
 module.exports=router;

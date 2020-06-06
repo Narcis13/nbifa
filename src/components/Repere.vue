@@ -17,7 +17,7 @@
                 >
                       <template v-slot:top>
                           
-                          <q-btn class="on-right" icon="delete_sweep" flat dense color="primary"  label="Sterge" @click="removeRow" />
+                          <q-btn v-show="selected.length==1" class="on-right" icon="delete_sweep" flat dense color="primary"  label="Sterge" @click="removeRow" />
                           <q-space />
                           <q-input  dense debounce="300" color="primary" v-model="filter">
                             <template v-slot:append>
@@ -90,10 +90,15 @@ export default {
   methods:{
     removeRow(){
       var that=this;
+
       console.log('sterg reper',this.repere,this.selected)
                                            this.repere.some(function(item, index) {
                                             return ( that.repere[index]["nrcrt"] === that.selected[0]['nrcrt']) ? !!( that.repere.splice(index, 1)) : false;
                                            }); 
+                                           this.repere.map((item,index)=>{
+                                                item.nrcrt=index+1
+                                           })
+                                           this.selected=[];
     }
   }        
 }

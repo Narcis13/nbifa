@@ -295,7 +295,7 @@
 
             </q-splitter>
             <div class="row q-pa-md justify-center">
-              <q-btn :disable="!PotAdaugaDocument" icon="save_alt" @click="salveaza" color="secondary" flat label="Salveaza"  />
+              <q-btn :disable="!PotAdaugaDocument" icon="save_alt" @click="salveaza" color="secondary" flat :label="!modMOD?'Salveaza':'Modifica'"  />
               <q-btn  icon="repeat" @click="resetDocument" color="secondary" flat label="Reset"  />
               <q-btn  icon="description" @click="clickDocumente" color="secondary" flat label="Documente..."  />
 
@@ -336,6 +336,7 @@ export default {
   data () {
     return {
             tab: 'tabintrari',
+            modMOD:false,
         splitterModel: 20,
         filter:'',
         um:'buc',
@@ -560,6 +561,7 @@ export default {
           that.vreauGrid=false;
           that.vreauLista=true;
           that.vreauFormular=true;
+          that.modMOD=true;
             console.log('raspuns la mod docu',resdatadoc,that.repere);
         }
       ).catch(err =>{})
@@ -662,7 +664,8 @@ export default {
 
               console.log('de postat',tranzactii);
               axios.post(process.env.host+'documente/tranzactienoua',{
-                    tranzactii
+                    tranzactii,
+                    desters:that.modMOD?that.documenteselectate[0].id:-1
               },{headers:{"Authorization" : `Bearer ${token}`}}).then(res =>{
                           this.$q.notify({
                                           message:`Tranzactia a fost adaugata cu succes!`,
@@ -693,6 +696,7 @@ export default {
                                             stare:"ACTIV"
                          })
                          that.nrdoc=" ";
+                         that.modMOD=false;
                          that.tipdocument=that.tipuridocumente[0];
                          that.tipmaterial={label:'MATERIALE', value:'M'}
                          that.schimbTipMaterial();
@@ -893,6 +897,8 @@ export default {
     resetDocument(){
       this.repere=[];
       this.nrdoc=" ";
+      this.modMOD=false;
+      this.documenteselectate=[];
       this.tipdocument=this.tipuridocumente[0];
       this.tipmaterial={label:'MATERIALE', value:'M'}
       this.schimbTipMaterial();

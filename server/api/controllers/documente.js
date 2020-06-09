@@ -228,9 +228,22 @@ module.exports.tranzactienoua = (req,res,next) =>{
 
 
   })
-console.log('Ma pregatesc sa inserez linii',linii)
+//console.log('Ma pregatesc sa inserez linii',linii)
   knex('tranzactii').insert(linii).then((d)=>{
  // console.log('Material adaugat',d)
+ if (req.body.desters>0){
+   // sterg documentul anterior...
+   knex('operatiuni')
+   .where('id', req.body.desters)
+   .del().then(()=>{console.log('sters.. ',req.body.desters)})
+
+   knex('tranzactii')
+   .where('idAntet', req.body.desters)
+   .del().then(()=>{console.log('sters.. ',req.body.desters)})
+
+
+ }
+
   return res.status(200).json({
     message: "Tranzactii adaugate"
   })

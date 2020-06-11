@@ -289,7 +289,7 @@
                     </template>
 
                     <template v-slot:after>
-                      <div class="q-pa-md" style="min-width:450px"><Repere :repere="repere"/></div>
+                      <div class="q-pa-md" style="min-width:450px"><Repere :repere="repere" @mod-linie="modLinie"/></div>
                         
                     </template>
 
@@ -514,6 +514,13 @@ export default {
       }
   },
   methods:{
+      modLinie(d){
+           console.log('Receptionat event mod-linie cu datele',d)
+
+           this.pretunitar=d.pret;
+           this.um=d.um;
+           this.cantitate=d.cantitate;
+      },
       moDoc(){
            console.log('Modific document')
            const token=this.$store.getters.token;

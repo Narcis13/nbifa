@@ -16,7 +16,7 @@
 
                 >
                       <template v-slot:top>
-                          
+                          <q-btn v-show="selected.length==1" class="on-right" icon="low_priority" flat dense color="primary"  label="Modifica" @click="modRow" />
                           <q-btn v-show="selected.length==1" class="on-right" icon="delete_sweep" flat dense color="primary"  label="Sterge" @click="removeRow" />
                           <q-space />
                           <q-input  dense debounce="300" color="primary" v-model="filter">
@@ -88,6 +88,10 @@ export default {
         }
   } ,
   methods:{
+    modRow(){
+       //console.log('Reper selectat ',this.selected)
+       this.$emit('mod-linie',this.selected[0]);
+    },
     removeRow(){
       var that=this;
 

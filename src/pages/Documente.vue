@@ -283,7 +283,7 @@
                               <div class="text-h6 ">{{valoareunitara}} lei</div>
                               <div class="column q-pa-md items-center">
                                     
-                                    <q-btn  :disable="!PotAdaugaReper" icon="create"  color="secondary" flat label="Adauga" @click="AdaugaReper"/>
+                                    <q-btn  :disable="!PotAdaugaReper" icon="create"  color="secondary" flat :label="modMODREPER?'Modifica':'Adauga'" @click="AdaugaReper"/>
                               </div>
                            </div>                  
                     </template>
@@ -337,6 +337,7 @@ export default {
     return {
             tab: 'tabintrari',
             modMOD:false,
+            modMODREPER:false,
         splitterModel: 20,
         filter:'',
         um:'buc',
@@ -515,11 +516,20 @@ export default {
   },
   methods:{
       modLinie(d){
-           console.log('Receptionat event mod-linie cu datele',d)
-
+           console.log('Receptionat event mod-linie cu datele',d,this.categoriei,this.tipdocument,materiale)
+           this.modMODREPER=true;
            this.pretunitar=d.pret;
            this.um=d.um;
            this.cantitate=d.cantitate;
+
+           this.categorii.map((c)=>{
+             if(c.id==d.id_categ) this.categoriei=c;
+           })
+
+           materiale.map((m)=>{
+             if (m.id==d.id_reper) this.materialintrare=m;
+           })
+
       },
       moDoc(){
            console.log('Modific document')
@@ -778,8 +788,24 @@ export default {
           this.vreauLista=false;
           this.vreauFormular=false;
       },
-      AdaugaReper(){
-      
+      AdaugaReper(inserat){
+           if (inserat){
+              this.repere.map(r=>{
+                if(r.nrcrt==inserat){
+                  r.nrcrt=inserat;
+                  r.categ=this.tipdocument.value==='i'? this.categoriei.label:this.categoriee.label;
+                  r.id_categ=this.tipdocument.value==='i'? this.categoriei.value:this.categoriee.value;
+                  r.denumire_reper=this.tipdocument.value==='i'? this.materialintrare.label:this.materialiesire.label;
+                  r.id_reper=this.tipdocument.value==='i'? this.materialintrare.value:this.materialiesire.value;
+                  r.um=this.um;
+                  r.cantitate=this.cantitate;
+                  r.pret=this.pretunitar;
+                  r.valoare=this.doarvaloare;
+                  r.tipmaterial=this.tipmaterial.value;
+                }
+              })
+           } else
+           {
            this.repere.push({
              nrcrt:this.repere.length+1,
              categ:this.tipdocument.value==='i'? this.categoriei.label:this.categoriee.label,
@@ -792,7 +818,10 @@ export default {
              valoare:this.doarvaloare,
              tipmaterial:this.tipmaterial.value
            })
+           }
+
            this.resetRepere();
+           this.modMODREPER=false;
       },
       filterIFn (val, update, abort) {
         if (val.length < 2) {
@@ -905,6 +934,7 @@ export default {
       this.repere=[];
       this.nrdoc=" ";
       this.modMOD=false;
+      this.modMODREPER=false;
       this.documenteselectate=[];
       this.tipdocument=this.tipuridocumente[0];
       this.tipmaterial={label:'MATERIALE', value:'M'}

@@ -283,7 +283,7 @@
                               <div class="text-h6 ">{{valoareunitara}} lei</div>
                               <div class="column q-pa-md items-center">
                                     
-                                    <q-btn  :disable="!PotAdaugaReper" icon="create"  color="secondary" flat :label="modMODREPER?'Modifica':'Adauga'" @click="AdaugaReper"/>
+                                    <q-btn  :disable="!PotAdaugaReper" icon="create"  color="secondary" flat :label="modMODREPER>0?'Modifica':'Adauga'" @click="AdaugaReper"/>
                               </div>
                            </div>                  
                     </template>
@@ -337,7 +337,7 @@ export default {
     return {
             tab: 'tabintrari',
             modMOD:false,
-            modMODREPER:false,
+            modMODREPER:-1,
         splitterModel: 20,
         filter:'',
         um:'buc',
@@ -517,10 +517,17 @@ export default {
   methods:{
       modLinie(d){
            console.log('Receptionat event mod-linie cu datele',d,this.categoriei,this.tipdocument,materiale)
-           this.modMODREPER=true;
+           this.modMODREPER=d.nrcrt;
            this.pretunitar=d.pret;
            this.um=d.um;
            this.cantitate=d.cantitate;
+
+           this.tipurirepere.map(t=>{
+             if(t.value==d.tipmaterial) {
+               this.tipmaterial=t;
+               this.categoriiPerGestiunePerTip();
+               }
+           })
 
            this.categorii.map((c)=>{
              if(c.id==d.id_categ) this.categoriei=c;
@@ -529,6 +536,8 @@ export default {
            materiale.map((m)=>{
              if (m.id==d.id_reper) this.materialintrare=m;
            })
+
+
 
       },
       moDoc(){
@@ -579,7 +588,7 @@ export default {
           that.vreauLista=true;
           that.vreauFormular=true;
           that.modMOD=true;
-            console.log('raspuns la mod docu',resdatadoc,that.repere);
+            console.log('raspuns la mod docu',res.data.doc,that.repere);
         }
       ).catch(err =>{})
 
@@ -632,7 +641,12 @@ export default {
               
               var antet=res.data;
               let tranzactii=[];
-              if(tip==="t"){
+              tranzactii=[...that.repere] ;// daca nu merge revin la ce era inainte
+              tranzactii.map(t=>{
+                t.idAntet=res.data.id;
+                t.id_gestiune=that.$store.getters.gestiuneCurenta.id;
+              })
+              /*if(tip==="t"){
                 //transfer
                     that.repere.map(r=>{
 
@@ -677,7 +691,7 @@ export default {
                           tip
                 })
               })
-              }
+              }*/
 
               console.log('de postat',tranzactii);
               axios.post(process.env.host+'documente/tranzactienoua',{
@@ -788,11 +802,11 @@ export default {
           this.vreauLista=false;
           this.vreauFormular=false;
       },
-      AdaugaReper(inserat){
-           if (inserat){
+      AdaugaReper(){
+           if (this.modMODREPER>0){
               this.repere.map(r=>{
-                if(r.nrcrt==inserat){
-                  r.nrcrt=inserat;
+                if(r.nrcrt==this.modMODREPER){
+                  r.nrcrt=this.modMODREPER;
                   r.categ=this.tipdocument.value==='i'? this.categoriei.label:this.categoriee.label;
                   r.id_categ=this.tipdocument.value==='i'? this.categoriei.value:this.categoriee.value;
                   r.denumire_reper=this.tipdocument.value==='i'? this.materialintrare.label:this.materialiesire.label;
@@ -816,12 +830,19 @@ export default {
              cantitate:this.cantitate,
              pret:this.pretunitar,
              valoare:this.doarvaloare,
-             tipmaterial:this.tipmaterial.value
+             tipmaterial:this.tipmaterial.value,
+             tip:this.tipdocument.value,
+             id_locintrare:this.locintrare?this.locintrare.id:null,
+             id_lociesire:this.lociesire?this.lociesire.id:null,
+             id_categ_intrare:this.categoriei?this.categoriei.value:null,
+             id_categ_iesire:this.categoriee?this.categoriee.value:null,
+             stare_material_intrare:this.staremateriali,
+             stare_material_iesire:this.staremateriale
            })
            }
 
            this.resetRepere();
-           this.modMODREPER=false;
+           this.modMODREPER=-1;
       },
       filterIFn (val, update, abort) {
         if (val.length < 2) {
@@ -934,7 +955,7 @@ export default {
       this.repere=[];
       this.nrdoc=" ";
       this.modMOD=false;
-      this.modMODREPER=false;
+      this.modMODREPER=-1;
       this.documenteselectate=[];
       this.tipdocument=this.tipuridocumente[0];
       this.tipmaterial={label:'MATERIALE', value:'M'}

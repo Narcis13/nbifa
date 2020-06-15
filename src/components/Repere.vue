@@ -91,6 +91,8 @@ export default {
     modRow(){
        //console.log('Reper selectat ',this.selected)
        this.$emit('mod-linie',this.selected[0]);
+       this.selected=[];
+
     },
     removeRow(){
       var that=this;

@@ -543,7 +543,11 @@ export default {
       moDoc(){
            console.log('Modific document')
            const token=this.$store.getters.token;
+           let tip='';
            let eTransfer = (this.documenteselectate[0].debit==this.documenteselectate[0].credit)?true:false;
+           let eIntrare = (this.documenteselectate[0].debit>this.documenteselectate[0].credit)?true:false;
+           let eIesire = (this.documenteselectate[0].debit<this.documenteselectate[0].credit)?true:false;
+           tip=eTransfer?'t':eIntrare?'i':'e';
            let that=this;
        axios.get(process.env.host+'documente/modificdocument/'+this.documenteselectate[0].id,{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
@@ -555,7 +559,7 @@ export default {
            resdatadoc=eTransfer?res.data.doc.filter((item,index) => index%2==0):[...res.data.doc]
            // aici in caz de transfer trebuie sa mai adaug cimpuri (intrare / iesire)
            for (var i=0;i<resdatadoc.length;i++){
-              that.repere.push({
+             let obj= {
                   nrcrt:i+1,
                   categ:resdatadoc[i].categorie,
                   id_categ:resdatadoc[i].id_categ,
@@ -565,9 +569,18 @@ export default {
                   cantitate:parseFloat(resdatadoc[i].cantitate_debit)+parseFloat(resdatadoc[i].cantitate_credit),
                   pret:parseFloat(resdatadoc[i].pret).toFixed(2),
                   valoare:parseFloat(resdatadoc[i].debit)+parseFloat(resdatadoc[i].credit),
-                 tipmaterial:resdatadoc[i].tip_material
-                })
-     
+                 tipmaterial:resdatadoc[i].tip_material,
+                 id_locintrare:eTransfer?res.data.doc[2*i+1].id_locdispunere:eIntrare?resdatadoc[i].id_locdispunere:null,
+                 id_lociesire:eTransfer?res.data.doc[2*i].id_locdispunere:eIntrare?null:resdatadoc[i].id_locdispunere,
+                 id_categ_intrare:eTransfer?res.data.doc[2*i+1].id_categ:eIntrare?resdatadoc[i].id_categ:null,
+                 id_categ_iesire:eTransfer?res.data.doc[2*i].id_categ:eIntrare?null:resdatadoc[i].id_categ,
+                 stare_material_intrare:eTransfer?res.data.doc[2*i+1].stare_material:eIntrare?resdatadoc[i].stare_marterial:null,
+                 stare_material_iesire:eTransfer?res.data.doc[2*i].stare_material:eIntrare?null:resdatadoc[i].stare_material,
+                 tip
+                }
+
+
+             that.repere.push(obj);
            
            }
          that.tipuridocumente.map((item,index)=>{
@@ -804,6 +817,7 @@ export default {
       },
       AdaugaReper(){
            if (this.modMODREPER>0){
+             // aici trebuie sa revizuiesc.....
               this.repere.map(r=>{
                 if(r.nrcrt==this.modMODREPER){
                   r.nrcrt=this.modMODREPER;

@@ -553,7 +553,7 @@ export default {
            let resdatadoc=[];
 
            resdatadoc=eTransfer?res.data.doc.filter((item,index) => index%2==0):[...res.data.doc]
-     
+           // aici in caz de transfer trebuie sa mai adaug cimpuri (intrare / iesire)
            for (var i=0;i<resdatadoc.length;i++){
               that.repere.push({
                   nrcrt:i+1,

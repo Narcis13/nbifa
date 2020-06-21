@@ -15,7 +15,7 @@ module.exports.tipuridocumente = (req, res, next) => {
 module.exports.modoc = (req,res,next) =>{
 console.log('Sunt in controllerul documente actiunea modofoca document',req.params.iddoc)
 
-knex.select(['operatiuni.idtipoperatiuni', 'operatiuni.tipoperatiune', 'operatiuni.data' ,'operatiuni.nrdoc', {categorie:'categorii.denumire'}, {gestiune:'gestiuni.denumire'}, {loc:'locuri.denumire'}, {material:'materiale.denumire'},'tranzactii.um','tranzactii.cantitate_debit','tranzactii.cantitate_credit','tranzactii.pret','tranzactii.debit','tranzactii.credit','tranzactii.stare_material','tranzactii.tip_material','tranzactii.id_categ',{id_material:'materiale.id'}])
+knex.select(['operatiuni.idtipoperatiuni', 'operatiuni.tipoperatiune', 'operatiuni.data' ,'operatiuni.nrdoc', {categorie:'categorii.denumire'}, {gestiune:'gestiuni.denumire'}, {loc:'locuri.denumire'}, {material:'materiale.denumire'},'tranzactii.um','tranzactii.cantitate_debit','tranzactii.cantitate_credit','tranzactii.pret','tranzactii.debit','tranzactii.credit','tranzactii.stare_material','tranzactii.tip_material','tranzactii.id_categ','tranzactii.id_locdispunere',{id_material:'materiale.id'}])
 .from('tranzactii')
 .innerJoin('operatiuni','operatiuni.id','tranzactii.idAntet')
 .innerJoin('categorii','categorii.id','tranzactii.id_categ')

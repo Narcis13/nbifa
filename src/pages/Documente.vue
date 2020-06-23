@@ -530,9 +530,15 @@ export default {
            })
 
            this.categorii.map((c)=>{
-             if(c.id==d.id_categ) this.categoriei=c;
+             if(c.id==d.id_categ_intrare) this.categoriei=c;
+             if(c.id==d.id_categ_iesire) this.categoriee=c;
            })
 
+           locuri.map(l=>{
+             if(l.id==d.id_locintrare) this.locintrare=l;
+             if(l.id==d.id_lociesire) this.lociesire=l;
+           }) 
+           
            materiale.map((m)=>{
              if (m.id==d.id_reper) this.materialintrare=m;
            })

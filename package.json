@@ -11,8 +11,8 @@
     "start": "nodemon -e js,ejs,json,css ./server/server.js"
   },
   "dependencies": {
-    "@quasar/cli": "^1.0.7",
-    "@quasar/extras": "^1.8.1",
+    "@quasar/cli": "^1.1.0",
+    "@quasar/extras": "^1.8.2",
     "axios": "^0.18.1",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
@@ -24,10 +24,10 @@
     "moment": "^2.24.0",
     "mysql2": "^1.6.5",
     "puppeteer": "^2.1.1",
-    "quasar": "^1.12.0"
+    "quasar": "^1.12.8"
   },
   "devDependencies": {
-    "@quasar/app": "^1.9.2",
+    "@quasar/app": "^1.9.6",
     "morgan": "^1.9.1",
     "nodemon": "^1.18.10",
     "quasar-app-extension-q-grouped-table": "^0.1.0",

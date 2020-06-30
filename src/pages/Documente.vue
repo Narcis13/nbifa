@@ -541,6 +541,7 @@ export default {
            
            materiale.map((m)=>{
              if (m.id==d.id_reper) this.materialintrare=m;
+             if (m.id==d.id_reper) this.materialiesire=m;
            })
 
 
@@ -750,6 +751,7 @@ export default {
                          that.tipdocument=that.tipuridocumente[0];
                          that.tipmaterial={label:'MATERIALE', value:'M'}
                          that.schimbTipMaterial();
+                         this.clickDocumente();// sa vedem daca ramine
 
 
               }).catch(err=>{
@@ -836,6 +838,13 @@ export default {
                   r.pret=this.pretunitar;
                   r.valoare=this.doarvaloare;
                   r.tipmaterial=this.tipmaterial.value;
+                  r.tip=this.tipdocument.value;
+                  r.id_locintrare=this.locintrare?this.locintrare.id:null;
+                  r.id_lociesire=this.lociesire?this.lociesire.id:null;
+                  r.id_categ_intrare=this.categoriei?this.categoriei.value:null;
+                  r.id_categ_iesire=this.categoriee?this.categoriee.value:null;
+                  r.stare_material_intrare=this.staremateriali;
+                  r.stare_material_iesire=this.staremateriale;
                 }
               })
            } else

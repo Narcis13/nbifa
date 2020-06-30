@@ -1,2 +1,2 @@
-- trebuie sa vad cind modific repere si tip docului este transfer....
+- datele de la rapoarte trebuie sa fie cele de la luna curenta
 

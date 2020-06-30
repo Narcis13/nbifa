@@ -134,6 +134,7 @@
 
 <script>
 import axios from 'axios';
+import { date } from 'quasar'
 import BalantaAnalitica from '../components/Balanta'
 import ListaInventariere from '../components/ListaInventariere'
 var locuri=[];
@@ -166,7 +167,15 @@ export default {
   },
   created(){
       const token=this.$store.getters.token;
+      var azi = new Date(); 
+      var firstDay =  
+                    new Date(azi.getFullYear(), azi.getMonth(), 1); 
+                      
+      var lastDay =  
+                   new Date(azi.getFullYear(), azi.getMonth() + 1, 0); 
 
+       this.datainceput=date.formatDate(firstDay, 'YYYY/MM/DD');
+       this.datasfirsit=date.formatDate(lastDay, 'YYYY/MM/DD');               
        axios.get(process.env.host+'locuri/toatelocurile',{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
         res => {

@@ -82,10 +82,11 @@ module.exports.un_document = (req,res,next) => {
           r.debit=parseFloat(r.debit).toFixed(2);
           totaldebit+=parseFloat(r.debit);
           r.credit=parseFloat(r.credit).toFixed(2);
-          totalcredit+=parseFloat(r.credit)
+          totalcredit+=parseFloat(r.credit);
           r.pret=parseFloat(r.pret).toFixed(2);
           r.data=moment(r.data).format('DD/MM/YYYY');
       }) 
+     // console.log('TOTAL CREDIT',totalcredit.toFixed(2));
        set_date.tipoperatiune=rows[0].tipoperatiune;
        set_date.nrdoc=rows[0].nrdoc;
        set_date.datadoc=rows[0].data;
@@ -93,8 +94,8 @@ module.exports.un_document = (req,res,next) => {
        set_date.loc=(rows.length>1&&rows[1].loc!==rows[0].loc)?rows[0].loc+' > '+rows[1].loc:rows[0].loc;
        set_date.stare=(rows.length>1&&rows[1].stare_material!==rows[0].stare_material)?rows[0].stare_material+' > '+rows[1].stare_material:rows[0].stare_material;
        set_date.linii=rows;
-       set_date.totaldebit=totaldebit;
-       set_date.totalcredit=totalcredit;
+       set_date.totaldebit=totaldebit.toFixed(2);
+       set_date.totalcredit=totalcredit.toFixed(2);
 
       const html = ejs.render(ejs_template, {set_date,style,config});
       res.send(html);

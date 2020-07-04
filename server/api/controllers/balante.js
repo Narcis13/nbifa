@@ -110,8 +110,8 @@ module.exports.raportanalitica = (req,res,next)=>{
       set_date.linii=linii;
       set_date.tsf=tsf;
       set_date.tsi=tsi;
-      set_date.rd=rd;
-      set_date.rc=rc;
+      set_date.rd=rd.toFixed(2);
+      set_date.rc=rc.toFixed(2);
 
 
        const html = ejs.render(ejs_template, {set_date,style,config});

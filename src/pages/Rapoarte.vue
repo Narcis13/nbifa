@@ -119,6 +119,9 @@
                             </q-select>
                           </div>
                   </q-card-section>
+                  <q-card-actions vertical>
+                    <q-btn flat v-close-popup @click="genFisaCont">Genereaza !</q-btn>
+                   </q-card-actions>
                 </q-card>
               </q-btn-dropdown>
             </q-btn-group>
@@ -126,6 +129,7 @@
        
       <lista-inventar v-if="afisezListaInventariere" />
       <balanta v-if="afisezBalanta" :setdate="datebalanta" :total="totalstocfinal" :parametrii="parametrii_balanta"/>
+      <fisa-cont v-if="afisezFisaCont" />
 
 
     </div>
@@ -137,11 +141,13 @@ import axios from 'axios';
 import { date } from 'quasar'
 import BalantaAnalitica from '../components/Balanta'
 import ListaInventariere from '../components/ListaInventariere'
+import FisaCont from '../components/FisaCont'
 var locuri=[];
 export default {
     components:{
     'balanta':BalantaAnalitica,
-    'lista-inventar':ListaInventariere
+    'lista-inventar':ListaInventariere,
+    'fisa-cont':FisaCont
 
   },
   data () {
@@ -151,6 +157,7 @@ export default {
         toatecategoriile:true,
         toatelocurile:true,
         afisezBalanta:false,
+        afisezFisaCont:false,
         afisezListaInventariere:false,
         toatestarile:true,
         locselectat:null,
@@ -200,6 +207,12 @@ export default {
     genLI(){
         this.afisezBalanta=false;
         this.afisezListaInventariere=true;
+          this.afisezFisaCont=false;
+    },
+    genFisaCont(){
+        this.afisezBalanta=false;
+        this.afisezListaInventariere=false;
+        this.afisezFisaCont=true;
     },
     genBalanta(){
          const token=this.$store.getters.token;
@@ -247,6 +260,7 @@ export default {
                  totalstoc+=parseFloat(linie.valoarestoc);
               }))
              that.afisezBalanta=true;
+               this.afisezFisaCont=false;
              that.totalstocfinal=totalstoc.toFixed(2);
              console.log('A sosit balanta...',that.datebalanta)
              that.afisezListaInventariere=false;

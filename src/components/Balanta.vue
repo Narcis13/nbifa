@@ -6,6 +6,7 @@
       :data="setdate"
       :filter="filter"
       :columns="columns"
+      :pagination.sync="pagination"
       row-key="id">
 
                  <template v-slot:top>
@@ -36,6 +37,12 @@ export default {
  data () {
     return {
       filter:'',
+      pagination: {
+
+                page: 1,
+                rowsPerPage: 12
+                // rowsNumber: xx if getting data from a server
+             },
       columns: [
             { name: 'nrcrt', align: 'center', label: 'Nr. crt.', field: 'nrcrt' },
             { name: 'id', label: 'ID', field: 'id_reper',align: 'left' },

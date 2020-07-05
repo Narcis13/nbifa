@@ -99,20 +99,20 @@
                      <div class="q-gutter-md row">
                             <q-select
                               filled
-                              v-model="model"
+                              v-model="materialselectat"
                               use-input
                               hide-selected
                               fill-input
                               input-debounce="0"
-                              :options="options"
+                              :options="materialelegestiunii"
                               @filter="filterFn"
-                              hint="Mininum 2 characters to trigger filtering"
+                              hint="Mininum 2 caractere pentru cautare..."
                               style="width: 250px; padding-bottom: 32px"
                             >
                               <template v-slot:no-option>
                                 <q-item>
                                   <q-item-section class="text-grey">
-                                    No results
+                                    Niciun material gasit!
                                   </q-item-section>
                                 </q-item>
                               </template>
@@ -142,7 +142,7 @@ import { date } from 'quasar'
 import BalantaAnalitica from '../components/Balanta'
 import ListaInventariere from '../components/ListaInventariere'
 import FisaCont from '../components/FisaCont'
-var locuri=[];
+var locuri=[],materiale=[];
 export default {
     components:{
     'balanta':BalantaAnalitica,
@@ -163,6 +163,8 @@ export default {
         locselectat:null,
         categoriei:null,
         locuriintrare:[],
+        materialelegestiunii:[],
+        materialselectat:null,
         datainceput: '2020/04/01',
         datasfirsit:'2020/04/27',
         starimaterial:['NOU', 'FOLOSIT', 'CASARE'],
@@ -201,6 +203,28 @@ export default {
         }
       ).catch(err =>{})
 
+      //materiale
+        axios.get(process.env.host+`materiale/toate/${this.$store.getters.gestiuneCurenta.id}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+        res => {
+           console.log('Rspuns la toate materialele',res.data);
+           this.materialelegestiunii=[];
+           materiale=[];
+           res.data.materiale.map(m=>{
+             this.materialelegestiunii.push({
+               id:m.id,
+               label:m.denumire,
+               value:m.id,
+               um:m.um,
+               pretpredefinit:m.pretpredefinit,
+               stoc:9999
+             })
+           })
+          
+           materiale=[...this.materialelegestiunii];
+
+        }
+      ).catch(err =>{})
       this.categoriiPerGestiunePerTip()
   },
   methods:{
@@ -213,6 +237,7 @@ export default {
         this.afisezBalanta=false;
         this.afisezListaInventariere=false;
         this.afisezFisaCont=true;
+        console.log('Material selectat...',this.materialselectat);
     },
     genBalanta(){
          const token=this.$store.getters.token;
@@ -295,6 +320,16 @@ export default {
         }
       ).catch(err =>{})
 
+      },
+      filterFn(val, update, abort){
+        if (val.length < 2) {
+                  abort()
+                  return
+           }
+          update(() => {
+            const needle = val.toLowerCase()
+            this.materialelegestiunii = materiale.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
+          })
       },
      schimbTipMaterial(){
             console.log('schimb tip material', this.tipmaterial)

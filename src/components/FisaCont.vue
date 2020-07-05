@@ -4,6 +4,9 @@
 <script>
 export default {
     name:'FisaCont',
-    props:['setdate','total','parametrii']
+    props:['setdate','total','parametrii'],
+    created(){
+        console.log('Component fisa de cont creat!');
+    }
 }
 </script>

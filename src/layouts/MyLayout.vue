@@ -17,7 +17,7 @@
         </q-btn>
 
         <q-toolbar-title>
-          BIFA Gestiune (Preview)
+          BIFA Gestiune (vers. 1.0 alpha)
           
         </q-toolbar-title>
         <q-btn v-if="!userAutentificat" icon="lock" flat dense @click="doLogin">Autentificare!</q-btn>

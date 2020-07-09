@@ -6,6 +6,12 @@ let config = require('./reports/config.json');
 let ejs = require('ejs');
 /*const User = require("../models/user");*/
 
+module.exports.fisacont = (req, res, next) => {
+  console.log('sunt in controllerul balante actiunea fisa decont....',req.body)
+
+}
+
+
 module.exports.analitica = (req, res, next) => {
   let sql_categ=req.body.categorii==="*"?">=1":"="+req.body.categorii;
   let sql_stari=req.body.stari==="*"?"%":req.body.stari;
@@ -120,3 +126,39 @@ module.exports.raportanalitica = (req,res,next)=>{
     ).catch(err =>{console.log(err)})
 
 }
+
+
+
+/*
+pentru stoc initial la fisa de cont
+
+SELECT 
+m.denumire,
+tranzactii.id_reper,
+m.um um,
+ifnull(sum(case when op.data < '2020-04-09' then tranzactii.cantitate_debit-tranzactii.cantitate_credit end),0) as stocinitial,
+
+ifnull(sum(case when op.data < '2020-04-09' then tranzactii.debit-tranzactii.credit end),0) as valoarestocinitial
+
+FROM bifa.tranzactii 
+inner join materiale m on m.id=id_reper
+inner join operatiuni  op on op.id=tranzactii.idAntet
+where id_reper=8 and tranzactii.stare_material LIKE '%' and tranzactii.tip_material='M'  and id_categ>=1 and op.stare='ACTIV' and tranzactii.stare='ACTIV' and id_gestiune=1 and id_locdispunere>=1
+group by id_reper
+
+
+
+pentru tranzactii in interval
+
+SELECT 
+op.data,
+concat(op.tipoperatiune,op.nrdoc) as explicatii,
+tranzactii.um um,
+tranzactii.cantitate_debit,
+tranzactii.cantitate_credit,
+tranzactii.debit,
+tranzactii.credit
+FROM bifa.tranzactii 
+inner join operatiuni  op on op.id=tranzactii.idAntet
+where op.data>='2020-04-09' and op.data<='2020-04-13' and id_reper=8 and tranzactii.stare_material LIKE '%' and tranzactii.tip_material='M'  and id_categ>=1 and op.stare='ACTIV' and tranzactii.stare='ACTIV' and id_gestiune=1 and id_locdispunere>=1
+*/

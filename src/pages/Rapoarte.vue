@@ -236,8 +236,44 @@ export default {
     genFisaCont(){
         this.afisezBalanta=false;
         this.afisezListaInventariere=false;
-        this.afisezFisaCont=true;
+        this.afisezFisaCont=true;// asta se muta cind vine raspunsul de la fisa cont
         console.log('Material selectat...',this.materialselectat);
+
+        const token=this.$store.getters.token;
+         let categorii=this.toatecategoriile? '*':this.categoriei.value;
+         //tipmaterial
+         let locuri=this.toatelocurile? '*':this.locselectat.value;
+         let stari=this.toatestarile? '*':this.staremateriali;
+         console.log('GENEREZ FISA CONT',categorii,this.tipmaterial.value,locuri,stari,this.datainceput,this.datasfirsit);
+         var that=this; 
+         this.parametrii_balanta={
+            "tipmaterial":this.tipmaterial.value,
+            denumiretipmaterial:this.tipmaterial.label,
+            denumireloc:this.toatelocurile?'Toate Locurile':this.locselectat.label,
+            denumirecategorie:this.toatecategoriile?'Toate Categoriile':this.categoriei.label,
+             "datainceput":this.datainceput,
+             "datasfirsit":this.datasfirsit,
+             "idmaterial":this.materialselectat.value,
+            "idgestiune":this.$store.getters.gestiuneCurenta.id,
+            "gestiune":this.$store.getters.gestiuni[0].denumire,
+            categorii,
+            locuri,
+            stari
+        };
+
+         axios.post(process.env.host+'balante/fisacont',this.parametrii_balanta,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+            res => {
+                console.log('a sosist fisa de cont',res.data);
+            }
+         ).catch(err =>{
+                  this.$q.notify({
+                    color: 'negative',
+                    timeout:1500,
+                    position:'top',
+                    icon: 'delete',
+                    message: `EROARE GENERICA! `
+                  })
+        })
     },
     genBalanta(){
          const token=this.$store.getters.token;

@@ -1,12 +1,55 @@
 <template>
-    <h3>Fisa de cont analitic</h3>
+     <q-table
+      dense
+      separator="cell"
+      title="Fisa de cont analitica"
+      :data="setdate"
+      :columns="columns"
+      :pagination.sync="pagination"
+      >
+
+                 <template v-slot:top>
+
+                          <q-btn class="on-right" icon="print" flat dense color="green"  label="Print" @click="raportPrintat" />
+                          
+                </template>
+                      
+    </q-table>
 </template>
 <script>
 export default {
     name:'FisaCont',
     props:['setdate','total','parametrii'],
-    created(){
-        console.log('Component fisa de cont creat!');
-    }
-}
-</script>
+    data(){
+            return {
+                pagination: {
+
+                page: 1,
+                rowsPerPage: 12
+                // rowsNumber: xx if getting data from a server
+             },
+                columns: [
+                        { name: 'data', align: 'center', label: 'Data', field: 'data' },
+                        { name: 'explicatii', label: 'Explicatii', field: 'explicatii',align: 'left' },
+                        { name: 'um', align: 'center', label: 'UM', field: 'um' },
+                        { name: 'ci', align: 'right', label: 'Intrari', field: 'ci' },
+                        { name: 'ce', align: 'right', label: 'Iesiri', field: 'ce' },
+                        { name: 'cs', align: 'right', label: 'Sold', field: 'cs' },
+                        { name: 'vi', align: 'right', label: 'Val. intrata', field: 'vi' },
+                        { name: 've', align: 'right', label: 'Val. iesita', field: 've' },
+                        { name: 'vs', align: 'right', label: 'Sold', field: 'vs' }
+                        
+
+                ]
+                        }
+                },
+                created(){
+                    console.log('Component fisa de cont creat!');
+                },
+                methods:{
+                    raportPrintat(){
+                        
+                    }
+                }
+            }
+            </script>

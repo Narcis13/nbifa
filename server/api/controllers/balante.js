@@ -8,6 +8,53 @@ let ejs = require('ejs');
 
 module.exports.fisacont = (req, res, next) => {
   console.log('sunt in controllerul balante actiunea fisa decont....',req.body)
+  let sql_categ=req.body.categorii==="*"?">=1":"="+req.body.categorii;
+  let sql_stari=req.body.stari==="*"?"%":req.body.stari;
+  let sql_locuri=req.body.locuri==="*"?">=1":"="+req.body.locuri;
+  let si_sql=`
+  SELECT 
+      m.denumire,
+      tranzactii.id_reper,
+      m.um um,
+      ifnull(sum(case when op.data < '${req.body.datainceput}' then tranzactii.cantitate_debit-tranzactii.cantitate_credit end),0) as stocinitial,
+
+      ifnull(sum(case when op.data < '${req.body.datainceput}' then tranzactii.debit-tranzactii.credit end),0) as valoarestocinitial
+
+      FROM bifa.tranzactii 
+      inner join materiale m on m.id=id_reper
+      inner join operatiuni  op on op.id=tranzactii.idAntet
+      where id_reper=${req.body.idmaterial} and tranzactii.stare_material LIKE '${sql_stari}' and tranzactii.tip_material='${req.body.tipmaterial}'  and id_categ${sql_categ} and op.stare='ACTIV' and tranzactii.stare='ACTIV' and id_gestiune=${req.body.idgestiune} and id_locdispunere${sql_locuri}
+      group by id_reper
+  `;
+
+let sql_tranzactii=`
+      SELECT 
+          op.data,
+          concat(op.tipoperatiune,op.nrdoc) as explicatii,
+          tranzactii.um um,
+          tranzactii.cantitate_debit,
+          tranzactii.cantitate_credit,
+          tranzactii.debit,
+          tranzactii.credit
+          FROM bifa.tranzactii 
+          inner join operatiuni  op on op.id=tranzactii.idAntet
+          where op.data>='${req.body.datainceput}' and op.data<='${req.body.datasfirsit}' and id_reper=${req.body.idmaterial} and tranzactii.stare_material LIKE '${sql_stari}' and tranzactii.tip_material='${req.body.tipmaterial}'  and id_categ${sql_categ} and op.stare='ACTIV' and tranzactii.stare='ACTIV' and id_gestiune=${req.body.idgestiune} and id_locdispunere${sql_locuri}
+`;
+
+    knex.raw(si_sql,[]).then(
+      r=>{
+        knex.raw(sql_tranzactii,[]).then(
+          rt=>{
+            return res.status(200).json({
+              message: " fisa de cont",
+              sifc:r,
+              tranzactii:rt
+            });
+          }
+        ).catch(err =>{console.log(err)})
+
+      }
+  ).catch(err =>{console.log(err)})
 
 }
 

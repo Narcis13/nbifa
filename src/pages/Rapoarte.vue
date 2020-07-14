@@ -129,7 +129,7 @@
        
       <lista-inventar v-if="afisezListaInventariere" />
       <balanta v-if="afisezBalanta" :setdate="datebalanta" :total="totalstocfinal" :parametrii="parametrii_balanta"/>
-      <fisa-cont v-if="afisezFisaCont" />
+      <fisa-cont v-if="afisezFisaCont" :setdate="datefisacont"/>
 
 
     </div>
@@ -170,6 +170,7 @@ export default {
         starimaterial:['NOU', 'FOLOSIT', 'CASARE'],
         staremateriali:'NOU',
         datebalanta:[] ,
+        datefisacont:[],
         parametrii_balanta:{},
         totalstocfinal:0
     }
@@ -234,9 +235,10 @@ export default {
           this.afisezFisaCont=false;
     },
     genFisaCont(){
+        var that=this; 
         this.afisezBalanta=false;
         this.afisezListaInventariere=false;
-        this.afisezFisaCont=true;// asta se muta cind vine raspunsul de la fisa cont
+       
         console.log('Material selectat...',this.materialselectat);
 
         const token=this.$store.getters.token;
@@ -260,10 +262,57 @@ export default {
             locuri,
             stari
         };
-
+         
          axios.post(process.env.host+'balante/fisacont',this.parametrii_balanta,{headers:{"Authorization" : `Bearer ${token}`}}).then(
             res => {
-                console.log('a sosist fisa de cont',res.data);
+               
+                that.datefisacont=[];
+                var si=parseFloat(res.data.sifc[0][0].stocinitial),vi=parseFloat(res.data.sifc[0][0].valoarestocinitial);
+                
+                that.datefisacont.push({
+                  data:'<'+that.datainceput,
+                  explicatii:'SOLD INITIAL',
+                  um:'',
+                  ci:'',
+                  ce:'',
+                  cs:parseFloat(res.data.sifc[0][0].stocinitial).toFixed(2),
+                  vi:'',
+                  ve:'',
+                  vs:parseFloat(res.data.sifc[0][0].valoarestocinitial).toFixed(2)
+                })
+              
+              res.data.tranzactii[0].map(t=>{
+                 console.log('a sosist fisa de cont',si);
+                 let c_d=parseFloat(t.cantitate_debit),c_c=parseFloat(t.cantitate_credit);
+                 let v_d=parseFloat(t.debit),v_c=parseFloat(t.credit);
+                si+=(c_d-c_c);
+                vi+=(v_d-v_c);
+                that.datefisacont.push({
+                  data:date.formatDate(t.data, 'DD.MM.YYYY'),
+                  explicatii:t.explicatii,
+                  um:t.um,
+                  ci:t.cantitate_debit,
+                  ce:t.cantitate_credit,
+                  cs:si.toFixed(2),
+                  vi:parseFloat(t.debit).toFixed(2),
+                  ve:parseFloat(t.credit).toFixed(2),
+                  vs:vi.toFixed(2)
+                })
+              })
+
+              that.datefisacont.push({
+                  data:'<'+that.datasfirsit,
+                  explicatii:'SOLD FINAL',
+                  um:'',
+                  ci:'',
+                  ce:'',
+                  cs:si.toFixed(2),
+                  vi:'',
+                  ve:'',
+                  vs:vi.toFixed(2)
+                })
+
+              that.afisezFisaCont=true;// asta se muta cind vine raspunsul de la fisa cont
             }
          ).catch(err =>{
                   this.$q.notify({

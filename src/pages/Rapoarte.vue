@@ -129,7 +129,7 @@
        
       <lista-inventar v-if="afisezListaInventariere" />
       <balanta v-if="afisezBalanta" :setdate="datebalanta" :total="totalstocfinal" :parametrii="parametrii_balanta"/>
-      <fisa-cont v-if="afisezFisaCont" :setdate="datefisacont"/>
+      <fisa-cont v-if="afisezFisaCont" :setdate="datefisacont" :parametrii="parametrii_fisa"/>
 
 
     </div>
@@ -172,6 +172,7 @@ export default {
         datebalanta:[] ,
         datefisacont:[],
         parametrii_balanta:{},
+        parametrii_fisa:{},
         totalstocfinal:0
     }
   },
@@ -248,7 +249,7 @@ export default {
          let stari=this.toatestarile? '*':this.staremateriali;
          console.log('GENEREZ FISA CONT',categorii,this.tipmaterial.value,locuri,stari,this.datainceput,this.datasfirsit);
          var that=this; 
-         this.parametrii_balanta={
+         this.parametrii_fisa={
             "tipmaterial":this.tipmaterial.value,
             denumiretipmaterial:this.tipmaterial.label,
             denumireloc:this.toatelocurile?'Toate Locurile':this.locselectat.label,
@@ -256,6 +257,7 @@ export default {
              "datainceput":this.datainceput,
              "datasfirsit":this.datasfirsit,
              "idmaterial":this.materialselectat.value,
+             "denumirematerial":this.materialselectat.label,
             "idgestiune":this.$store.getters.gestiuneCurenta.id,
             "gestiune":this.$store.getters.gestiuni[0].denumire,
             categorii,
@@ -263,7 +265,7 @@ export default {
             stari
         };
          
-         axios.post(process.env.host+'balante/fisacont',this.parametrii_balanta,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+         axios.post(process.env.host+'balante/fisacont',this.parametrii_fisa,{headers:{"Authorization" : `Bearer ${token}`}}).then(
             res => {
                
                 that.datefisacont=[];

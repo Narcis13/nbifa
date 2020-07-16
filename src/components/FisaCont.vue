@@ -17,6 +17,7 @@
     </q-table>
 </template>
 <script>
+import axios from 'axios';
 export default {
     name:'FisaCont',
     props:['setdate','total','parametrii'],
@@ -48,8 +49,33 @@ export default {
                 },
                 methods:{
                     raportPrintat(){
-                        
-                    }
+                           const token=this.$store.getters.token;
+                            var that=this;
+                            axios.post(process.env.host+'balante/rapfisacont',this.parametrii,{responseType:'blob',headers:{"Authorization" : `Bearer ${token}`}}).then(
+                                res => {
+                                    const file = new Blob([res.data], {
+                                                type: "text/html"
+                                            });
+
+                                    // saveAs(file,'pdfNou.pdf');
+                                    let newWindow = window.open('/','fisacont')
+                                    newWindow.onload = () => {
+                                            newWindow.location = URL.createObjectURL(file);
+                                            
+                                        };
+                                    newWindow.document.title="Fisa de cont analitica"     
+                                }
+                            ).catch(err=>{
+                                    //  console.log('Eroare.............',err.response.data.message)
+                                        this.$q.notify({
+                                            color: 'negative',
+                                            timeout:1500,
+                                            position:'top',
+                                            icon: 'delete',
+                                            message: `ATENTIE! `
+                                        })
+                                })
+                            }
                 }
             }
             </script>

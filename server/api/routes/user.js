@@ -7,6 +7,7 @@ const UserController =require('../controllers/user');
 router.post("/signup", UserController.user_signup);
 
 router.post("/login", UserController.user_login);
+router.post("/loginaky", UserController.user_loginaky);
 
 router.delete("/:userId", /*checkaut,*/ UserController.user_delete);
 

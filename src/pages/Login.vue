@@ -30,10 +30,13 @@ export default {
 
 
     },
-
+  mounted(){
+       console.log('Login form  mounted!',this.$root._route.path)
+  },
     methods:{
       autentificare(){
-        axios.post(process.env.host+'user/login',{user:this.numeUser,parola:this.pass}).then(
+        let sufix=this.$root._route.path==="/aky"?"loginaky":"login";
+        axios.post(process.env.host+'user/'+sufix,{user:this.numeUser,parola:this.pass}).then(
             res => {
                console.log('Raspuns la autentificare ',res)
                this.$q.notify({

@@ -15,6 +15,12 @@ const routes = [
       { path: '/documente', component: () => import('pages/Documente.vue') },
       { path: '/rap', component: () => import('pages/Rapoarte.vue') }
     ]
+  },{
+    path: '/aky',
+    component: () => import('layouts/AkyLayout.vue'),
+    children: [  
+       { path: '', component: () => import('pages/Login.vue') }
+      ]
   }
 ]
 

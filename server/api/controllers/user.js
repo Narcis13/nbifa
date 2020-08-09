@@ -1,6 +1,7 @@
 
 const jwt =require("jsonwebtoken");
 const knex =require('../../db.js');
+const knexaky =require('../../dbaky.js');
 /*const User = require("../models/user");*/
 
 module.exports.user_signup = (req, res, next) => {
@@ -39,6 +40,24 @@ module.exports.user_signup = (req, res, next) => {
 
 
 };
+
+module.exports.user_loginaky = (req, res, next) => {
+  console.log('sunt in controllerul users actiunea loginAKY....',req.body)
+  knexaky.select(['authentication.id', 'authentication.username', 'authentication.rol' ,'authentication.obs', 'compartimente.denumire' ])
+  .from('authentication')
+  .innerJoin('compartimente','compartimente.idsef','authentication.id')
+  .where({
+    username: req.body.user
+  })
+  .then((rows)=>{
+    console.log('rows dfrom adata authentication',rows)
+  
+  }).catch(err =>{console.log(err)})
+  /*knexaky('authentication').where({
+    username: req.body.user
+  }).select()*/
+
+}
 
 module.exports.user_login = (req, res, next) => {
   console.log('sunt in controllerul users actiunea login....')

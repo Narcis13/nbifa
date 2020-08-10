@@ -166,12 +166,25 @@ export default {
         console.log('Log out!');
         commit('setUser', null);
         this.$router.push('/login');
+      },
+      akylogout ({commit}) {
+        console.log('Log out din BIFA AKY!');
+        commit('setAkyUser', null);
+        this.$router.push('/aky');
       }
     },
     getters: {
       user (state) {
         return state.user
       },
+      akyuserlogat (state){
+       // return state.akyuser[0].username
+       return state.akyuser? state.akyuser.utilizator[0].username:"Nimeni";
+      },
+      compartimentakyuserlogat (state){
+        // return state.akyuser[0].username
+        return state.akyuser? state.akyuser.utilizator[0].denumire:"Niciunul";
+       },
       userid(state){
           return state.iduser
       },

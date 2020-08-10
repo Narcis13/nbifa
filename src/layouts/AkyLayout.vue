@@ -24,22 +24,9 @@
             <q-menu auto-close>
               <q-list dense style="min-width: 100px">
                 <q-item clickable class="GL__menu-link">
-                  <q-item-section>New repository</q-item-section>
+                  <q-item-section>Mesaj nou</q-item-section>
                 </q-item>
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Import repository</q-item-section>
-                </q-item>
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>New gist</q-item-section>
-                </q-item>
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>New organization</q-item-section>
-                </q-item>
-                <q-separator />
-                <q-item-label header>This repository</q-item-label>
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>New issue</q-item-section>
-                </q-item>
+                
               </q-list>
             </q-menu>
           </q-btn>
@@ -54,7 +41,7 @@
               <q-list dense>
                 <q-item class="GL__menu-link-signed-in">
                   <q-item-section>
-                    <div>Signed in as <strong>Mary</strong></div>
+                    <div>Autentificat ca <strong>{{user_autentificat}}</strong></div>
                   </q-item-section>
                 </q-item>
                 <q-separator />
@@ -62,35 +49,14 @@
                   <q-item-section>
                     <div>
                       <q-icon name="tag_faces" color="blue-9" size="18px" />
-                      Set your status
+                      {{compartiment_user_autentificat}}
                     </div>
                   </q-item-section>
                 </q-item>
                 <q-separator />
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Your profile</q-item-section>
-                </q-item>
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Your repositories</q-item-section>
-                </q-item>
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Your projects</q-item-section>
-                </q-item>
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Your stars</q-item-section>
-                </q-item>
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Your gists</q-item-section>
-                </q-item>
-                <q-separator />
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Help</q-item-section>
-                </q-item>
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Settings</q-item-section>
-                </q-item>
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Sign out</q-item-section>
+                
+                <q-item clickable class="GL__menu-link" @click="$store.dispatch('akylogout')">
+                  <q-item-section>Exit</q-item-section>
                 </q-item>
               </q-list>
             </q-menu>
@@ -115,10 +81,19 @@ export default {
   name: 'MyLayout',
   data () {
     return {
-      text: '',
+      utilizator: '',
+      compartiment:'',
       options: null,
       filteredOptions: []
     }
+  },
+  computed :{
+      user_autentificat(){
+        return this.$store.getters.akyuserlogat;
+      },
+     compartiment_user_autentificat(){
+        return this.$store.getters.compartimentakyuserlogat;
+      }
   },
   mounted(){
        console.log('Aky layout mounted!')

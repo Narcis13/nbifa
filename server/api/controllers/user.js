@@ -43,7 +43,7 @@ module.exports.user_signup = (req, res, next) => {
 
 module.exports.user_loginaky = (req, res, next) => {
   console.log('sunt in controllerul users actiunea loginAKY....',req.body)
-  knexaky.select(['authentication.id', 'authentication.username', 'authentication.rol' ,'authentication.obs', 'compartimente.denumire' ])
+  knexaky.select(['authentication.id', 'authentication.username', 'authentication.rol' ,'authentication.obs', 'compartimente.denumire',{idcompartiment:'compartimente.id'} ])
   .from('authentication')
   .innerJoin('compartimente','compartimente.idsef','authentication.id')
   .where({
@@ -51,11 +51,34 @@ module.exports.user_loginaky = (req, res, next) => {
   })
   .then((rows)=>{
     console.log('rows dfrom adata authentication',rows)
+    if(rows.length==1){
+
+
+      const token = jwt.sign(
+        {
+          nume:  req.body.user,
+          parola: req.body.parola
+        },
+       'ROSES',
+        {
+          expiresIn: "2h"
+        }
+      );
+       
+      return res.status(200).json({
+        message: "Logat cu succes in aplicatia BIFA AKY",
+        token,
+        utilizator:rows
+      })
+
+    }
+    else
+    return res.status(401).json({
+      message: "Auth failed"
+    });
   
   }).catch(err =>{console.log(err)})
-  /*knexaky('authentication').where({
-    username: req.body.user
-  }).select()*/
+
 
 }
 

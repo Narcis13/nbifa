@@ -45,7 +45,11 @@ export default {
                  position:'top',
                  color:'positive'
                });
-               this.$store.dispatch('signUserIn',res.data)
+
+               if(sufix==="loginaky")
+                 this.$store.dispatch('akysignUserIn',res.data)
+               else
+                this.$store.dispatch('signUserIn',res.data)
             }
      ).catch(err=>{
        this.numeUser=''

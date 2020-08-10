@@ -19,7 +19,8 @@ const routes = [
     path: '/aky',
     component: () => import('layouts/AkyLayout.vue'),
     children: [  
-       { path: '', component: () => import('pages/Login.vue') }
+       { path: '', component: () => import('pages/Login.vue') },
+       { path: '/dashboard', component: () => import('pages/Dashboard.vue') }
       ]
   }
 ]

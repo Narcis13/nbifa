@@ -1,6 +1,7 @@
 export default {
     state: {
       user: null,
+      akyuser:null,
       iduser:0,
       token:null,
       rol:null,
@@ -42,6 +43,12 @@ export default {
           state.gestiuni =null;
         }
    
+      },
+      setAkyUser(state,payload){
+          if(payload)
+             state.akyuser=payload
+          else
+             state.akyuser=null;   
       },
       setGestiuneCurenta (state,payload){
         state.gestiuneCurenta = payload;
@@ -110,6 +117,11 @@ export default {
         console.log('se ruleaza actiunea signUserIn...',payload);
         commit('setUser', payload);
         this.$router.push('/');
+      },
+      akysignUserIn ({commit}, payload) {
+        console.log('se ruleaza actiunea akysignUserIn...',payload);
+        commit('setAkyUser', payload);
+        this.$router.push('/dashboard');
       },
       schimbaGestiuneaCurenta ({commit}, payload) {
         console.log('se ruleaza actiunea schimbaGestiuneaCurenta...',payload);

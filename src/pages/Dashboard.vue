@@ -9,8 +9,8 @@
       <q-separator />
 
       <q-card-actions align="around">
-        <q-btn flat>Action 1</q-btn>
-        <q-btn flat>Action 2</q-btn>
+        <q-btn @click="$router.push('/paap')" flat>Opereaza</q-btn>
+        <q-btn flat>Rapoarte</q-btn>
       </q-card-actions>
     </q-card>
 
@@ -21,8 +21,8 @@
       </q-card-section>
 
       <q-card-actions align="around">
-        <q-btn flat>Action 1</q-btn>
-        <q-btn flat>Action 2</q-btn>
+        <q-btn flat>Opereaza</q-btn>
+        <q-btn flat>Rapoarte</q-btn>
       </q-card-actions>
     </q-card>
 
@@ -33,8 +33,8 @@
       </q-card-section>
 
       <q-card-actions  align="around">
-        <q-btn flat>Action 1</q-btn>
-        <q-btn flat>Action 2</q-btn>
+        <q-btn flat>Opereaza</q-btn>
+        <q-btn flat>Rapoarte</q-btn>
       </q-card-actions>
     </q-card>
 
@@ -45,8 +45,8 @@
       </q-card-section>
 
       <q-card-actions  align="around">
-        <q-btn flat>Action 1</q-btn>
-        <q-btn flat>Action 2</q-btn>
+        <q-btn flat>Opereaza</q-btn>
+        <q-btn flat>Rapoarte</q-btn>
       </q-card-actions>
     </q-card>
   </div>

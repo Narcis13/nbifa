@@ -20,7 +20,8 @@ const routes = [
     component: () => import('layouts/AkyLayout.vue'),
     children: [  
        { path: '', component: () => import('pages/Login.vue') },
-       { path: '/dashboard', component: () => import('pages/Dashboard.vue') }
+       { path: '/dashboard', component: () => import('pages/Dashboard.vue') },
+       { path: '/paap', component: () => import('pages/Paap.vue') },
       ]
   }
 ]

@@ -181,9 +181,16 @@ export default {
        // return state.akyuser[0].username
        return state.akyuser? state.akyuser.utilizator[0].username:"Nimeni";
       },
+      akyroluserlogat(state){
+        return state.akyuser? state.akyuser.utilizator[0].rol:"Niciunul";
+      },
       compartimentakyuserlogat (state){
         // return state.akyuser[0].username
         return state.akyuser? state.akyuser.utilizator[0].denumire:"Niciunul";
+       },
+       idcompartimentakyuserlogat (state){
+        // return state.akyuser[0].username
+        return state.akyuser? state.akyuser.utilizator[0].idcompartiment:"Niciunul";
        },
       userid(state){
           return state.iduser
@@ -194,6 +201,9 @@ export default {
       token(state){
         return state.token
       },
+      akytoken(state){
+        return state.akyuser? state.akyuser.token:null;
+      },      
       gestiuni(state){
         return state.gestiuni
       },

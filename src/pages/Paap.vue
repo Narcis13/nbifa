@@ -20,8 +20,25 @@
         >
 
         <template v-slot:top>
-            <q-btn color="primary"  label="Add row" />
-            <q-btn class="q-ml-sm" color="primary"  label="Remove row"  />
+            <div class="q-pa-sm text-h4">PAAP</div>
+            <div class="q-gutter-sm q-ml-xl">
+                <q-radio left-label v-model="ancur" val="2019" label="2019" />
+                <q-radio left-label v-model="ancur" val="2020" label="2020" />
+                <q-radio left-label v-model="ancur" val="2021" label="2021" />
+     
+            </div>
+            <q-btn-dropdown icon="filter_list" class="q-ml-xl" outline rounded color="primary"  label="Filtreaza" >
+              <div class="q-pa-md" style="width:300px;">Filtre si alte balarii ....</div>
+            </q-btn-dropdown>
+
+            <q-btn-dropdown :disable="!eCevaSelectat" icon="description" outline rounded class="q-ml-xl" color="primary"  label="Actiuni..."  >
+              <div class="column q-pa-md" >
+                <q-btn label="Suprascrie coloana cu valoarea..."></q-btn>
+                <q-btn label="Cloneaza aceste elemente pentru PAAP anul urmator"></q-btn>
+                <q-btn label="Sterge"></q-btn>
+              </div>  
+            </q-btn-dropdown>
+
             <q-space />
             <q-input borderless dense debounce="300" color="primary" v-model="filter">
               <template v-slot:append>
@@ -54,6 +71,7 @@ export default {
       paap:[],
       selected:[],
       filter:'',
+      ancur:"2020",
       pagination: {
         rowsPerPage: 0
       },
@@ -82,6 +100,11 @@ export default {
         { name: 'compartiment', label: 'Compartiment', align: 'center',field: 'denumire', sortable: true},
         { name: 'artbug', label: 'Art. Bug.', field: 'artbug', sortable: true }
       ]
+    }
+  },
+  computed:{
+    eCevaSelectat(){
+      return this.selected.length>0
     }
   },
   created(){

@@ -32,11 +32,40 @@
             </q-btn-dropdown>
 
             <q-btn-dropdown :disable="!eCevaSelectat" icon="description" outline rounded class="q-ml-xl" color="primary"  label="Actiuni..."  >
-              <div class="column q-pa-md" >
-                <q-btn label="Suprascrie coloana cu valoarea..."></q-btn>
-                <q-btn label="Cloneaza aceste elemente pentru PAAP anul urmator"></q-btn>
-                <q-btn label="Sterge"></q-btn>
-              </div>  
+                <q-list style="min-width:300px">
+                        <q-item clickable v-close-popup @click="onItemClick">
+                          <q-item-section avatar>
+                            <q-avatar icon="folder" color="primary" text-color="white"></q-avatar>
+                          </q-item-section>
+                          <q-item-section>
+                            <q-item-label>Photos</q-item-label>
+                            <q-item-label caption>February 22, 2016</q-item-label>
+                          </q-item-section>
+
+                        </q-item>
+
+                        <q-item clickable v-close-popup @click="onItemClick">
+                          <q-item-section avatar>
+                            <q-avatar icon="assignment" color="secondary" text-color="white"></q-avatar>
+                          </q-item-section>
+                          <q-item-section>
+                            <q-item-label>Cloneaza pentru PAAP anul urmator</q-item-label>
+                            <q-item-label caption>Elementele selectate</q-item-label>
+                          </q-item-section>
+
+                        </q-item>
+                        
+                      <q-item clickable v-close-popup @click="onItemClick">
+                          <q-item-section avatar>
+                            <q-avatar icon="assignment" color="negative" text-color="white"></q-avatar>
+                          </q-item-section>
+                          <q-item-section>
+                            <q-item-label>Sterge</q-item-label>
+                            <q-item-label caption>Elemenetele selectate</q-item-label>
+                          </q-item-section>
+
+                        </q-item>
+                      </q-list>
             </q-btn-dropdown>
 
             <q-space />

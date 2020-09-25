@@ -2,7 +2,7 @@ const { innerJoin } = require('../../dbaky.js');
 const knex =require('../../dbaky.js');
 
 module.exports.tot = (req, res, next) => {
-    console.log('sunt in controllerul PAAP actiunea tot....',req.params.idcomp,typeof req.params.idcomp)
+    console.log('sunt in controllerul PAAP actiunea tot....',req.params.an,typeof req.params.an)
     let op="=";
     if(req.params.idcomp==="Niciunul"){
       return res.status(401).json({
@@ -16,6 +16,7 @@ module.exports.tot = (req, res, next) => {
     .innerJoin('tipproceduri','paap.id_procedura','tipproceduri.id')
     .innerJoin('compartimente','paap.id_compartiment','compartimente.id')
     .where('paap.id_compartiment',op,parseInt(req.params.idcomp))
+    .andWhere('paap.anplan',parseInt(req.params.an))
     .orderBy('paap.artbug').then((rows)=>{
        return res.status(200).json({
         message: "Intregul PAAP",

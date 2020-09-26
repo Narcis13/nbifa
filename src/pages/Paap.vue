@@ -33,14 +33,19 @@
 
             <q-btn-dropdown :disable="!eCevaSelectat" icon="description" outline rounded class="q-ml-xl" color="primary"  label="Actiuni..."  >
                 <q-list style="min-width:300px">
-                        <q-item  v-close-popup >
+                        <q-item   >
                           <q-item-section avatar>
                             <q-avatar icon="create" color="primary" text-color="white"></q-avatar>
                           </q-item-section>
-                          <q-item-section>
-                            <q-item-label>Photos</q-item-label>
-                            <q-item-label caption>February 22, 2016</q-item-label>
-                          </q-item-section>
+                         
+                            <div class="row">
+                              <q-select style="min-width:250px;margin-right:15px;" filled v-model="colMultiEdit" :options="coloaneMultiEdit" label="Suprascrie valorile din coloana" />
+                              <q-input  label="Standard" />
+                              <q-btn style="min-width:60px;margin-left:15px;" round color="deep-orange" icon="check_circle">
+                                 <q-tooltip content-class="bg-accent">Aplica elementelor selectate</q-tooltip>
+                              </q-btn>
+                            </div>
+                         
 
                         </q-item>
 
@@ -107,7 +112,13 @@ export default {
       pagination: {
         rowsPerPage: 0
       },
-
+      colMultiEdit:null,
+      coloaneMultiEdit:[
+        {label:'Cod CPV',value:'CodCPV'},
+        { label: 'Procedura', value: 'procedura'},
+        { label: 'Responsabil', value: 'responsabil' },
+        { label: 'Articol Bugetar', value: 'artbug'}
+      ],
       columns: [
         {
           name: 'index',

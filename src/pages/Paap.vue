@@ -16,6 +16,7 @@
         :data="paap"
         :columns="columns"
         selection="multiple"
+          binary-state-sort
         :selected.sync="selected"
         >
 
@@ -39,9 +40,9 @@
                           </q-item-section>
                          
                             <div class="row">
-                              <q-select style="min-width:250px;margin-right:15px;" filled v-model="colMultiEdit" :options="coloaneMultiEdit" label="Suprascrie valorile din coloana" />
-                              <q-input  label="Standard" />
-                              <q-btn style="min-width:60px;margin-left:15px;" round color="deep-orange" icon="check_circle">
+                              <q-select style="min-width:250px;margin-right:15px;" @input="alegColDeEditat" filled v-model="colMultiEdit" :options="coloaneMultiEdit" label="Suprascrie valorile din coloana" />
+                              <component @selectie-coloana="coloanaSelectata" v-show="amAlesOColoanaDeEditat"  v-bind:is="compMultiEdit" ></component>
+                              <q-btn v-close-popup v-show="amAlesOColoanaDeEditat&&valoareNoua!==null" @click="aplicaModificari" style="min-width:60px;margin-left:15px;" round color="deep-orange" icon="check_circle">
                                  <q-tooltip content-class="bg-accent">Aplica elementelor selectate</q-tooltip>
                               </q-btn>
                             </div>
@@ -81,6 +82,50 @@
             </q-input>
         </template>
 
+        <!--  Rinduri in grid editabile  -->
+
+                    <template v-slot:body="props">
+                      <q-tr :props="props">
+                       <q-td auto-width>
+                          <q-checkbox dense v-model="props.selected" ></q-checkbox>
+                        </q-td>
+                        <q-td key="id" :props="props">{{ props.row.id }}</q-td>
+                        <q-td key="articol" :props="props">
+                              {{ props.row.obiectachizitie_text }}
+
+                                      <q-popup-edit @save="editezObiectAky(props.row.id_obiect_achizitie,props.row.obiectachizitie_text)"  v-model="props.row.obiectachizitie_text" title="Schimba obiect achizitie" buttons label-set="Modifica" label-cancel="Abandon">
+                                          <q-input   type="textarea" v-model="props.row.obiectachizitie_text" dense autofocus />
+                                      </q-popup-edit>
+
+                        </q-td>
+                        <q-td key="codcpv" :props="props">{{ props.row.CodCPV }}</q-td>
+                        <q-td key="cantitate" :props="props">
+                          {{ props.row.cantitate }}
+              
+              
+                                      <q-popup-edit @save="editeaza(props.row.id,'cantitate',props.row.cantitate)" @hide="proteinRangeValidation" :validate="proteinRangeValidation" v-model="props.row.cantitate" title="Schimba cantitatea" buttons label-set="Modifica" label-cancel="Abandon">
+                                          <q-input  :error="errorProtein"  :error-message="errorMessageProtein" type="number" v-model.number="props.row.cantitate" dense autofocus />
+                                      </q-popup-edit>
+
+                        </q-td>
+                        <q-td key="valoare" :props="props">
+                          {{ props.row.valoare }}
+
+                                      <q-popup-edit @save="editeaza(props.row.id,'valoare',props.row.valoare)" @hide="proteinRangeValidation" :validate="proteinRangeValidation" v-model="props.row.valoare" title="Schimba valoarea" buttons label-set="Modifica" label-cancel="Abandon">
+                                          <q-input  :error="errorProtein"  :error-message="errorMessageProtein" type="number" v-model.number="props.row.valoare" dense autofocus />
+                                      </q-popup-edit>
+
+                        </q-td>
+                        <q-td key="procedura" :props="props">{{ props.row.procedura }}</q-td>
+                        <q-td key="responsabil" :props="props">{{ props.row.responsabil }}</q-td>
+                        <q-td key="compartiment" :props="props">{{ props.row.denumire }}</q-td>
+                        <q-td key="artbug" :props="props">{{ props.row.artbug }}</q-td>
+                        
+                      </q-tr>
+                  </template>
+
+
+
         </q-table>
   </div>
 
@@ -98,13 +143,34 @@
 <script>
 import { date } from 'quasar'
 import axios from 'axios'
+import PaapProceduri from '../components/paap/PaapProceduri'
+import PaapResponsabil from '../components/paap/PaapResponsabil'
+import PaapArticolBugetar from '../components/paap/PaapArticolBugetar'
+import PaapCodCPV from '../components/paap/PaapCodCPV'
+
+function removeByKey(array, params){
+  array.some(function(item, index) {
+    return (array[index][params.key] === params.value) ? !!(array.splice(index, 1)) : false;
+  });
+  return array;
+}
+
 
 export default {
+  components:{
+     'paap-proceduri':PaapProceduri,
+     'paap-responsabil':PaapResponsabil,
+     'paap-artbug':PaapArticolBugetar,
+     'paap-codcpv':PaapCodCPV
+  },
   data () {
     return {
       paap:[],
       selected:[],
       filter:'',
+      errorProtein: false,
+      errorMessageProtein: '',
+      valoareNoua:null,
       anselectat:(new Date()).getFullYear().toString(),
       ancur:(new Date()).getFullYear().toString(),
       anante:((new Date()).getFullYear()-1).toString(),
@@ -113,15 +179,16 @@ export default {
         rowsPerPage: 0
       },
       colMultiEdit:null,
+      compMultiEdit:null, 
       coloaneMultiEdit:[
-        {label:'Cod CPV',value:'CodCPV'},
-        { label: 'Procedura', value: 'procedura'},
-        { label: 'Responsabil', value: 'responsabil' },
-        { label: 'Articol Bugetar', value: 'artbug'}
+        {label:'Cod CPV',value:'CodCPV',comp:'paap-codcpv'},
+        { label: 'Procedura', value: 'procedura',comp:'paap-proceduri'},
+        { label: 'Responsabil', value: 'responsabil',comp:'paap-responsabil' },
+        { label: 'Articol Bugetar', value: 'artbug',comp:'paap-artbug'}
       ],
       columns: [
         {
-          name: 'index',
+          name: 'id',
           label: '#',
           field: 'id'
         },
@@ -137,7 +204,7 @@ export default {
         },
         { name: 'codcpv', align: 'center', label: 'Cod CPV', field: 'CodCPV', sortable: true },
         { name: 'cantitate', align:'right',label: 'Cantitate', field: 'cantitate', sortable: true },
-        { name: 'valoare', align:'right',label: 'Valoare estimata', field: 'valoare' },
+        { name: 'valoare', align:'right',label: 'Valoare estimata', field: 'valoare', sortable: true },
         { name: 'procedura', label: 'Procedura', field: 'procedura',align: 'center', sortable: true ,style: 'max-width: 150px',},
         { name: 'responsabil', label: 'Responsabil', field: 'responsabil',align: 'left' },
         { name: 'compartiment', label: 'Compartiment', align: 'center',field: 'denumire', sortable: true},
@@ -148,17 +215,131 @@ export default {
   computed:{
     eCevaSelectat(){
       return this.selected.length>0
-    }
+    },
+    amAlesOColoanaDeEditat(){
+      return this.colMultiEdit!==null
+    },
+      /*compMultiEdit(){
+        console.log('....',this.coloaneMultiEdit.comp)
+         return this.colMultiEdit.comp
+      }*/
   },
   methods: {
+      proteinRangeValidation (val) {
+        if (val < 1 ) {
+          this.errorProtein = true
+          this.errorMessageProtein = 'Valoarea introdusa nu poate fi negativa'
+          return false
+        }
+        this.errorProtein = false
+        this.errorMessageProtein = ''
+        return true
+      },
+      editezObiectAky(id,text){
+              console.log('editez obiect aky ',id,text)
+              const token=this.$store.getters.token;
+               axios.put(process.env.host+`paap/updateobiectaky/${id}`,{'text':text}
+                 ,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+                      res => {
+
+                })
+        
+      },
+      editeaza(id,cheie,valoarenoua){
+
+              console.log('editez ',id,cheie,valoarenoua)
+              const token=this.$store.getters.token;
+               var that = this;
+               axios.put(process.env.host+`paap/atomicupdate/${id}`,{[cheie]:valoarenoua}
+                 ,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+                      res => {
+
+                })
+                
+        },
       schimbaAn(value){
-        console.log('Noul an ',value)
+       // console.log('Noul an ',value)
           this.paapCompAn(value)
       },
+      coloanaSelectata(v){
+       //  console.log('valoare pentru coloana de modificat',v);
+          this.valoareNoua=v;
+      },
+      alegColDeEditat(){
+       //  console.log('Am ales ',this.colMultiEdit);
+
+        this.compMultiEdit=this.colMultiEdit.comp;
+      },
       stergeSelectie(){
+              let iduri=[];
+              let that=this;
+              this.selected.map(el => iduri.push(el.id))
+              console.log('sterg ',iduri)
+              const token=this.$store.getters.token;
+              let id=999;
+              axios.put(process.env.host+`paap/invalideazapozitieplan/${id}`,{iduri}
+                 ,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+                      res => {
+                          // aici o sa bag codul prin care actualizez gridul
+                              this.$q.notify({
+                                message:`Stergere reusita!`,
+                                timeout:1500,
+                                position:'top',
+                                color:'positive'
+                                })
+                               iduri.map(id=>{that.paap = removeByKey(that.paap,{key:'id',value:id})}) 
+                               
+                               that.selected=[];
+                      })
 
       },
       cloneazaSelectie(){
+
+      },
+      aplicaModificari(){
+        console.log('Valoare noua ....',this.valoareNoua);
+         this.colMultiEdit=null;
+         let that=this;
+         let iduri=[];
+         this.selected.map(el => iduri.push(el.id))
+         const token=this.$store.getters.akytoken;
+         function eSelectat(id){
+           let exista=false;
+           
+           that.selected.map(el=>{
+            
+             if(el.id==id) exista=true;
+
+           })
+           return exista;
+         }
+         //aici aplic modificari
+
+         // aici update request
+         let id=999;
+         axios.put(process.env.host+`paap/${id}`,{[this.valoareNoua.cimp]:this.valoareNoua,iduri}
+                 ,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+                      res => {
+                          // aici o sa bag codul prin care actualizez gridul
+                              this.$q.notify({
+                                message:`Actualizare reusita!`,
+                                timeout:1500,
+                                position:'top',
+                                color:'positive'
+                                })
+
+                              this.paap.map(poz_paap=>{
+
+                              if(eSelectat(poz_paap.id)){
+                                poz_paap[that.valoareNoua.ce]=that.valoareNoua.valoare.label;
+                              }
+                              })
+
+                               this.selected=[];
+                      })
+
+
+
 
       },
       paapCompAn(an){

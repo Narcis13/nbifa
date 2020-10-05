@@ -61,7 +61,7 @@
 
                         </q-item>
                         
-                      <q-item clickable v-close-popup @click="stergeSelectie">
+                      <q-item clickable v-close-popup @click="confirm=true">
                           <q-item-section avatar>
                             <q-avatar icon="cancel_presentation" color="negative" text-color="white"></q-avatar>
                           </q-item-section>
@@ -127,6 +127,20 @@
 
 
         </q-table>
+
+             <q-dialog v-model="confirm" persistent>
+                <q-card>
+                  <q-card-section class="row items-center">
+                    <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
+                    <span class="q-ml-sm">Sunteti sigur ca doriti stergerea?</span>
+                  </q-card-section>
+
+                  <q-card-actions align="right">
+                    <q-btn flat label="Abandon" color="primary" v-close-popup />
+                    <q-btn flat label="Sterge" color="primary" @click="stergeSelectie" v-close-popup />
+                  </q-card-actions>
+                </q-card>
+              </q-dialog>
   </div>
 
     <q-page-sticky  position="bottom-right" :offset="[24, 24]">
@@ -168,6 +182,7 @@ export default {
       paap:[],
       selected:[],
       filter:'',
+      confirm:false,
       errorProtein: false,
       errorMessageProtein: '',
       valoareNoua:null,

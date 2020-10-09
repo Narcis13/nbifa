@@ -228,6 +228,9 @@ export default {
     }
   },
   computed:{
+    ultimulAn(){
+           return this.anselectat==this.anpost
+    },
     eCevaSelectat(){
       return this.selected.length>0
     },
@@ -274,6 +277,7 @@ export default {
         },
       schimbaAn(value){
        // console.log('Noul an ',value)
+          this.selected=[];
           this.paapCompAn(value)
       },
       coloanaSelectata(v){
@@ -309,6 +313,20 @@ export default {
 
       },
       cloneazaSelectie(){
+
+              let iduri=[];
+              let that=this;
+              this.selected.map(el => iduri.push(el.id))
+              console.log('clonez ',this.selected)
+              const token=this.$store.getters.token; 
+              axios.post(process.env.host+'paap/cloneazapozitii',{
+                    tranzactii:this.selected
+              },{headers:{"Authorization" : `Bearer ${token}`}}).then(res =>{
+
+                  
+              }).catch(err=>{
+                
+              })
 
       },
       aplicaModificari(){

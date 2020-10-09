@@ -11,5 +11,5 @@ router.put("/atomicupdate/:idpaap", /*checkaut,*/ PAAPController.update_atomic);
 router.put("/updateobiectaky/:idpaap", /*checkaut,*/ PAAPController.update_obiect_aky);
 router.put("/invalideazapozitieplan/:idpaap", /*checkaut,*/ PAAPController.invalideazapozitieplan);
 
-
+router.post("/cloneazapozitii", PAAPController.cloneaza_pozitii);
 module.exports=router;

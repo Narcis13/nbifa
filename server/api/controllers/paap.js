@@ -9,7 +9,7 @@ module.exports.tot = (req, res, next) => {
         message: "Cimpuri vide!"
       })
     } else if(req.params.idcomp=="0") op=">" 
-    knex.select(['paap.id', 'paap.id_obiect_achizitie','obiecte_achizitie.obiectachizitie_text','coduricpv.CodCPV','paap.cantitate','paap.valoare','tipproceduri.procedura','paap.responsabil','paap.artbug','compartimente.denumire'])
+    knex.select(['paap.id','paap.id_procedura','paap.id_compartiment','paap.id_cod_cpv','paap.to', 'paap.id_obiect_achizitie','obiecte_achizitie.obiectachizitie_text','coduricpv.CodCPV','paap.cantitate','paap.valoare','tipproceduri.procedura','paap.responsabil','paap.artbug','compartimente.denumire'])
     .from('paap')
     .innerJoin('obiecte_achizitie','obiecte_achizitie.id','paap.id_obiect_achizitie')
     .innerJoin('coduricpv','paap.id_cod_cpv','coduricpv.IDCod')
@@ -25,6 +25,11 @@ module.exports.tot = (req, res, next) => {
       });
      }).catch(err =>{})
 
+}
+
+
+module.exports.cloneaza_pozitii = (req,res,next) => {
+  console.log('Sunt in controllerul paap actiunea cloneaza pozitii',req.body)
 }
 
 module.exports.toate_procedurile = (req, res, next) => {

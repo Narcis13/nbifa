@@ -9,7 +9,7 @@ module.exports.tot = (req, res, next) => {
         message: "Cimpuri vide!"
       })
     } else if(req.params.idcomp=="0") op=">" 
-    knex.select(['paap.id','paap.id_procedura','paap.id_compartiment','paap.id_cod_cpv','paap.to', 'paap.id_obiect_achizitie','obiecte_achizitie.obiectachizitie_text','coduricpv.CodCPV','paap.cantitate','paap.valoare','tipproceduri.procedura','paap.responsabil','paap.artbug','compartimente.denumire'])
+    knex.select(['paap.id','paap.anplan','paap.id_procedura','paap.id_compartiment','paap.id_cod_cpv','paap.to', 'paap.id_obiect_achizitie','obiecte_achizitie.obiectachizitie_text','coduricpv.CodCPV','paap.cantitate','paap.valoare','tipproceduri.procedura','paap.responsabil','paap.artbug','compartimente.denumire'])
     .from('paap')
     .innerJoin('obiecte_achizitie','obiecte_achizitie.id','paap.id_obiect_achizitie')
     .innerJoin('coduricpv','paap.id_cod_cpv','coduricpv.IDCod')
@@ -29,7 +29,54 @@ module.exports.tot = (req, res, next) => {
 
 
 module.exports.cloneaza_pozitii = (req,res,next) => {
-  console.log('Sunt in controllerul paap actiunea cloneaza pozitii',req.body)
+ 
+let tranzactii= req.body.tranzactii;
+let pozitii=[];
+let iduri=[];
+
+tranzactii.map(t => {
+  iduri.push(t.id);
+  pozitii.push({
+    id_procedura:t.id_procedura,
+    id_compartiment:t.id_compartiment,
+    id_cod_cpv:t.id_cod_cpv,
+    from:t.id,
+    id_obiect_achizitie:t.id_obiect_achizitie,
+    cantitate:t.cantitate,
+    valoare:t.valoare,
+    responsabil:t.responsabil,
+    artbug:t.artbug,
+    sursa_finantare:'venituri proprii',
+    luna_inceput:'ianuarie',
+    luna_sfirsit:'decembrie',
+    mod_derulare:'online',
+    stare:'activ',
+    anplan:t.anplan+1,
+    data_creere:knex.fn.now(),
+    data_modificare:knex.fn.now()
+  })
+})
+
+
+console.log('Sunt in controllerul paap actiunea cloneaza pozitii',iduri);
+knex('paap').insert(pozitii).then((d)=>{
+   // aici updatez to...
+   knex('paap').whereIn('id',iduri).update({
+         
+    data_modificare:knex.fn.now(),
+    to:1
+  })
+  .then(()=>{
+    return res.status(200).json({
+      message: "Tranzactii adaugate"
+    });
+  
+  }).catch(err =>{})
+
+ }).catch(err =>{ console.log(err)})
+
+
+  
 }
 
 module.exports.toate_procedurile = (req, res, next) => {

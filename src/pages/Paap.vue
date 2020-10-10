@@ -322,7 +322,14 @@ export default {
               axios.post(process.env.host+'paap/cloneazapozitii',{
                     tranzactii:this.selected
               },{headers:{"Authorization" : `Bearer ${token}`}}).then(res =>{
+                           this.$q.notify({
+                                message:`Clonare pozitii PAAP reusita!`,
+                                timeout:2000,
+                                position:'top',
+                                color:'positive'
+                                })
 
+                               this.selected=[];
                   
               }).catch(err=>{
                 

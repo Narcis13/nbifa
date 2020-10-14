@@ -4,7 +4,7 @@
 
 <script>
 export default {
-   name:'PaapProceduri',
+   name:'PaapArticolBugetar',
    data(){
        return {
                 model: null,

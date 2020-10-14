@@ -1,6 +1,6 @@
 <template>
 <q-page padding>
-    <div class="flex flex-center q-pa-md">
+    <div class="flex flex-center ">
         <q-table
         class="my-sticky-virtscroll-table"
         :filter="filter"
@@ -17,6 +17,7 @@
         :columns="columns"
         selection="multiple"
           binary-state-sort
+          ref="paaptable"
         :selected.sync="selected"
         >
 
@@ -28,8 +29,73 @@
                 <q-radio @input="schimbaAn" left-label v-model="anselectat" :val="anpost" :label="anpost" />
      
             </div>
-            <q-btn-dropdown icon="filter_list" class="q-ml-xl" outline rounded color="primary"  label="Filtreaza" >
-              <div class="q-pa-md" style="width:300px;">Filtre si alte balarii ....</div>
+            <q-btn v-show="filtruAplicat" class="q-ml-xl"  outline rounded color="primary" label="nefiltrat" @click="stergFiltru" />
+            <q-btn-dropdown v-show="!filtruAplicat" @hide="resetFiltre" icon="filter_list" class="q-ml-xl" outline rounded color="primary"  label="Filtreaza" >
+              
+              <div class="q-pa-md" style="width:600px;">
+
+                        <div class="row q-gutter-md q-mt-xs">
+
+                            <div class="col">
+                                   <q-toggle v-model="toateArticolele" color="green" :label="toateArticolele?'Toate articolele bugetare':'Numai articolul bugetar'"    />
+                            </div>
+
+                            <div v-show="!toateArticolele" class="col">
+                                  <paap-artbug  @selectie-coloana="coloanaSelectata" />
+                            </div>
+
+                        </div>
+
+                        <div class="row q-gutter-md q-mt-xs">
+
+                            <div class="col">
+                                   <q-toggle v-model="toateValorile" color="green" label="Indiferent de valoare"    />
+                            </div>
+
+                            <div v-show="!toateValorile" class="col">
+                                      <q-range style="max-width:270px;" v-model="rangeValori" :min="0"  :max="250000" :step="1000" label color="purple" />
+                            </div>
+
+                        </div>
+
+                        <div class="row q-gutter-md q-mt-xs">
+
+                            <div class="col">
+                                   <q-toggle v-model="toateProcedurile" color="green" label="Toate procedurile"    />
+                            </div>
+
+                            <div v-show="!toateProcedurile" class="col">
+                                  <paap-proceduri  @selectie-coloana="coloanaSelectata" />
+                            </div>
+
+                        </div> 
+
+                        <div class="row q-gutter-md q-mt-xs">
+
+                            <div class="col">
+                                   <q-toggle v-model="toateCompartimentele" color="green" label="Toate compartimentele"    />
+                            </div>
+
+                            <div v-show="!toateCompartimentele" class="col">
+                                  <paap-compartimente  @selectie-coloana="coloanaSelectata" />
+                            </div>
+
+                        </div>        
+
+                        <div class="row q-gutter-md q-mt-xs">
+
+                            <div class="flex justify-end col">
+                                   <q-btn outline color="primary" label="reset" @click="resetFiltre" />
+                            </div>
+
+                            <div  class="col">
+                                <q-btn outline color="primary" label="Aplica!" @click="aplicFiltru" v-close-popup />
+                            </div>
+
+                        </div>   
+
+              </div>
+
             </q-btn-dropdown>
 
             <q-btn-dropdown :disable="!eCevaSelectat" icon="description" outline rounded class="q-ml-xl" color="primary"  label="Actiuni..."  >
@@ -50,7 +116,7 @@
 
                         </q-item>
 
-                        <q-item clickable v-close-popup @click="cloneazaSelectie">
+                        <q-item :disable="ultimulAn" clickable v-close-popup @click="cloneazaSelectie">
                           <q-item-section avatar>
                             <q-avatar icon="content_copy" color="secondary" text-color="white"></q-avatar>
                           </q-item-section>
@@ -82,16 +148,16 @@
             </q-input>
         </template>
 
-        <!--  Rinduri in grid editabile  -->
+        <!--  Rinduri in grid editabile :style="{backgroundColor:props.row.to>0?'grey':'white'}" -->
 
                     <template v-slot:body="props">
-                      <q-tr :props="props">
+                      <q-tr :style="{backgroundColor:props.row.to>0?'#f4e4ff':'white'}" :props="props">
                        <q-td auto-width>
                           <q-checkbox dense v-model="props.selected" ></q-checkbox>
                         </q-td>
                         <q-td key="id" :props="props">{{ props.row.id }}</q-td>
                         <q-td key="articol" :props="props">
-                              {{ props.row.obiectachizitie_text }}
+                             <span >{{ props.row.obiectachizitie_text }}</span> 
 
                                       <q-popup-edit @save="editezObiectAky(props.row.id_obiect_achizitie,props.row.obiectachizitie_text)"  v-model="props.row.obiectachizitie_text" title="Schimba obiect achizitie" buttons label-set="Modifica" label-cancel="Abandon">
                                           <q-input   type="textarea" v-model="props.row.obiectachizitie_text" dense autofocus />
@@ -124,7 +190,9 @@
                       </q-tr>
                   </template>
 
-
+          <template v-slot:bottom>
+           <div style="min-width: 80vw;" class="row justify-center text-h6">{{nrPozitii}} pozitii - Total valoare: {{sumaTotala}}</div> 
+          </template>
 
         </q-table>
 
@@ -141,10 +209,14 @@
                   </q-card-actions>
                 </q-card>
               </q-dialog>
+
+                  <q-dialog v-model="adaug_pozitie" persistent transition-show="scale" transition-hide="scale">
+                     <paap-pozitie-add :anplan="anselectat" @pozitie-adaugata="pozitieAdaugata"/>
+                  </q-dialog>
   </div>
 
     <q-page-sticky  position="bottom-right" :offset="[24, 24]">
-            <q-btn fab   icon="add" color="accent"   />
+            <q-btn fab   icon="add" color="accent"  @click="adaug_pozitie=true" />
     </q-page-sticky>
     <q-page-sticky  position="bottom-left" :offset="[24, 24]">
             <q-btn fab   icon="settings_backup_restore" color="accent"  @click="$router.push('/dashboard')" />
@@ -161,6 +233,8 @@ import PaapProceduri from '../components/paap/PaapProceduri'
 import PaapResponsabil from '../components/paap/PaapResponsabil'
 import PaapArticolBugetar from '../components/paap/PaapArticolBugetar'
 import PaapCodCPV from '../components/paap/PaapCodCPV'
+import PozitiePAAPAdd from '../components/PozitiePAAPAdd'
+import PaapCompartimente from '../components/paap/PaapCompartimente'
 
 function removeByKey(array, params){
   array.some(function(item, index) {
@@ -175,15 +249,27 @@ export default {
      'paap-proceduri':PaapProceduri,
      'paap-responsabil':PaapResponsabil,
      'paap-artbug':PaapArticolBugetar,
-     'paap-codcpv':PaapCodCPV
+     'paap-codcpv':PaapCodCPV,
+     'paap-pozitie-add':PozitiePAAPAdd,
+     'paap-compartimente':PaapCompartimente
   },
   data () {
     return {
       paap:[],
       selected:[],
       filter:'',
+      rangeValori: {
+        min:0,
+        max:250000
+      },
+      toateArticolele:true,
+      toateValorile:true,
+      toateProcedurile:true,
+      toateCompartimentele:true,
       confirm:false,
+      filtruAplicat:false,
       errorProtein: false,
+      adaug_pozitie:false,
       errorMessageProtein: '',
       valoareNoua:null,
       anselectat:(new Date()).getFullYear().toString(),
@@ -231,6 +317,12 @@ export default {
     ultimulAn(){
            return this.anselectat==this.anpost
     },
+    nrPozitii(){
+       return this.paap.length;
+    },
+    sumaTotala(){
+       return 999999;
+    },
     eCevaSelectat(){
       return this.selected.length>0
     },
@@ -243,6 +335,26 @@ export default {
       }*/
   },
   methods: {
+      resetFiltre(){
+        this.toateArticolele=true;
+        this.toateCompartimentele=true;
+        this.toateValorile=true;
+        this.toateProcedurile=true;
+      },
+      aplicFiltru(){
+         this.filtruAplicat=true;
+         //si multe altele...
+
+      },
+      stergFiltru(){
+        this.filtruAplicat=false;
+      },
+      pozitieAdaugata(){
+         console.log('receptionat eveniment pozitie-adaugata')
+         this.adaug_pozitie=false;
+         this.paapCompAn(this.anselectat);
+         this.$refs['paaptable'].scrollTo(0);
+      },
       proteinRangeValidation (val) {
         if (val < 1 ) {
           this.errorProtein = true
@@ -290,13 +402,16 @@ export default {
         this.compMultiEdit=this.colMultiEdit.comp;
       },
       stergeSelectie(){
-              let iduri=[];
+              let iduri=[],fromuri=[];
               let that=this;
-              this.selected.map(el => iduri.push(el.id))
+              this.selected.map(el =>{
+                iduri.push(el.id)
+                fromuri.push(el.from)
+                })
               console.log('sterg ',iduri)
               const token=this.$store.getters.token;
               let id=999;
-              axios.put(process.env.host+`paap/invalideazapozitieplan/${id}`,{iduri}
+              axios.put(process.env.host+`paap/invalideazapozitieplan/${id}`,{iduri,fromuri}
                  ,{headers:{"Authorization" : `Bearer ${token}`}}).then(
                       res => {
                           // aici o sa bag codul prin care actualizez gridul
@@ -386,12 +501,13 @@ export default {
           const token=this.$store.getters.akytoken;
           const rol = this.$store.getters.akyroluserlogat;
           const id_comp = this.$store.getters.idcompartimentakyuserlogat;
-        // console.log('PAAP created!',rol,id_comp);
+        console.log('PAAP Comp An',rol,id_comp);
           let idc = (rol==="Achizitii")? 0:id_comp;
           axios.get(process.env.host+'paap/paapintegral/'+idc+'/'+an,{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
               res => {
                 console.log('Rspuns la tot paap-ul',res);
+                this.paap=[];
                 this.paap = [...res.data.paap];
               }
             ).catch(err =>{})  

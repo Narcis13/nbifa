@@ -9,7 +9,7 @@ module.exports.tot = (req, res, next) => {
         message: "Cimpuri vide!"
       })
     } else if(req.params.idcomp=="0") op=">" 
-    knex.select(['paap.id','paap.anplan','paap.id_procedura','paap.id_compartiment','paap.id_cod_cpv','paap.to', 'paap.id_obiect_achizitie','obiecte_achizitie.obiectachizitie_text','coduricpv.CodCPV','paap.cantitate','paap.valoare','tipproceduri.procedura','paap.responsabil','paap.artbug','compartimente.denumire'])
+    knex.select(['paap.id','paap.anplan','paap.id_procedura','paap.id_compartiment','paap.id_cod_cpv','paap.to', 'paap.from','paap.id_obiect_achizitie','obiecte_achizitie.obiectachizitie_text','coduricpv.CodCPV','paap.cantitate','paap.valoare','tipproceduri.procedura','paap.responsabil','paap.artbug','compartimente.denumire'])
     .from('paap')
     .innerJoin('obiecte_achizitie','obiecte_achizitie.id','paap.id_obiect_achizitie')
     .innerJoin('coduricpv','paap.id_cod_cpv','coduricpv.IDCod')
@@ -18,7 +18,7 @@ module.exports.tot = (req, res, next) => {
     .where('paap.id_compartiment',op,parseInt(req.params.idcomp))
     .andWhere('paap.anplan',parseInt(req.params.an))
     .andWhere('paap.stare','activ')
-    .orderBy('paap.artbug').then((rows)=>{
+    .orderBy('paap.id','desc').then((rows)=>{
        return res.status(200).json({
         message: "Intregul PAAP",
         paap:rows
@@ -27,6 +27,45 @@ module.exports.tot = (req, res, next) => {
 
 }
 
+module.exports.pozitie_noua = (req,res,next) =>{
+  
+  let obiectachizitie_text = req.body.obiect_achizitie;
+  let pozitie=req.body;
+  delete pozitie.obiect_achizitie;
+  console.log('Pozitie noua',obiectachizitie_text,pozitie);
+
+  knex('obiecte_achizitie').insert({
+
+    "obiectachizitie_text":obiectachizitie_text,
+    "obiectachizitie_format":obiectachizitie_text,
+   
+    
+}).then((d)=>{
+  console.log('Obiect adaugat',d)
+  pozitie.id_obiect_achizitie=d[0];
+  pozitie.from=0;
+  pozitie.to=0;
+  pozitie.observatii='initial';
+  pozitie.sursa_finantare='venituri proprii',
+  pozitie.luna_inceput='ianuarie';
+  pozitie.luna_sfirsit='decembrie';
+  pozitie.mod_derulare='online';
+  pozitie.stare='activ';
+  pozitie.data_creere=knex.fn.now(),
+  pozitie.data_modificare=knex.fn.now()
+
+  knex('paap').insert(pozitie).then(dd=>{
+    return res.status(200).json({
+      message: "Pozitie plan adaugata!",
+      id:dd[0]
+  
+    })
+
+  })
+
+
+}).catch(err =>{ console.log(err)})
+}
 
 module.exports.cloneaza_pozitii = (req,res,next) => {
  
@@ -89,6 +128,19 @@ module.exports.toate_procedurile = (req, res, next) => {
   }).catch(err =>{})
 
 }
+
+module.exports.toate_compartimentele = (req, res, next) => {
+
+  knex('compartimente').where({stare:'activ'}).then((rows)=>{
+    return res.status(200).json({
+     message: "Toate compartimentele",
+     compartimente:rows
+   });
+  }).catch(err =>{})
+
+}
+
+
 
 module.exports.toate_codurilecpv = (req, res, next) => {
 
@@ -170,16 +222,24 @@ module.exports.update_obiect_aky = (req,res,next) => {
 module.exports.invalideazapozitieplan = (req,res,next) => {
   
   const iduri = req.body.iduri;
-  console.log('sunt in controlerul paap actiunea sterge pozitie plan',iduri);
+  const fromuri = req.body.fromuri;
+  console.log('sunt in controlerul paap actiunea sterge pozitie plan',iduri,fromuri);
   knex('paap').whereIn('id',iduri).update({
          
     data_modificare:knex.fn.now(),
     stare:'inactiv'
   })
   .then(()=>{
-    return res.status(200).json({
-      message: "Actualizare reusita"
-    });
+    knex('paap').whereIn('id',fromuri).update({
+         
+      data_modificare:knex.fn.now(),
+      to:0
+    }).then((r)=>{
+      return res.status(200).json({
+        message: "Actualizare reusita"
+      });
+    })
+
   
   }).catch(err =>{})
 

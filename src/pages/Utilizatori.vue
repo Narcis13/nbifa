@@ -18,7 +18,7 @@
                 </template>
         </q-table>
           <q-dialog v-model="opened"  transition-show="jump-down" transition-hide="jump-up">
-            <q-card class="q-pa-md" style="width: 400px; max-width: 90vw;padding:10">
+            <q-card class="q-pa-md" style="width: 400px; max-width: 90vw;padding:10px">
 
                 <q-input v-model="username" label="Utilizator" @keyup.enter="urmatorul('edParola')"/>
 

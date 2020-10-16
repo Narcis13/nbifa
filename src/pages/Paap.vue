@@ -49,7 +49,7 @@
                         <div class="row q-gutter-md q-mt-xs">
 
                             <div class="col">
-                                   <q-toggle v-model="toateValorile" color="green" label="Indiferent de valoare"    />
+                                   <q-toggle v-model="toateValorile" color="green" :label="toateValorile?'Indiferent de valoare':'Interval valoare'"    />
                             </div>
 
                             <div v-show="!toateValorile" class="col">
@@ -61,7 +61,7 @@
                         <div class="row q-gutter-md q-mt-xs">
 
                             <div class="col">
-                                   <q-toggle v-model="toateProcedurile" color="green" label="Toate procedurile"    />
+                                   <q-toggle v-model="toateProcedurile" color="green" :label="toateProcedurile?'Toate procedurile':'Numai procedura'"    />
                             </div>
 
                             <div v-show="!toateProcedurile" class="col">
@@ -70,10 +70,10 @@
 
                         </div> 
 
-                        <div class="row q-gutter-md q-mt-xs">
+                        <div v-if="DeLaAchizitii" class="row q-gutter-md q-mt-xs">
 
                             <div class="col">
-                                   <q-toggle v-model="toateCompartimentele" color="green" label="Toate compartimentele"    />
+                                   <q-toggle v-model="toateCompartimentele" color="green" :label="toateCompartimentele?'Toate compartimentele':'Numai compartimentul'"    />
                             </div>
 
                             <div v-show="!toateCompartimentele" class="col">
@@ -314,6 +314,9 @@ export default {
     }
   },
   computed:{
+      DeLaAchizitii(){
+           return this.$store.getters.akyroluserlogat==="Achizitii"
+       },
     ultimulAn(){
            return this.anselectat==this.anpost
     },

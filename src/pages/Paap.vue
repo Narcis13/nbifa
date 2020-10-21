@@ -41,7 +41,7 @@
                             </div>
 
                             <div v-show="!toateArticolele" class="col">
-                                  <paap-artbug  @selectie-coloana="coloanaSelectata" />
+                                  <paap-artbug  @selectie-coloana="alegFiltruArtBug" />
                             </div>
 
                         </div>
@@ -65,7 +65,7 @@
                             </div>
 
                             <div v-show="!toateProcedurile" class="col">
-                                  <paap-proceduri  @selectie-coloana="coloanaSelectata" />
+                                  <paap-proceduri  @selectie-coloana="alegFiltruProceduri" />
                             </div>
 
                         </div> 
@@ -77,7 +77,7 @@
                             </div>
 
                             <div v-show="!toateCompartimentele" class="col">
-                                  <paap-compartimente  @selectie-coloana="coloanaSelectata" />
+                                  <paap-compartimente  @selectie-coloana="alegFiltruCompartimente" />
                             </div>
 
                         </div>        
@@ -267,6 +267,12 @@ export default {
       toateProcedurile:true,
       toateCompartimentele:true,
       confirm:false,
+      strFiltru:{
+        artbug:'',
+        proceduri:'',
+        comp:'',
+        range:''
+      },
       filtruAplicat:false,
       errorProtein: false,
       adaug_pozitie:false,
@@ -345,7 +351,21 @@ export default {
         this.toateProcedurile=true;
       },
       aplicFiltru(){
+        console.log('Aplica filtru...',this.toateValorile,this.rangeValori)
          this.filtruAplicat=true;
+          const token=this.$store.getters.akytoken;
+          let filtru_valori="";
+          if(!this.DeLaAchizitii) this.strFiltru.comp=` and id_compartiment=${this.$store.getters.idcompartimentakyuserlogat}`;
+          if(!this.toateValorile) filtru_valori=` and paap.valoare>=${this.rangeValori.min} and paap.valoare<=${this.rangeValori.max}`; 
+         let filtru_cumulat=this.strFiltru.artbug+this.strFiltru.proceduri+filtru_valori+this.strFiltru.comp;
+          axios.post(process.env.host+'paap/paapfiltrat',{filtru:filtru_cumulat,an:this.anselectat},{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+              res => {
+                console.log('Rspuns la  paap filtrat',res);
+                this.paap=[];
+                this.paap = [...res.data.paap];
+              }
+            ).catch(err =>{})  
          //si multe altele...
 
       },
@@ -395,9 +415,20 @@ export default {
           this.selected=[];
           this.paapCompAn(value)
       },
+      alegFiltruArtBug(v){
+           this.strFiltru.artbug=` and paap.artbug='${v.valoare.value}'` ;
+      },
+      alegFiltruProceduri(v){
+           this.strFiltru.proceduri=` and paap.id_procedura=${v.valoare.value}` ;
+      },
+      alegFiltruCompartimente(v){
+          this.strFiltru.comp=` and paap.id_compartiment=${v.valoare.value}` ;             
+      },
       coloanaSelectata(v){
-       //  console.log('valoare pentru coloana de modificat',v);
-          this.valoareNoua=v;
+       //  NUY MERGE LA FILTRARE
+        this.valoareNoua=v;
+
+
       },
       alegColDeEditat(){
        //  console.log('Am ales ',this.colMultiEdit);

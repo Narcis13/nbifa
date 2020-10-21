@@ -27,6 +27,12 @@ module.exports.tot = (req, res, next) => {
 
 }
 
+module.exports.filtrat = (req,res,next)=>{
+  console.log('PAAP filtrat!',req.body);
+
+
+}
+
 module.exports.pozitie_noua = (req,res,next) =>{
   
   let obiectachizitie_text = req.body.obiect_achizitie;

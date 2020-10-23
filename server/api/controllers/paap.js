@@ -29,7 +29,19 @@ module.exports.tot = (req, res, next) => {
 
 module.exports.filtrat = (req,res,next)=>{
   console.log('PAAP filtrat!',req.body);
-
+  knex.select(['paap.id','paap.anplan','paap.id_procedura','paap.id_compartiment','paap.id_cod_cpv','paap.to', 'paap.from','paap.id_obiect_achizitie','obiecte_achizitie.obiectachizitie_text','coduricpv.CodCPV','paap.cantitate','paap.valoare','tipproceduri.procedura','paap.responsabil','paap.artbug','compartimente.denumire'])
+  .from('paap')
+  .innerJoin('obiecte_achizitie','obiecte_achizitie.id','paap.id_obiect_achizitie')
+  .innerJoin('coduricpv','paap.id_cod_cpv','coduricpv.IDCod')
+  .innerJoin('tipproceduri','paap.id_procedura','tipproceduri.id')
+  .innerJoin('compartimente','paap.id_compartiment','compartimente.id')
+  .whereRaw(req.body.filtru,[])
+   .orderBy('obiecte_achizitie.obiectachizitie_text').then((rows)=>{
+     return res.status(200).json({
+      message: "PAAP filtrat",
+      paap:rows
+    });
+   }).catch(err =>{})
 
 }
 

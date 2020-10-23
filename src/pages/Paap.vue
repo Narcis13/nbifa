@@ -330,7 +330,12 @@ export default {
        return this.paap.length;
     },
     sumaTotala(){
-       return 999999;
+     // console.log('sumaTotala ',this.paap[0].valoare)
+     let total=0;
+     this.paap.map(p=>{
+       total+=parseFloat(p.valoare)
+     })
+       return total.toFixed(2);
     },
     eCevaSelectat(){
       return this.selected.length>0
@@ -355,9 +360,10 @@ export default {
          this.filtruAplicat=true;
           const token=this.$store.getters.akytoken;
           let filtru_valori="";
-          if(!this.DeLaAchizitii) this.strFiltru.comp=` and id_compartiment=${this.$store.getters.idcompartimentakyuserlogat}`;
+          let filtru_initial=`paap.stare='activ' and paap.anplan=${this.anselectat}`
+          if(!this.DeLaAchizitii) this.strFiltru.comp=` and paap.id_compartiment=${this.$store.getters.idcompartimentakyuserlogat}`;
           if(!this.toateValorile) filtru_valori=` and paap.valoare>=${this.rangeValori.min} and paap.valoare<=${this.rangeValori.max}`; 
-         let filtru_cumulat=this.strFiltru.artbug+this.strFiltru.proceduri+filtru_valori+this.strFiltru.comp;
+          let filtru_cumulat=filtru_initial+this.strFiltru.artbug+this.strFiltru.proceduri+filtru_valori+this.strFiltru.comp;
           axios.post(process.env.host+'paap/paapfiltrat',{filtru:filtru_cumulat,an:this.anselectat},{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
               res => {
@@ -371,6 +377,14 @@ export default {
       },
       stergFiltru(){
         this.filtruAplicat=false;
+        this.strFiltru={
+                      artbug:'',
+                      proceduri:'',
+                      comp:'',
+                      range:''
+         };
+        this.paapCompAn(this.anselectat)
+
       },
       pozitieAdaugata(){
          console.log('receptionat eveniment pozitie-adaugata')
@@ -413,6 +427,16 @@ export default {
       schimbaAn(value){
        // console.log('Noul an ',value)
           this.selected=[];
+          if(this.filtruAplicat){
+            this.filtruAplicat=false;
+            this.strFiltru={
+                          artbug:'',
+                          proceduri:'',
+                          comp:'',
+                          range:''
+            };
+          }
+
           this.paapCompAn(value)
       },
       alegFiltruArtBug(v){

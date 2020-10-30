@@ -22,6 +22,7 @@ const routes = [
        { path: '', component: () => import('pages/Login.vue') },
        { path: '/dashboard', component: () => import('pages/Dashboard.vue') },
        { path: '/paap', component: () => import('pages/Paap.vue') },
+       { path: '/referatenecesitate', component: () => import('pages/Referate.vue') },
       ]
   }
 ]

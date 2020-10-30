@@ -21,7 +21,7 @@
       </q-card-section>
 
       <q-card-actions align="around">
-        <q-btn flat>Opereaza</q-btn>
+        <q-btn @click="$router.push('/referatenecesitate')" flat>Opereaza</q-btn>
         <q-btn flat>Rapoarte</q-btn>
       </q-card-actions>
     </q-card>

@@ -21,7 +21,8 @@
                                       title="PAAP"
                                       :data="paap"
                                       :columns="coloane_paap"
-                                      selection="multiple"
+                                      selection="single"
+                                      @selection="pozPAAPSelectat"
                                         binary-state-sort
                                         ref="paaptable"
                                       :selected.sync="selected"
@@ -303,7 +304,9 @@ export default {
   
     },
     methods:{
-            
+            pozPAAPSelectat(detalii){
+              console.log('Am selectat din PAAP',detalii);
+            }
     }
 }
 

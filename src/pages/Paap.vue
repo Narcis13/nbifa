@@ -319,6 +319,13 @@ export default {
       ]
     }
   },
+ 
+    mounted(){
+           if(this.DeLaAchizitii) {
+             this.coloaneMultiEdit.push({ label: 'Compartiment', value: 'denumire',comp:'paap-compartimente'}) // de modificat daca merge
+           }
+         },
+ 
   computed:{
       DeLaAchizitii(){
            return this.$store.getters.akyroluserlogat==="Achizitii"

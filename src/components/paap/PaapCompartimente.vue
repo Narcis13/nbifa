@@ -34,7 +34,7 @@ export default {
    },
    methods:{
        amSelectat(){
-          this.$emit('selectie-coloana',{cimp:'id_compartiment',ce:'compartiment',valoare:{label:this.model.label,value:this.model.value}})
+          this.$emit('selectie-coloana',{cimp:'id_compartiment',ce:'denumire',valoare:{label:this.model.label,value:this.model.value}})
         //  console.log('Art bug nou',{label:this.model,value:this.model})
        }
    }

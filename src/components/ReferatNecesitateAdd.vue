@@ -1,8 +1,8 @@
 <template>
-     <q-card style="width: 1200px; height:800px;max-width: 80vw;max-height: 80vh;">
+     <q-card  style="width: 1200px; height:800px;max-width: 80vw;max-height: 80vh;">
                       
                           
-                      
+                     <div class="column">
                           <div class="row q-mt-md" style="height:90%;">
                             
                             <div class="col-5 q-pa-sm">
@@ -110,7 +110,7 @@
                          
                           <q-btn flat label="Salveaza!"   />
                         </div>
-
+              </div>
                         
      </q-card>
 </template>

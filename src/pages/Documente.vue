@@ -247,7 +247,7 @@
                                         <q-item>
                                           <q-item-section class="text-grey">
                                             Material inexistent
-                                             <material-add :data="materialeintrare" @materialnou="materialAdaugat"/>
+                                             <material-add :mat="materialintrare" :data="materialeintrare" @materialnou="materialAdaugat"/>
                                           </q-item-section>
                                         </q-item>
                                       </template>

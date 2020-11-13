@@ -1,5 +1,5 @@
 <template>
-     <q-btn icon="add_box" color="secondary" flat label="Adauga" class="q-mr-sm">
+     <q-btn icon="add_box" color="secondary" flat label="Adauga" class="q-mr-sm" @click="adMaterial">
            <q-menu>
                     
                     <div class="column no-wrap q-pa-md" style="min-width:300px">
@@ -28,7 +28,7 @@
 import axios from 'axios'
 export default {
     name:'MaterialAdd',
-    props: ['data'],
+    props: ['data','mat'],
     data: function () {
         return {
            nume_material:"",
@@ -38,9 +38,12 @@ export default {
         }
     },
     created(){
-      console.log('Componentul MaterialAdd a fost creat cu datele',this.materiale)
+      console.log('Componentul MaterialAdd a fost creat cu mat',this.mat)
     },
     methods:{
+      adMaterial(){
+console.log('ADAUG MATERIAL!',this.mat);
+      },
         adauga(){
           const token=this.$store.getters.token;
           var that = this;

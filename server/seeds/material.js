@@ -1,9 +1,8 @@
 const knex =require('../db.js');
 
 console.log('SEED MATERIALE.....');
-
-knex('materiale').insert({
-    denumire:'Saminta material',
+let m=[{
+    denumire:'Saminta material 1',
     um:'buc',
     pretpredefinit:13,
     idgestiune:1,
@@ -14,7 +13,22 @@ knex('materiale').insert({
     datamodificare:knex.fn.now()//new Date().toISOString()
 
     
-}).then((d)=>{
+},
+{
+    denumire:'Saminta material 2',
+    um:'buc',
+    pretpredefinit:14,
+    idgestiune:1,
+    iduser:3,
+    stare:'activ',
+        
+    datacreere:knex.fn.now(),//new Date().toISOString(),
+    datamodificare:knex.fn.now()//new Date().toISOString()
+
+    
+}]
+
+knex('materiale').insert(m).then((d)=>{
     console.log('Material adaugat',d)
     
   }).catch(err =>{ console.log(err)})

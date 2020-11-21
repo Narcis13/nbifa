@@ -64,8 +64,8 @@
 
                               <div class="row">
                                     <div style="height:100px" class="drop col-6 shadow-1 q-pa-sm q-mt-md ">
-                                          <div><span class="text-bold">Denumire reper: </span> dcasdasd asd asdaaads asd asd asdsa dasd adsas dsad asd asdddasda sd asdaa</div>
-                                          <div><span class="text-bold">Cod CPV: </span> 3-123456 </div>
+                                          <div><span class="text-bold">Denumire reper: </span> {{linieRN.denumire}}</div>
+                                          <div><span class="text-bold">Cod CPV: </span> {{linieRN.codcpv}} </div>
                                     </div>
                                     <div class="col-6 q-pa-sm q-mt-sm" >
                                         <q-input
@@ -79,13 +79,13 @@
                               </div>
 
                               <div class="row q-mt-sm justify-between">
-                                    <q-input v-model.number="model" type="number" filled dense label="Cantitate" />
-                                    <q-input v-model.number="model" type="number" filled dense label="Pret" />
-                                    <q-input class="q-mr-sm" v-model.number="model" type="number" filled dense label="Valoare" />
+                                    <q-input v-model.number="linieRN.cantitate" type="number" filled dense label="Cantitate" />
+                                    <q-input v-model.number="linieRN.pret" type="number" filled dense label="Pret" />
+                                    <q-input class="q-mr-sm" readonly v-model.number="valoareLinieRN" type="number" filled dense label="Valoare" />
                               </div>
 
                               <div class="row justify-center q-mt-md q-mb-md">
-                                  <q-btn flat label="Adauga!"   />
+                                  <q-btn @click="adaugLinieRN" flat label="Adauga!"   />
                               </div>
 
                               <q-separator inset />
@@ -133,6 +133,13 @@ export default {
            detalii_tehnice:'',
            model:0,
            paap:[],
+           linieRN:{
+             denumire:'',
+             codcpv:'',
+             cantitate:1,
+             pret:0
+
+           },
            selected:[],
            filter:'',
            coloane_paap:[
@@ -298,7 +305,9 @@ export default {
             ).catch(err =>{})  
     },
     computed:{
-      
+      valoareLinieRN(){
+        return this.linieRN.cantitate*this.linieRN.pret;
+      }
     },
     mounted(){
   
@@ -306,7 +315,18 @@ export default {
     methods:{
             pozPAAPSelectat(detalii){
               console.log('Am selectat din PAAP',detalii);
+              this.linieRN.denumire=detalii.rows[0].obiectachizitie_text;
+              this.linieRN.codcpv=detalii.rows[0].CodCPV;
+            },
+            adaugLinieRN(){
+                this.resetLinieRN();
+            },
+            resetLinieRN(){
+              this.linieRN.denumire="";
+              this.linieRN.codcpv="";
+              this.selected=[];
             }
+
     }
 }
 

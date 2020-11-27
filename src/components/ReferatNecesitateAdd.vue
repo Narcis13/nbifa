@@ -69,7 +69,7 @@
                                     </div>
                                     <div class="col-6 q-pa-sm q-mt-sm" >
                                         <q-input
-                                          v-model="detalii_tehnice"
+                                          v-model="linieRN.detalii_tehnice"
                                           label="Detalii tehnice"
                                           filled
                                           style="height:100px"
@@ -79,13 +79,13 @@
                               </div>
 
                               <div class="row q-mt-sm justify-between">
-                                    <q-input v-model.number="linieRN.cantitate" type="number" filled dense label="Cantitate" />
-                                    <q-input v-model.number="linieRN.pret" type="number" filled dense label="Pret" />
-                                    <q-input class="q-mr-sm" readonly v-model.number="valoareLinieRN" type="number" filled dense label="Valoare" />
+                                    <q-input v-model.number="linieRN.cantitate" type="number" filled dense label="Cantitate" error-message="Cantitate invalida!"  :error="!cantitateValida"/>
+                                    <q-input v-model.number="linieRN.pret" type="number" filled dense label="Pret" error-message="N/A!"  :error="false"/>
+                                    <q-input class="q-mr-sm" readonly v-model.number="valoareLinieRN" type="number" filled dense label="Valoare" error-message="N/A!"  :error="false"/>
                               </div>
 
-                              <div class="row justify-center q-mt-md q-mb-md">
-                                  <q-btn @click="adaugLinieRN" flat label="Adauga!"   />
+                              <div class="row justify-center q-mt-sm q-mb-md">
+                                  <q-btn :disable="!informatiiComplete" @click="adaugLinieRN" flat label="Adauga!"   />
                               </div>
 
                               <q-separator inset />
@@ -94,10 +94,29 @@
                                 <q-table
                                     :id="uuid"
                                     dense
-                                    :data="data"
+                                    :data="liniiRN"
+                                    :pagination.sync="pagination_repere"
+                                    wrap-cells
+                                    separator="cell"
                                     :columns="columns"
-                                    row-key="name"
-                                  />
+                                     selection="single"
+                                     :selected.sync="repere_selectate"
+                                     no-data-label="Niciun reper!"
+                                    row-key="idpozPAAP"
+                                  >
+                                    <template v-slot:top>
+                                        
+                                        <q-btn v-show="repere_selectate.length==1" class="on-right" icon="delete_sweep" flat dense color="primary"  label="Sterge" @click="removeRow" />
+                                        
+                                    </template>
+                                  <template v-slot:bottom-row>
+                                    <q-tr>
+                                      <q-td style="text-align: right;" colspan="100%">
+                                        Total {{valoaretotala}} lei
+                                      </q-td>
+                                    </q-tr>
+                                </template>
+                                </q-table>
                               </div>
 
   
@@ -109,7 +128,7 @@
                         <div class="row justify-center">
                           <q-btn flat label="Abandon" v-close-popup />
                          
-                          <q-btn flat label="Salveaza!"   />
+                          <q-btn @click="salveaza" flat label="Salveaza!" :disable="!documentValid" v-close-popup />
                         </div>
               </div>
                         
@@ -117,7 +136,7 @@
 </template>
 <script>
 import axios from 'axios'
-
+import { date } from 'quasar'
 import {
         uid
     } from 'quasar'
@@ -127,20 +146,30 @@ export default {
     
     data: function () {
         return {
-           data_referat:'2020/03/26',
+           data_referat: date.formatDate(new Date(), 'YYYY/MM/DD'),
            uuid:'',
+          pagination_repere: {
+
+                page: 1,
+                rowsPerPage: 10
+                // rowsNumber: xx if getting data from a server
+          },
            obiect_achizitie:'',
-           detalii_tehnice:'',
+          cantitate_maxima:1,
            model:0,
            paap:[],
+           liniiRN:[],
            linieRN:{
+             idpozPAAP:0,
              denumire:'',
              codcpv:'',
+            detalii_tehnice:'',
              cantitate:1,
              pret:0
 
            },
            selected:[],
+           repere_selectate:[],
            filter:'',
            coloane_paap:[
              {
@@ -166,124 +195,21 @@ export default {
           },
            columns: [
               {
-                name: 'name',
+                name: 'denumire',
                 required: true,
-                label: 'Dessert (100g serving)',
+                label: 'Denumire',
                 align: 'left',
-                field: row => row.name,
-                format: val => `${val}`,
+                field: 'denumire',
                 sortable: true
               },
-              { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-              { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-              { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-              { name: 'protein', label: 'Protein (g)', field: 'protein' },
-              { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-              { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-              { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
-            ],
-            data: [
-              {
-                name: 'Frozen Yogurt',
-                calories: 159,
-                fat: 6.0,
-                carbs: 24,
-                protein: 4.0,
-                sodium: 87,
-                calcium: '14%',
-                iron: '1%'
-              },
-              {
-                name: 'Ice cream sandwich',
-                calories: 237,
-                fat: 9.0,
-                carbs: 37,
-                protein: 4.3,
-                sodium: 129,
-                calcium: '8%',
-                iron: '1%'
-              },
-              {
-                name: 'Eclair',
-                calories: 262,
-                fat: 16.0,
-                carbs: 23,
-                protein: 6.0,
-                sodium: 337,
-                calcium: '6%',
-                iron: '7%'
-              },
-              {
-                name: 'Cupcake',
-                calories: 305,
-                fat: 3.7,
-                carbs: 67,
-                protein: 4.3,
-                sodium: 413,
-                calcium: '3%',
-                iron: '8%'
-              },
-              {
-                name: 'Gingerbread',
-                calories: 356,
-                fat: 16.0,
-                carbs: 49,
-                protein: 3.9,
-                sodium: 327,
-                calcium: '7%',
-                iron: '16%'
-              },
-              {
-                name: 'Jelly bean',
-                calories: 375,
-                fat: 0.0,
-                carbs: 94,
-                protein: 0.0,
-                sodium: 50,
-                calcium: '0%',
-                iron: '0%'
-              },
-              {
-                name: 'Lollipop',
-                calories: 392,
-                fat: 0.2,
-                carbs: 98,
-                protein: 0,
-                sodium: 38,
-                calcium: '0%',
-                iron: '2%'
-              },
-              {
-                name: 'Honeycomb',
-                calories: 408,
-                fat: 3.2,
-                carbs: 87,
-                protein: 6.5,
-                sodium: 562,
-                calcium: '0%',
-                iron: '45%'
-              },
-              {
-                name: 'Donut',
-                calories: 452,
-                fat: 25.0,
-                carbs: 51,
-                protein: 4.9,
-                sodium: 326,
-                calcium: '2%',
-                iron: '22%'
-              },
-              {
-                name: 'KitKat',
-                calories: 518,
-                fat: 26.0,
-                carbs: 65,
-                protein: 7,
-                sodium: 54,
-                calcium: '12%',
-                iron: '6%'
-              }
+              { name: 'codcpv', align: 'center', label: 'CodCPV', field: 'codcpv', sortable: true },
+              { name: 'detalii', label: 'Detalii', field: 'detalii_tehnice', sortable: true,align: 'left' },
+              { name: 'cantitate', label: 'Cantitate', field: 'cantitate' ,align: 'right'},
+              { name: 'pret', label: 'Pret', field: 'pret',align: 'right' },
+              { name: 'valoare', label: 'Valoare', field: 'valoare',align: 'right'}
+
             ]
+
         }
     },
     created(){
@@ -307,7 +233,23 @@ export default {
     computed:{
       valoareLinieRN(){
         return this.linieRN.cantitate*this.linieRN.pret;
-      }
+      },
+      cantitateValida(){
+         return this.linieRN.cantitate!==''&&this.linieRN.cantitate>0&&this.linieRN.cantitate<=this.cantitate_maxima
+      },
+      informatiiComplete(){
+        return this.linieRN.detalii_tehnice.length>6&&this.linieRN.codcpv!=''&&this.linieRN.denumire!=''&&this.valoareLinieRN>0&&this.cantitateValida
+      },
+      documentValid(){
+        return this.obiect_achizitie.length>5&&this.liniiRN.length>0
+      },
+      valoaretotala(){
+          let total=0;
+          this.liniiRN.map(linie=>{
+            total+=linie.valoare;
+          })
+          return total.toFixed(2);
+        }
     },
     mounted(){
   
@@ -317,13 +259,84 @@ export default {
               console.log('Am selectat din PAAP',detalii);
               this.linieRN.denumire=detalii.rows[0].obiectachizitie_text;
               this.linieRN.codcpv=detalii.rows[0].CodCPV;
+              this.linieRN.idpozPAAP=detalii.rows[0].id;
+              this.cantitate_maxima=detalii.rows[0].cantitate;
+            },
+            removeRow(){
+                   var that=this;
+                        this.liniiRN.some(function(item, index) {
+                                            return ( that.liniiRN[index]["idpozPAAP"] === that.repere_selectate[0]['idpozPAAP']) ? !!( that.liniiRN.splice(index, 1)) : false;
+                                           }); 
+
+                                           this.repere_selectate=[];
+            },
+            salveaza(){
+              const token=this.$store.getters.akytoken;
+              var that=this;
+              let data = date.extractDate(this.data_referat, 'YYYY/MM/DD');
+              let datacorecta=date.formatDate(data, 'YYYY-MM-DD');
+              console.log('Data doc', datacorecta,this.$store.getters.idcompartimentakyuserlogat);  
+                axios.post(process.env.host+'rn/antetnou',{
+                      "data":datacorecta,
+                      "obiect_achizitie":this.obiect_achizitie,
+                      "valoare":this.valoaretotala,
+                      "id_compartiment":this.$store.getters.idcompartimentakyuserlogat
+
+                  },{headers:{"Authorization" : `Bearer ${token}`}}).then(
+                      res => {
+                         console.log('Raspuns de la antet nou',res.data)
+                         axios.post(process.env.host+'rn/detaliinoi',{
+                                tranzactii:that.liniiRN,
+                                idAntet:res.data.id
+                                  },{headers:{"Authorization" : `Bearer ${token}`}}).then(res =>{
+                                              this.$q.notify({
+                                                              message:`Referat necesitate adaugat cu succes!`,
+                                                              timeout:1500,
+                                                              position:'top',
+                                                              color:'positive'
+                                              })
+                                              // curatenie dupa ce salvam RN-ul
+                                              that.liniiRN=[];
+                                              that.obiectachizitie_text="";
+
+                                  }).catch(err=>{
+                                    
+                                  })
+                        
+                      }).catch(err=>{
+                        console.log('Eroare.............',err)
+                        this.$q.notify({
+                              color: 'negative',
+                              timeout:1500,
+                              position:'top',
+                              icon: 'delete',
+                              message: `ATENTIE! `
+                            })
+                });
+
             },
             adaugLinieRN(){
-                this.resetLinieRN();
+
+            this.liniiRN.push({
+                  idpozPAAP:this.linieRN.idpozPAAP,
+                  denumire: this.linieRN.denumire,
+                  codcpv:  this.linieRN.codcpv,
+                  detalii_tehnice:this.linieRN.detalii_tehnice,
+                  cantitate:this.linieRN.cantitate,
+                  pret: this.linieRN.pret,
+                  valoare:this.valoareLinieRN
+              })
+
+              this.resetLinieRN();
             },
             resetLinieRN(){
+              this.cantitate_maxima=1;
               this.linieRN.denumire="";
               this.linieRN.codcpv="";
+              this.linieRN.cantitate=1;
+              this.linieRN.idpozPAAP=0;
+              this.linieRN.pret=0;
+              this.linieRN.detalii_tehnice="";
               this.selected=[];
             }
 

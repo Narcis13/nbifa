@@ -17,4 +17,4 @@ router.get("/tipuridocumente", /*checkaut,*/ DocumenteController.tipuridocumente
 router.get("/modificdocument/:iddoc", /*checkaut,*/ DocumenteController.modoc); 
 
 
-module.exports=router;
+module.exports=router; 

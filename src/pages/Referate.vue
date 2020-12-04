@@ -6,10 +6,53 @@
                 title="Referate necesitate"
                 :data="rows"
                 :columns="columns"
-                row-key="name"
+                row-key="id"
                 :pagination.sync="pagination"
                 hide-pagination
+                selection="single"
+                :selected.sync="selected"
         >
+        <template v-slot:body="props">
+                <q-tr :props="props">
+                <q-td auto-width>
+                     <q-checkbox  v-model="props.selected" ></q-checkbox>
+                </q-td>
+                <q-td key="id" :props="props">
+                    {{ props.row.id }}
+                </q-td>
+                <q-td key="data" :props="props">
+                 
+                    {{ props.row.data }}
+                  
+                </q-td>
+                <q-td key="obiect_achizitie" :props="props">
+                   
+                    {{ props.row.obiect_achizitie }}
+                    
+                </q-td>
+                <q-td key="valoare" :props="props">
+                   
+                    {{ props.row.valoare }}
+                 
+                </q-td>
+                <q-td key="compartiment" :props="props">
+                  
+                    {{ props.row.compartiment }}
+                   
+                </q-td>
+                <q-td key="stare" :props="props">
+                    <q-badge color="purple">
+                    {{ props.row.stare }}
+                    </q-badge>
+                </q-td>
+                <q-td key="data_modificare" :props="props">
+                  
+                    {{ props.row.data_modificare }}
+                  
+                </q-td>
+
+                </q-tr>
+      </template>
         </q-table>
      </div>
 
@@ -23,7 +66,7 @@
         </div>
 
     <q-dialog v-model="adaug_referat" persistent transition-show="scale" transition-hide="scale">
-        <ref-necesitate-add />
+        <ref-necesitate-add  @referat-nou="toateReferatele"/>
     </q-dialog>
 
 
@@ -38,6 +81,8 @@
 
 
 <script>
+import { date } from 'quasar'
+import axios from 'axios'
 import ReferatNecesitateAdd from '../components/ReferatNecesitateAdd'
 export default {
     components:{
@@ -49,104 +94,66 @@ export default {
             pagination: {
 
                 page: 1,
-                rowsPerPage: 4
+                rowsPerPage: 10
                 // rowsNumber: xx if getting data from a server
             },
-
+            selected:[],
             columns: [
                 {
-                name: 'desc',
-                required: true,
-                label: 'Dessert (100g serving)',
+                name: 'id',
+              
+                label: 'ID',
                 align: 'left',
-                field: row => row.name,
-                format: val => `${val}`,
+                field:'id',
                 sortable: true
                 },
-                { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-                { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-                { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-                { name: 'protein', label: 'Protein (g)', field: 'protein' }
+                { name: 'data', align: 'center', label: 'Data', field: 'data', sortable: true },
+                { name: 'obiect_achizitie', align: 'left',label: 'Obiect achizitie', field: 'obiect_achizitie', sortable: true },
+                { name: 'valoare', label: 'Valoare', field: 'valoare',align:'right' },
+                { name: 'compartiment', label: 'Compartiment', field: 'compartiment',align:'left' },
+                 { name: 'stare', label: 'Stare', field: 'stare',align:'left' },
+                  { name: 'data_modificare', label: 'Data modificare', field: 'data_modificare',align:'left' }
             ],
 
-            rows: [
-                {
-                name: 'Frozen Yogurt',
-                calories: 159,
-                fat: 6.0,
-                carbs: 24,
-                protein: 4.0
-                },
-                {
-                name: 'Ice cream sandwich',
-                calories: 237,
-                fat: 9.0,
-                carbs: 37,
-                protein: 4.3
-                },
-                {
-                name: 'Eclair',
-                calories: 262,
-                fat: 16.0,
-                carbs: 23,
-                protein: 6.0
-                },
-                {
-                name: 'Cupcake',
-                calories: 305,
-                fat: 3.7,
-                carbs: 67,
-                protein: 4.3
-                },
-                {
-                name: 'Gingerbread',
-                calories: 356,
-                fat: 16.0,
-                carbs: 49,
-                protein: 3.9
-                },
-                {
-                name: 'Jelly bean',
-                calories: 375,
-                fat: 0.0,
-                carbs: 94,
-                protein: 0.0
-                },
-                {
-                name: 'Lollipop',
-                calories: 392,
-                fat: 0.2,
-                carbs: 98,
-                protein: 0
-                },
-                {
-                name: 'Honeycomb',
-                calories: 408,
-                fat: 3.2,
-                carbs: 87,
-                protein: 6.5
-                },
-                {
-                name: 'Donut',
-                calories: 452,
-                fat: 25.0,
-                carbs: 51,
-                protein: 4.9
-                },
-                {
-                name: 'KitKat',
-                calories: 518,
-                fat: 26.0,
-                carbs: 65,
-                protein: 7
-                }
-            ]
+            rows: []
         }
     },
     computed: {
         pagesNumber () {
             return Math.ceil(this.rows.length / this.pagination.rowsPerPage)
         }
+  },
+  created(){
+      console.log('Pagina principala Referate a fost creata!')
+      this.toateReferatele();
+  } ,
+  methods:{
+      toateReferatele(){
+          console.log('toate referatele...')
+          this.adaug_referat=false;
+
+          const token=this.$store.getters.akytoken;
+          this.rows=[];
+          axios.get(process.env.host+'rn/toatereferatele',{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+              res => {
+                console.log('Rspuns la toate referatele',res.data);
+                //this.paap = [...res.data.proceduri];
+                res.data.referate.map(p=>{
+                    this.rows.push({
+                        id:p.id,
+                        data:date.formatDate(p.data, 'DD/MM/YYYY'),
+                        obiect_achizitie:p.obiect_achizitie,
+                        valoare:p.valoare,
+                        data_modificare:date.formatDate(p.data, 'DD/MM/YYYY H:mm'),
+                        compartiment:p.denumire,
+                        stare:p.stare
+
+                    })
+                })
+              }
+            ).catch(err =>{})  
+      }
   }
 }
 </script>

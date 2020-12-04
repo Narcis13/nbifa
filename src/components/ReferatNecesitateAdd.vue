@@ -128,7 +128,7 @@
                         <div class="row justify-center">
                           <q-btn flat label="Abandon" v-close-popup />
                          
-                          <q-btn @click="salveaza" flat label="Salveaza!" :disable="!documentValid" v-close-popup />
+                          <q-btn @click="salveaza" flat label="Salveaza!" :disable="!documentValid"  />
                         </div>
               </div>
                         
@@ -188,7 +188,7 @@ export default {
                 sortable: true
               },
 
-              { name: 'cantitate', align:'right',label: 'Cantitate', field: 'cantitate', sortable: true }
+              { name: 'cantitate', align:'right',label: 'Cantitate', field: 'cant_ramasa', sortable: true }
            ],
           pagination: {
              rowsPerPage: 0
@@ -213,7 +213,7 @@ export default {
         }
     },
     created(){
-      console.log('Componentul ReferatNecesitateAdd a fost creat !')
+      console.log('Componentul ReferatNecesitateAdd a fost creat !',this)
           this.uuid = uid();
           const token=this.$store.getters.akytoken;
           const rol = this.$store.getters.akyroluserlogat;
@@ -221,12 +221,12 @@ export default {
           let an=(new Date()).getFullYear().toString();
         console.log('PAAP Comp An',rol,id_comp);
           let idc = (rol==="Achizitii")? 0:id_comp;
-          axios.get(process.env.host+'paap/paapintegral/'+idc+'/'+an,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+          axios.get(process.env.host+'paap/paapsolduri/'+idc+'/'+an,{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
               res => {
-                console.log('Rspuns la tot paap-ul',res);
+                console.log('Rspuns la  paap cu solduri',res);
                 this.paap=[];
-                this.paap = [...res.data.paap];
+                this.paap = [...res.data.paap[0]];
               }
             ).catch(err =>{})  
     },
@@ -260,7 +260,7 @@ export default {
               this.linieRN.denumire=detalii.rows[0].obiectachizitie_text;
               this.linieRN.codcpv=detalii.rows[0].CodCPV;
               this.linieRN.idpozPAAP=detalii.rows[0].id;
-              this.cantitate_maxima=detalii.rows[0].cantitate;
+              this.cantitate_maxima=detalii.rows[0].cant_ramasa;
             },
             removeRow(){
                    var that=this;
@@ -298,6 +298,8 @@ export default {
                                               // curatenie dupa ce salvam RN-ul
                                               that.liniiRN=[];
                                               that.obiectachizitie_text="";
+                                              console.log('ajung fix aici inainte de a emite event referat-nou')
+                                              that.$emit("referat-nou", {nimic:'interesant'});
 
                                   }).catch(err=>{
                                     

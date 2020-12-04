@@ -4,6 +4,7 @@ const router = express.Router();
 const RNController =require('../controllers/rn');
 router.post("/antetnou", RNController.antet_rn_nou);
 router.post("/detaliinoi", RNController.detalii_noi);
+router.get("/toatereferatele", /*checkaut,*/ RNController.toate_referatele); 
 //router.get("/paapintegral/:idcomp/:an", /*checkaut,*/ PAAPController.tot); 
 //router.post("/paapfiltrat", /*checkaut,*/ PAAPController.filtrat); 
 //router.get("/toateprocedurile", /*checkaut,*/ PAAPController.toate_procedurile); 

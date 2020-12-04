@@ -60,3 +60,18 @@ module.exports.detalii_noi = (req,res,next) => {
    }).catch(err =>{ console.log(err)})
 
 }
+
+module.exports.toate_referatele=(req,res,next)=> {
+  console.log("sunt in controllerul referate necesitate actiunea TOATE")
+  knex.select(['antetrn.id','antetrn.data','antetrn.obiect_achizitie','antetrn.valoare','antetrn.id_compartiment','compartimente.denumire','antetrn.data_modificare','stari_documente.stare'])
+  .from('antetrn')
+  .innerJoin('stari_documente','antetrn.id_stare','stari_documente.id')
+  .innerJoin('compartimente','antetrn.id_compartiment','compartimente.id')
+  .orderBy('antetrn.id','desc').then((rows)=>{
+    return res.status(200).json({
+     message: "Toate referatele",
+     referate:rows
+   });
+  }).catch(err =>{})
+
+}

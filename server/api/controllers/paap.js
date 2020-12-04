@@ -27,6 +27,30 @@ module.exports.tot = (req, res, next) => {
 
 }
 
+module.exports.tot_cu_solduri = (req,res,next) => {
+  console.log('sunt in controllerul PAAP actiunea tot_cu_solduri....')
+
+let sql=`
+SELECT p.id, p.id_obiect_achizitie,obi.obiectachizitie_text,c.CodCPV, p.cantitate total, d.cantitate necesar, p.valoare val_totala, d.valoare val_necesara, p.cantitate - coalesce(d.cantitate, 0 ) cant_ramasa,p.valoare - coalesce(d.valoare, 0 ) val_ramasa FROM adata.paap p 
+inner join adata.obiecte_achizitie obi on obi.id=p.id_obiect_achizitie
+inner join adata.coduricpv c on c.IDCod=p.id_cod_cpv
+left join adata.detaliirn d on d.idpozPAAP = p.id
+ where p.id_compartiment= ? and p.anplan= ? and p.stare='activ'
+ order by p.id desc;
+`;
+ knex.raw(sql,[parseInt(req.params.idcomp),parseInt(req.params.an)]).then(
+  r=>{
+   // console.log("Raspuns de la query stoc pret mediu",r)
+   return res.status(200).json({
+    message: "PAAP su solduri",
+    paap:r
+  });
+  }
+).catch(err =>{console.log(err)})
+
+
+}
+
 module.exports.filtrat = (req,res,next)=>{
   console.log('PAAP filtrat!',req.body);
   knex.select(['paap.id','paap.anplan','paap.id_procedura','paap.id_compartiment','paap.id_cod_cpv','paap.to', 'paap.from','paap.id_obiect_achizitie','obiecte_achizitie.obiectachizitie_text','coduricpv.CodCPV','paap.cantitate','paap.valoare','tipproceduri.procedura','paap.responsabil','paap.artbug','compartimente.denumire'])

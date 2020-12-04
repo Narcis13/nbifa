@@ -4,6 +4,7 @@ const router = express.Router();
 const PAAPController =require('../controllers/paap');
 
 router.get("/paapintegral/:idcomp/:an", /*checkaut,*/ PAAPController.tot); 
+router.get("/paapsolduri/:idcomp/:an", /*checkaut,*/ PAAPController.tot_cu_solduri); 
 router.post("/paapfiltrat", /*checkaut,*/ PAAPController.filtrat); 
 router.get("/toateprocedurile", /*checkaut,*/ PAAPController.toate_procedurile); 
 router.get("/toatecodurilecpv", /*checkaut,*/ PAAPController.toate_codurilecpv); 

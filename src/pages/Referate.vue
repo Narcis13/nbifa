@@ -3,7 +3,6 @@
      <div class="row justify-center q-mt-md">
      
          <q-table
-                title="Referate necesitate"
                 :data="rows"
                 :columns="columns"
                 row-key="id"
@@ -12,6 +11,14 @@
                 selection="single"
                 :selected.sync="selected"
         >
+                    <template v-slot:top>
+                          
+                          <div class="text-body1 text-weight-bold">Referate de necesitate</div>
+                          
+                          <q-space />
+                          <q-btn v-show="selected.length>0" class="on-right" icon="print" flat dense color="green"  label="PRINT" @click="printRN" />
+                    </template>
+
         <template v-slot:body="props">
                 <q-tr :props="props">
                 <q-td auto-width>
@@ -128,6 +135,10 @@ export default {
       this.toateReferatele();
   } ,
   methods:{
+      printRN(){
+          console.log('Urmeaza sa printez RN',this.selected[0])
+           window.open(process.env.host+'rapoarte/unreferat/'+this.selected[0].id,'_blank');
+      },
       toateReferatele(){
           console.log('toate referatele...')
           this.adaug_referat=false;

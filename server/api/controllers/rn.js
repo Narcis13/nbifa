@@ -17,6 +17,7 @@ module.exports.antet_rn_nou = (req,res,next) => {
 
     "data":req.body.data,
     "obiect_achizitie":req.body.obiect_achizitie,
+    "justificare":req.body.justificare,
     "valoare":req.body.valoare,
     "id_compartiment":req.body.id_compartiment,
     "id_stare":1,

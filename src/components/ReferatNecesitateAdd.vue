@@ -60,6 +60,16 @@
 
                               </div>
 
+                              <div class="q-mt-xs q-mb-xs q-pa-xs">
+                                        <q-input
+                                          v-model="justificare"
+                                          label="Justificarea necesitatii"
+                                          filled
+                                          style="height:70px"
+                                          type="textarea"
+                                        />
+                              </div>
+
                               <q-separator inset />
 
                               <div class="row">
@@ -155,6 +165,7 @@ export default {
                 // rowsNumber: xx if getting data from a server
           },
            obiect_achizitie:'',
+           justificare:'Asigurarea derularii optime a activitatilor institutiei',
           cantitate_maxima:1,
            model:0,
            paap:[],
@@ -280,6 +291,7 @@ export default {
                       "data":datacorecta,
                       "obiect_achizitie":this.obiect_achizitie,
                       "valoare":this.valoaretotala,
+                      "justificare":this.justificare,
                       "id_compartiment":this.$store.getters.idcompartimentakyuserlogat
 
                   },{headers:{"Authorization" : `Bearer ${token}`}}).then(

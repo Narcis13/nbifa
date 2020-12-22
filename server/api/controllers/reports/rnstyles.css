@@ -25,7 +25,7 @@ body {
 .container {
      display: grid;
      grid-template-columns: repeat(3, 1fr);
-     grid-template-rows: repeat(4, auto);
+     grid-template-rows: repeat(11, auto);
 }
 
 .antet-stinga {
@@ -53,6 +53,27 @@ body {
     padding: 5px;
 }
 
+.molecula-stinga {
+  grid-column-start: 1;
+  grid-column-end:  2;
+  margin-top: 16px;
+  padding: 5px;
+}
+
+.molecula-dreapta {
+  grid-column-start: 3;
+  grid-column-end:  4;
+  margin-top: 16px;
+  padding: 5px;
+}
+
+.subantet-dreapta {
+  grid-column-start: 3;
+  grid-column-end:  4;
+  font-weight: bold;
+  padding: 5px;
+}
+
 .subsol-stinga {
     grid-column-start: 1;
     grid-column-end:  2;
@@ -76,11 +97,40 @@ body {
     margin:auto;
 }
 
+.paragraf {
+  grid-column-start: span 3;
+  text-indent: 3rem;
+  text-align:justify;
+text-justify:inter-word;
+}
 
+.linii-suplimentare {
+  grid-column-start: span 3;
+  margin-top: 8px;
+  text-align:left;
+
+}
+
+.flexibil {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.watermark {
+  font-size: 10px;
+  display: none;
+}
+
+.indentare {
+  text-indent: 3rem;
+  margin-top: 4px;
+}
 
 table.minimalistBlack {
     border: 2px solid #000000;
     width: 100%;
+    margin-top: 4px;
     text-align: left;
     border-collapse: collapse;
   }
@@ -103,7 +153,7 @@ table.minimalistBlack {
   }
 
   table.minimalistBlack thead th {
-    font-size: 15px;
+    font-size: 13px;
     font-weight: bold;
     color: #000000;
    
@@ -133,7 +183,9 @@ table.minimalistBlack {
     text-align: center; 
   }
 
-
+  .a-stinga {
+    text-align: left; 
+  }
 @page {
     size: A4;
     margin: 10mm;
@@ -153,5 +205,17 @@ table.minimalistBlack {
         background: initial;
         page-break-after: always;
     }
+
+    .watermark {
+      display: inline;
+      position: fixed !important;
+
+      font-size: 10px;
+      width: 100%;
+      text-align: center;
+      z-index: 1000;
+      top:1135px;
+      right:5px;
+  }
 }
 </style>

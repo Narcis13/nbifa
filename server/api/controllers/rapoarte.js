@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const knex =require('../../db.js');
+const knexaky =require('../../dbaky.js');
 const fs = require("fs");   
 const path=require("path");
 const moment = require('moment');
@@ -102,5 +103,41 @@ module.exports.un_document = (req,res,next) => {
 
   })
   .catch(err =>{console.log(err)})
+
+}
+
+module.exports.un_referat = (req,res,next) => {
+    console.log('sunt in controllerul rapoarte actiunea un_referat',req.params.iddoc);
+
+    let set_date={};
+    
+    
+    var ejs_template = fs.readFileSync(path.join(__dirname,'reports','un_referat.ejs'),'utf8'),
+   style=fs.readFileSync(path.join(__dirname,'reports','rnstyles.css'),'utf8');
+
+
+   knexaky.select(['antetrn.data',{total_valoare_ftva:'antetrn.valoare'},'antetrn.justificare','compartimente.sef_nume_complet','compartimente.structura_nume_complet','detaliirn.idpozPAAP','detaliirn.detalii_tehnice','detaliirn.cantitate','detaliirn.pret','detaliirn.valoare','obiecte_achizitie.obiectachizitie_text'])
+   .from('detaliirn')
+   .innerJoin('antetrn','antetrn.id','detaliirn.id_Antet')
+   .innerJoin('compartimente','compartimente.id','antetrn.id_compartiment')
+   .innerJoin('paap','paap.id','detaliirn.idpozPAAP')
+   .innerJoin('obiecte_achizitie','obiecte_achizitie.id','paap.id_obiect_achizitie')
+   .whereRaw('detaliirn.id_Antet = ? ',[req.params.iddoc])
+   .then( rows=>{
+
+    set_date.data_referat=moment(rows[0].data).format('DD/MM/YYYY');
+    set_date.totalftva=rows[0].total_valoare_ftva;
+    set_date.totalcutva=set_date.totalftva*1.19;
+    set_date.justificare=rows[0].justificare;
+    set_date.nume_sef=rows[0].sef_nume_complet;
+    set_date.nume_structura=rows[0].structura_nume_complet;
+    set_date.linii=rows;
+
+    const html = ejs.render(ejs_template, {set_date,style,config});
+    res.send(html);
+ 
+   })
+   .catch(err =>{console.log(err)})
+
 
 }

@@ -21,7 +21,7 @@ const rnRoutes = require('./api/routes/rnroutes');
 
 app.use(morgan('dev'));
 
-//app.use(express.static(__dirname + '/api/controllers/reports'));
+app.use(express.static(__dirname + '/api/controllers/reports'));
 //app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 

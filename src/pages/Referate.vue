@@ -144,11 +144,15 @@ export default {
           this.adaug_referat=false;
 
           const token=this.$store.getters.akytoken;
+          const rol = this.$store.getters.akyroluserlogat;
+          const id_comp = this.$store.getters.idcompartimentakyuserlogat;
+   
+          let idc = (rol==="Achizitii")? 0:id_comp;
           this.rows=[];
-          axios.get(process.env.host+'rn/toatereferatele',{headers:{"Authorization" : `Bearer ${token}`}}).then(
+          axios.get(process.env.host+'rn/toatereferatele/'+idc,{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
               res => {
-                console.log('Rspuns la toate referatele',res.data);
+                console.log('Raspuns la toate referatele',res.data);
                 //this.paap = [...res.data.proceduri];
                 res.data.referate.map(p=>{
                     this.rows.push({

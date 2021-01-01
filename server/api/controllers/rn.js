@@ -63,11 +63,19 @@ module.exports.detalii_noi = (req,res,next) => {
 }
 
 module.exports.toate_referatele=(req,res,next)=> {
+  let op="=";
+  if(req.params.idcomp==="Niciunul"){
+    return res.status(401).json({
+      message: "Cimpuri vide!"
+    })
+  } else if(req.params.idcomp=="0") op=">" 
+
   console.log("sunt in controllerul referate necesitate actiunea TOATE")
   knex.select(['antetrn.id','antetrn.data','antetrn.obiect_achizitie','antetrn.valoare','antetrn.id_compartiment','compartimente.denumire','antetrn.data_modificare','stari_documente.stare'])
   .from('antetrn')
   .innerJoin('stari_documente','antetrn.id_stare','stari_documente.id')
   .innerJoin('compartimente','antetrn.id_compartiment','compartimente.id')
+  .where('antetrn.id_compartiment',op,parseInt(req.params.idcomp))
   .orderBy('antetrn.id','desc').then((rows)=>{
     return res.status(200).json({
      message: "Toate referatele",

@@ -180,6 +180,7 @@
                                                 <q-item-section>
                                                   <q-item-label >{{ scope.opt.label }} ({{scope.opt.um}}) - {{scope.opt.stare}}</q-item-label>
                                                   <q-item-label >Pret mediu: {{ scope.opt.pretpredefinit }} Stoc curent: {{scope.opt.stoc}}</q-item-label>
+                                                   <q-item-label >Cod: {{scope.opt.cod}}</q-item-label>
                                                 </q-item-section>
                                               </q-item>
                                   </template>
@@ -260,6 +261,7 @@
 
                                                 <q-item-section>
                                                   <q-item-label >{{ scope.opt.label }} ({{scope.opt.um}})</q-item-label>
+                                                  <q-item-label >Cod: {{scope.opt.cod}}</q-item-label>
                                                   
                                                 </q-item-section>
                                               </q-item>
@@ -455,6 +457,7 @@ export default {
                id:m.id,
                label:m.denumire,
                value:m.id,
+               cod:m.cod_import,
                um:m.um,
                pretpredefinit:m.pretpredefinit,
                stoc:9999
@@ -1023,6 +1026,7 @@ export default {
                label:s.denumire,
                value:s.id_reper,
                um:s.um,
+               cod:s.cod_import,
                pretpredefinit:parseFloat(s.pretmediu).toFixed(2),
                stoc:s.stoc,
                stare:s.stare_material

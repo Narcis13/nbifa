@@ -7,7 +7,7 @@ const knex =require('../../db.js');
 
 module.exports.toate = (req, res, next) => {
  console.log('sunt in controllerul materiale actiunea toate....')
- knex.column(['materiale.id','materiale.denumire','materiale.um','materiale.pretpredefinit',{gestiune:'gestiuni.denumire'},{user:'utilizatori.name'},'materiale.datacreere','materiale.datamodificare'])
+ knex.column(['materiale.id','materiale.denumire','materiale.cod_import','materiale.um','materiale.pretpredefinit',{gestiune:'gestiuni.denumire'},{user:'utilizatori.name'},'materiale.datacreere','materiale.datamodificare'])
  .select().from('materiale')
  .innerJoin('gestiuni','materiale.idgestiune','gestiuni.id')
  .innerJoin('utilizatori','utilizatori.id','materiale.iduser').where({'materiale.stare': 'ACTIV','materiale.idgestiune':req.params.idgest}).then((rows)=>{
@@ -30,6 +30,7 @@ module.exports.materialnou = (req,res,next) =>{
   knex('materiale').insert({
     denumire:req.body.denumire,
     um:req.body.um,
+    cod_import:req.body.cod_import,
     pretpredefinit:req.body.pretpredefinit,
     idgestiune:req.body.idgestiune,
     iduser:req.body.iduser,

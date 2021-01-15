@@ -17,7 +17,7 @@
         </q-btn>
 
         <q-toolbar-title>
-          BIFA Gestiune (vers. 1.0 beta)
+          BIFA Gestiune (vers. 1.0 alpha)
           
         </q-toolbar-title>
         <q-btn v-if="!userAutentificat" icon="lock" flat dense @click="doLogin">Autentificare!</q-btn>
@@ -73,7 +73,7 @@
 
       <q-footer elevated class="bg-grey-8 text-white">
         <q-toolbar>
-          <q-toolbar-title>@2020 Narcis Petru Brindusescu! </q-toolbar-title>
+          <q-toolbar-title>Din pasiune de: Narcis Brindusescu </q-toolbar-title>
         </q-toolbar>     
       </q-footer>
   </q-layout>

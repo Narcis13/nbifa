@@ -44,6 +44,7 @@ module.exports.stocPretMediu = (req,res,next) => {
   let sql=`SELECT 
 m.denumire,
 m.um,
+m.cod_import,
 tranzactii.stare_material,
 tranzactii.id_reper,
     sum(tranzactii.cantitate_debit) as ti,

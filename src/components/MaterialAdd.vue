@@ -6,7 +6,7 @@
                         <q-input autofocus ref="edNume" v-model="nume_material" label="Denumire"  @keyup.enter="urmatorul('edUM')" />
                         <q-input ref="edUM" v-model="um_material" label="UM" @keyup.enter="urmatorul('edPret')"  />
                         <q-input ref="edPret" v-model.number="pret_predefinit" label="Pret predefinit" type="number"   />
-                        
+                        <q-input  v-model="cod_material" label="Cod"  />
                         <q-btn
                             color="primary"
                             @click="adauga"
@@ -34,6 +34,7 @@ export default {
            nume_material:"",
            pret_predefinit:1,
            um_material:"buc",
+           cod_material:" ",
            materiale:this.data
         }
     },
@@ -51,6 +52,7 @@ console.log('ADAUG MATERIAL!',this.mat);
                 axios.post(process.env.host+'materiale/materialnou',{
                 "denumire":this.nume_material,
                 "um":this.um_material,
+                "cod_import":this.cod_material,
                 "pretpredefinit":this.pret_predefinit,
                 "idgestiune":this.$store.getters.gestiuneCurenta.id,
                 "iduser":this.$store.getters.userid,

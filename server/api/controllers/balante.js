@@ -271,8 +271,8 @@ module.exports.raportanalitica = (req,res,next)=>{
       }))
 
       set_date.linii=linii;
-      set_date.tsf=tsf;
-      set_date.tsi=tsi;
+      set_date.tsf=tsf.toFixed(2);
+      set_date.tsi=tsi.toFixed(2);
       set_date.rd=rd.toFixed(2);
       set_date.rc=rc.toFixed(2);
 

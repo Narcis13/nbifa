@@ -84,7 +84,7 @@ export default {
           this.repere.map(reper=>{
             total+=parseFloat(reper.valoare)
           })
-          return total.toFixed(2);
+          return total.toFixed(4);
         }
   } ,
   methods:{

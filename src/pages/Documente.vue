@@ -485,10 +485,10 @@ export default {
           return this.tipdocument.value==='e'||this.tipdocument.value==='t'
       },
       valoareunitara(){
-        return 'Valoare: '+(this.pretunitar*this.cantitate).toFixed(2);
+        return 'Valoare: '+(this.pretunitar*this.cantitate).toFixed(4);
       },
       doarvaloare(){
-        return (this.pretunitar*this.cantitate).toFixed(2);
+        return (this.pretunitar*this.cantitate).toFixed(4);
       },
       lblPrint(){
          return this.documenteselectate.length===0?'Printeaza toate':'Printeaza'    
@@ -1027,7 +1027,7 @@ export default {
                value:s.id_reper,
                um:s.um,
                cod:s.cod_import,
-               pretpredefinit:parseFloat(s.pretmediu).toFixed(2),
+               pretpredefinit:parseFloat(s.pretmediu).toFixed(4),
                stoc:s.stoc,
                stare:s.stare_material
              })

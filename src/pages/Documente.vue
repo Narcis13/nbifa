@@ -584,7 +584,7 @@ export default {
                  id_lociesire:eTransfer?res.data.doc[2*i].id_locdispunere:eIntrare?null:resdatadoc[i].id_locdispunere,
                  id_categ_intrare:eTransfer?res.data.doc[2*i+1].id_categ:eIntrare?resdatadoc[i].id_categ:null,
                  id_categ_iesire:eTransfer?res.data.doc[2*i].id_categ:eIntrare?null:resdatadoc[i].id_categ,
-                 stare_material_intrare:eTransfer?res.data.doc[2*i+1].stare_material:eIntrare?resdatadoc[i].stare_marterial:null,
+                 stare_material_intrare:eTransfer?res.data.doc[2*i+1].stare_material:eIntrare?resdatadoc[i].stare_material:null,
                  stare_material_iesire:eTransfer?res.data.doc[2*i].stare_material:eIntrare?null:resdatadoc[i].stare_material,
                  tip
                 }

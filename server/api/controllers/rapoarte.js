@@ -68,7 +68,7 @@ module.exports.un_document = (req,res,next) => {
     var ejs_template = fs.readFileSync(path.join(__dirname,'reports','un_document.ejs'),'utf8'),
    style=fs.readFileSync(path.join(__dirname,'reports','styles.css'),'utf8');
 
-  knex.select(['operatiuni.idtipoperatiuni', 'operatiuni.tipoperatiune', 'operatiuni.data' ,'operatiuni.nrdoc', {categorie:'categorii.denumire'}, {gestiune:'gestiuni.denumire'}, {loc:'locuri.denumire'}, {material:'materiale.denumire'},'tranzactii.um','tranzactii.cantitate_debit','tranzactii.cantitate_credit','tranzactii.pret','tranzactii.debit','tranzactii.credit','tranzactii.stare_material'])
+  knex.select(['operatiuni.idtipoperatiuni', 'operatiuni.tipoperatiune', 'operatiuni.data' ,'operatiuni.nrdoc', {categorie:'categorii.denumire'}, {gestiune:'gestiuni.denumire'}, {loc:'locuri.denumire'}, {material:'materiale.denumire'},{cod:'materiale.cod_import'},'tranzactii.um','tranzactii.cantitate_debit','tranzactii.cantitate_credit','tranzactii.pret','tranzactii.debit','tranzactii.credit','tranzactii.stare_material'])
   .from('tranzactii')
   .innerJoin('operatiuni','operatiuni.id','tranzactii.idAntet')
   .innerJoin('categorii','categorii.id','tranzactii.id_categ')

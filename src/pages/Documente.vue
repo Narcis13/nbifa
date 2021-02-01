@@ -414,7 +414,8 @@ export default {
              this.tipuridocumente.push({
                id:td.id,
                label:td.denumire,
-               value:td.tip,
+               value:td.id,
+               tip:td.tip,
                scurta:td.denumire_scurta
              })
            })
@@ -479,10 +480,10 @@ export default {
           return this.cantitate!==''&&this.cantitate>0&&this.cantitate<=this.cantitate_maxima
       },
       intrarivizibile(){
-          return this.tipdocument.value==='i'||this.tipdocument.value==='t'
+          return this.tipdocument.tip==='i'||this.tipdocument.tip==='t'
       },
       iesirivizibile(){
-          return this.tipdocument.value==='e'||this.tipdocument.value==='t'
+          return this.tipdocument.tip==='e'||this.tipdocument.tip==='t'
       },
       valoareunitara(){
         return 'Valoare: '+(this.pretunitar*this.cantitate).toFixed(4);
@@ -494,7 +495,7 @@ export default {
          return this.documenteselectate.length===0?'Printeaza toate':'Printeaza'    
       },
       eTransfer(){
-           return this.tipdocument.value==="t"
+           return this.tipdocument.tip==="t"
       },
       totaldebit(){
         let t=0;
@@ -597,7 +598,7 @@ export default {
                if(item.scurta==resdatadoc[0].tipoperatiune){
                  that.tipdocument=item;
                //  console.log('tip doc ',item)
-                if(item.value=="e"||item.value=="t"){
+                if(item.tip=="e"||item.tip=="t"){
                     that.tab="tabiesiri";
                 }
                 else
@@ -644,7 +645,7 @@ export default {
       salveaza(){
         const token=this.$store.getters.token;
         var that=this;
-        let tip=that.tipdocument.value;
+        let tip=that.tipdocument.tip;
         let data = date.extractDate(this.datadoc, 'DD/MM/YYYY')
         let datacorecta=date.formatDate(data, 'YYYY-MM-DD');
         console.log('Data doc', datacorecta,this.$store.getters.gestiuneCurenta.id);
@@ -793,7 +794,7 @@ export default {
       },
       tipdocumentselectat(){
           console.log('Selectat',this.tipdocument);
-          if(this.tipdocument.value=="e"||this.tipdocument.value=="t"){
+          if(this.tipdocument.tip=="e"||this.tipdocument.tip=="t"){
             this.tab="tabiesiri";
           }
           else
@@ -809,7 +810,7 @@ export default {
       },
       MaterialIesireSelectat(value){
            this.um=value.um;
-           if(this.tipdocument.value==="t") this.materialintrare=value;
+           if(this.tipdocument.tip==="t") this.materialintrare=value;
            this.pretunitar=value.pretpredefinit;
            this.cantitate_maxima=value.stoc;
            this.cantitate=value.stoc;
@@ -832,16 +833,16 @@ export default {
               this.repere.map(r=>{
                 if(r.nrcrt==this.modMODREPER){
                   r.nrcrt=this.modMODREPER;
-                  r.categ=this.tipdocument.value==='i'? this.categoriei.label:this.categoriee.label;
-                  r.id_categ=this.tipdocument.value==='i'? this.categoriei.value:this.categoriee.value;
-                  r.denumire_reper=this.tipdocument.value==='i'? this.materialintrare.label:this.materialiesire.label;
-                  r.id_reper=this.tipdocument.value==='i'? this.materialintrare.value:this.materialiesire.value;
+                  r.categ=this.tipdocument.tip==='i'? this.categoriei.label:this.categoriee.label;
+                  r.id_categ=this.tipdocument.tip==='i'? this.categoriei.value:this.categoriee.value;
+                  r.denumire_reper=this.tipdocument.tip==='i'? this.materialintrare.label:this.materialiesire.label;
+                  r.id_reper=this.tipdocument.tip==='i'? this.materialintrare.value:this.materialiesire.value;
                   r.um=this.um;
                   r.cantitate=this.cantitate;
                   r.pret=this.pretunitar;
                   r.valoare=this.doarvaloare;
                   r.tipmaterial=this.tipmaterial.value;
-                  r.tip=this.tipdocument.value;
+                  r.tip=this.tipdocument.tip;
                   r.id_locintrare=this.locintrare?this.locintrare.id:null;
                   r.id_lociesire=this.lociesire?this.lociesire.id:null;
                   r.id_categ_intrare=this.categoriei?this.categoriei.value:null;
@@ -854,16 +855,16 @@ export default {
            {
            this.repere.push({
              nrcrt:this.repere.length+1,
-             categ:this.tipdocument.value==='i'? this.categoriei.label:this.categoriee.label,
-             id_categ:this.tipdocument.value==='i'? this.categoriei.value:this.categoriee.value,
-             denumire_reper:this.tipdocument.value==='i'? this.materialintrare.label:this.materialiesire.label,
-             id_reper:this.tipdocument.value==='i'? this.materialintrare.value:this.materialiesire.value,
+             categ:this.tipdocument.tip==='i'? this.categoriei.label:this.categoriee.label,
+             id_categ:this.tipdocument.tip==='i'? this.categoriei.value:this.categoriee.value,
+             denumire_reper:this.tipdocument.tip==='i'? this.materialintrare.label:this.materialiesire.label,
+             id_reper:this.tipdocument.tip==='i'? this.materialintrare.value:this.materialiesire.value,
              um:this.um,
              cantitate:this.cantitate,
              pret:this.pretunitar,
              valoare:this.doarvaloare,
              tipmaterial:this.tipmaterial.value,
-             tip:this.tipdocument.value,
+             tip:this.tipdocument.tip,
              id_locintrare:this.locintrare?this.locintrare.id:null,
              id_lociesire:this.lociesire?this.lociesire.id:null,
              id_categ_intrare:this.categoriei?this.categoriei.value:null,
@@ -999,7 +1000,7 @@ export default {
       this.pretunitar=0;
       this.materialintrare=null;
       this.materialiesire=null;
-      if(this.tipdocument.value==="t") this.tab="tabiesiri";
+      if(this.tipdocument.tip==="t") this.tab="tabiesiri";
     },
     resetLocCategorieStare(){
         this.staremateriali='NOU';

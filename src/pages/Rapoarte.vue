@@ -116,6 +116,19 @@
                                   </q-item-section>
                                 </q-item>
                               </template>
+                              <template v-slot:option="scope">
+                                              <q-item
+                                                v-bind="scope.itemProps"
+                                                v-on="scope.itemEvents"
+                                              >
+
+                                                <q-item-section>
+                                                  <q-item-label >{{ scope.opt.label }} ({{scope.opt.um}})</q-item-label>
+                                                  <q-item-label >Cod: {{scope.opt.cod}}</q-item-label>
+                                                  
+                                                </q-item-section>
+                                              </q-item>
+                                  </template>
                             </q-select>
                           </div>
                   </q-card-section>
@@ -219,6 +232,7 @@ export default {
                value:m.id,
                um:m.um,
                pretpredefinit:m.pretpredefinit,
+               cod:m.cod_import,
                stoc:9999
              })
            })

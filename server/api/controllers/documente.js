@@ -58,7 +58,8 @@ tranzactii.id_reper,
 
 FROM bifa.tranzactii
 inner join materiale m on m.id=id_reper
-where id_categ= ? and tranzactii.stare='ACTIV' and id_gestiune= ? and id_locdispunere= ?
+inner join operatiuni op on op.id=idAntet
+where id_categ= ? and op.stare='ACTIV' and id_gestiune= ? and id_locdispunere= ?
 group by id_reper,tranzactii.stare_material
 having stoc>0`;
 

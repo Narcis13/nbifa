@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+         BIFA ALOP Teaser
         </q-toolbar-title>
 
         <div>Quasar v{{ $q.version }}</div>
@@ -23,22 +23,14 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      class="bg-grey-1"
-    >
-      <q-list>
-        <q-item-label
-          header
-          class="text-grey-8"
-        >
-          Essential Links
-        </q-item-label>
+      class="bg-grey-1 "
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
+    >
+    <div class="column items-center">
+        <q-btn class="q-ma-xl col" outline rounded color="primary" label="Autentificare" @click="global.actions.autentificare"/>
+        <Meniu v-show="global.state.user.autentificat" class="col"/>
+    </div>
+
     </q-drawer>
 
     <q-page-container>
@@ -49,6 +41,8 @@
 
 <script>
 import EssentialLink from 'components/EssentialLink.vue'
+import Meniu from 'components/Meniu.vue'
+
 
 const linksList = [
   {
@@ -95,21 +89,23 @@ const linksList = [
   }
 ];
 
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref ,inject} from 'vue'
 
 export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    EssentialLink
+    EssentialLink,
+    Meniu
   },
 
   setup () {
     const leftDrawerOpen = ref(false)
-
+    const global=inject('global');
     return {
       essentialLinks: linksList,
       leftDrawerOpen,
+      global,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       }

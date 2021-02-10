@@ -11,8 +11,12 @@ const state = reactive({
 })
 
 const actions = {
-     autentificare(){
+     autentificare(user,parola){
+         console.log('Autentificare: '+user+" "+parola)
          state.user.autentificat=true
+     },
+     deconectare(){
+        state.user.autentificat=false
      }
 }
 

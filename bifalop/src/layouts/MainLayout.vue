@@ -27,8 +27,26 @@
 
     >
     <div class="column items-center">
-        <q-btn class="q-ma-xl col" outline rounded color="primary" label="Autentificare" @click="global.actions.autentificare"/>
-        <Meniu v-show="global.state.user.autentificat" class="col"/>
+       <q-input v-show="!global.state.user.autentificat" class="q-mt-md" v-model="username" filled dense label="Utilizator" />
+       <q-input v-show="!global.state.user.autentificat" class="q-mt-md" v-model="password" filled dense type="password" label="Parola" />
+        <q-btn v-show="!global.state.user.autentificat" class="q-ma-md col" outline rounded color="primary" label="Autentificare" @click="autentificare"/>
+    
+     <q-card class="col my-card" v-show="global.state.user.autentificat">
+      <q-card-section>
+        <div class="text-h6">Popa Aurel</div>
+        <div class="text-subtitle2">Sef compartiment specialitate</div>
+        <div class="text-subtitle2">FARMACIA</div>
+      </q-card-section>
+
+      <q-separator />
+
+      <q-card-actions vertical>
+        <q-btn flat @click="global.actions.deconectare">Deconectare!</q-btn>
+
+      </q-card-actions>
+    </q-card>
+
+        <Meniu v-show="global.state.user.autentificat" class="q-mt-md col"/>
     </div>
 
     </q-drawer>
@@ -90,6 +108,8 @@ const linksList = [
 ];
 
 import { defineComponent, ref ,inject} from 'vue'
+import { useQuasar } from 'quasar'
+import axios from 'axios'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -101,15 +121,57 @@ export default defineComponent({
 
   setup () {
     const leftDrawerOpen = ref(false)
+    const username = ref("")
+    const password = ref("")
     const global=inject('global');
+    const $q = useQuasar()
     return {
       essentialLinks: linksList,
       leftDrawerOpen,
+      username,
+      password,
       global,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
+      },
+      autentificare(){
+
+        console.log(process.env.host);
+          axios.post(process.env.host+'user/loginaky',{user:username.value,parola:password.value}).then(
+                      res => {
+                        console.log('Raspuns la autentificare ',res)
+                        username.value=''
+                        password.value=''
+                        $q.notify({
+                              message:res.data.message,
+                              timeout:2000,
+                              position:'top',
+                              color:'positive'
+                            }) 
+
+                        global.actions.autentificare(username.value,password.value)
+                      }
+              ).catch(err=>{
+                username.value=''
+                password.value=''
+                    $q.notify({
+                              color: 'negative',
+                              timeout:1500,
+                              position:'top',
+                              icon: 'delete',
+                              message: `User sau parola incorecte...`
+                            })
+                console.log('Eroare autentificare',err);
+              });
+
       }
     }
   }
 })
 </script>
+
+<style lang="sass" scoped>
+.my-card
+  width: 100%
+  max-width: 250px
+</style>

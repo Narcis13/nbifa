@@ -14,7 +14,7 @@
                   <q-btn class="full-width q-ma-xs" color="indigo"  to="a" no-caps>
                     Angajamente<br>Bugetare
                   </q-btn>
-                  <q-btn class="full-width q-ma-xs" color="indigo" no-caps>
+                  <q-btn class="full-width q-ma-xs" color="indigo" to="l" no-caps>
                      Lichidari<br>Receptii
                   </q-btn>
                   <q-btn class="full-width q-ma-xs" color="indigo" no-caps>

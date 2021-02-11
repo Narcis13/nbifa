@@ -2,11 +2,11 @@
   <div class="bg-blue text-white text-center q-pa-md flex flex-center">
     <div>
       <div style="font-size: 30vh">
-        Propuneri
+        Lichidari 
       </div>
 
       <div class="text-h2" style="opacity:.4">
-        Angajamente bugetare
+        In lucru...
       </div>
 
       <q-btn
@@ -26,10 +26,6 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Angajamente',
-
-  setup(p,c){
-    console.log('Setup Angajamente',p,c)
-  }
+  name: 'Lichidari'
 })
 </script>

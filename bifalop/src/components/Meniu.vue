@@ -11,7 +11,7 @@
           >
             <q-card>
               <q-card-section>
-                  <q-btn class="full-width q-ma-xs" color="indigo" no-caps>
+                  <q-btn class="full-width q-ma-xs" color="indigo"  to="a" no-caps>
                     Angajamente<br>Bugetare
                   </q-btn>
                   <q-btn class="full-width q-ma-xs" color="indigo" no-caps>

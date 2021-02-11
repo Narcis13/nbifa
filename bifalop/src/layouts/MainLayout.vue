@@ -33,15 +33,15 @@
     
      <q-card class="col my-card" v-show="global.state.user.autentificat">
       <q-card-section>
-        <div class="text-h6">Popa Aurel</div>
-        <div class="text-subtitle2">Sef compartiment specialitate</div>
-        <div class="text-subtitle2">FARMACIA</div>
+        <div class="text-h6">{{global.state.user.nume}}</div>
+        <div class="text-subtitle2">{{global.state.user.rol}}</div>
+        <div class="text-subtitle2">{{global.state.user.compartiment}}</div>
       </q-card-section>
 
       <q-separator />
 
       <q-card-actions vertical>
-        <q-btn flat @click="global.actions.deconectare">Deconectare!</q-btn>
+        <q-btn to="/" flat @click="global.actions.deconectare">Deconectare!</q-btn>
 
       </q-card-actions>
     </q-card>
@@ -149,7 +149,7 @@ export default defineComponent({
                               color:'positive'
                             }) 
 
-                        global.actions.autentificare(username.value,password.value)
+                        global.actions.autentificare(res.data)
                       }
               ).catch(err=>{
                 username.value=''

@@ -53,7 +53,8 @@
 </template>
 
 <script>
-import { defineComponent , reactive} from 'vue'
+import { defineComponent , reactive,inject} from 'vue'
+import axios from 'axios'
 const columns = [
   {
     name: 'name',
@@ -183,6 +184,17 @@ export default defineComponent({
 
   setup(p,c){
     console.log('Setup Angajamente',p,c)
+    const global=inject('global');
+    const token=global.state.user.token;
+      axios.get(process.env.host+`angajamente/toate/${global.state.user.idcompartiment}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+        res => {
+           console.log('Raspuns la toate angajamentele',res.data);
+    
+        }
+      ).catch(err =>{})
+
+
     return {
       columns,
       state,

@@ -356,7 +356,7 @@ export default {
              "datainceput":this.datainceput,
              "datasfirsit":this.datasfirsit,
             "idgestiune":this.$store.getters.gestiuneCurenta.id,
-            "gestiune":this.$store.getters.gestiuni[0].denumire,
+            "gestiune":this.$store.getters.gestiuneCurenta.denumire,
             categorii,
             locuri,
             stari

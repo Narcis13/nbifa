@@ -273,7 +273,7 @@ export default {
              "idmaterial":this.materialselectat.value,
              "denumirematerial":this.materialselectat.label,
             "idgestiune":this.$store.getters.gestiuneCurenta.id,
-            "gestiune":this.$store.getters.gestiuni[0].denumire,
+            "gestiune":this.$store.getters.gestiuneCurenta.denumire,
             categorii,
             locuri,
             stari

@@ -28,9 +28,9 @@ module.exports.documente_interval = (req,res,next) => {
       let totaldebit=0,totalcredit=0;
       rows.forEach(r=>{
           r.debit=parseFloat(r.debit).toFixed(2);
-          totaldebit+=parseFloat(r.debit);
+          totaldebit+=parseFloat(r.debit).toFixed(2);
           r.credit=parseFloat(r.credit).toFixed(2);
-          totalcredit+=parseFloat(r.credit)
+          totalcredit+=parseFloat(r.credit).toFixed(2)
           r.data=moment(r.data).format('DD/MM/YYYY');
       }) 
        set_date.docs=rows;

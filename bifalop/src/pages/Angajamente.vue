@@ -7,6 +7,8 @@
       dense
       :columns="columns"
       row-key="name"
+      selection="single"
+      v-model:selected="selected"
     >
 
       <template v-slot:header="props">
@@ -25,7 +27,7 @@
       <template v-slot:body="props">
         <q-tr :props="props">
           <q-td auto-width>
-            <q-btn size="sm" color="accent" round dense @click="props.expand = !props.expand" :icon="props.expand ? 'remove' : 'add'" />
+            <q-btn size="sm" color="accent" round dense @click="(props.expand = !props.expand)&&extinde(props)" :icon="props.expand ? 'remove' : 'add'" />
           </q-td>
           <q-td
             v-for="col in props.cols"
@@ -53,7 +55,7 @@
 </template>
 
 <script>
-import { defineComponent , reactive,inject} from 'vue'
+import { defineComponent , reactive,inject,ref} from 'vue'
 import axios from 'axios'
 const columns = [
   {
@@ -196,10 +198,14 @@ export default defineComponent({
 
 
     return {
+       selected: ref([]),
       columns,
       state,
       sterge(){
         state.rows.pop();
+      },
+      extinde(props){
+        console.log('Ma extinde',props)
       }
     }
   }

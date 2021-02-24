@@ -79,13 +79,14 @@ export default {
       modificaUnDocument(id){
           
       },
-      raportToateDocumentele(idgest){
+      raportToateDocumentele(idgest,numegest){
           const token=this.$store.getters.token;
           var that=this;
           axios.post(process.env.host+'rapoarte/documenteinterval',{
               "inceput":this.datainceput,
               "sfirsit":this.datasfirsit,
-              "idgestiune":idgest
+              "idgestiune":idgest,
+              "numegest":numegest
 
            },{responseType:'blob',headers:{"Authorization" : `Bearer ${token}`}}).then(
              res => {

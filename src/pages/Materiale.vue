@@ -63,8 +63,8 @@
                           {{ props.row.user }}
 
                         </q-td>
-                        <q-td key="datacreere" :props="props">
-                          {{ props.row.datacreere }}
+                        <q-td key="codimport" :props="props">
+                          {{ props.row.cod_import }}
 
                          </q-td>
                         <q-td key="datamodificare" :props="props">
@@ -111,7 +111,7 @@ export default {
         { name: 'pretpredefinit', label: 'Pret predefinit', field: 'pretpredefinit', sortable: true ,align: 'right'},
         { name: 'gestiune', label: 'Gestiune', field: 'gestiune' ,align: 'left'},
         { name: 'user', label: 'Utilizator', field: 'user' ,align: 'left'},
-        { name: 'datacreere', label: 'Data creere', field: 'datacreere' ,align: 'left'},
+        { name: 'codimport', label: 'Cod', field: 'cod_import' ,align: 'left'},
         { name: 'datamodificare', label: 'Data modificare', field: 'datamodificare', sortable: true,align: 'left' }
         
       ],

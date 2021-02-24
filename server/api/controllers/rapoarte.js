@@ -16,7 +16,7 @@ module.exports.documente_interval = (req,res,next) => {
 
  (async () => {
 
-  let set_date={start:req.body.inceput, stop:req.body.sfirsit};
+  let set_date={start:req.body.inceput, stop:req.body.sfirsit,numegest:req.body.numegest};
     
   knex.select(['operatiuni.id', 'operatiuni.idtipoperatiuni', 'operatiuni.tipoperatiune','operatiuni.data' ,'operatiuni.nrdoc', 'operatiuni.stare','operatiuni.datacreere','operatiuni.datamodificare'])
   .from('operatiuni')
@@ -28,14 +28,15 @@ module.exports.documente_interval = (req,res,next) => {
       let totaldebit=0,totalcredit=0;
       rows.forEach(r=>{
           r.debit=parseFloat(r.debit).toFixed(2);
-          totaldebit+=parseFloat(r.debit).toFixed(2);
+         // console.log('r.debit',r.debit)
+          totaldebit+=parseFloat(r.debit);
           r.credit=parseFloat(r.credit).toFixed(2);
-          totalcredit+=parseFloat(r.credit).toFixed(2)
+          totalcredit+=parseFloat(r.credit);
           r.data=moment(r.data).format('DD/MM/YYYY');
       }) 
        set_date.docs=rows;
-       set_date.totaldebit=totaldebit;
-       set_date.totalcredit=totalcredit;
+       set_date.totaldebit=parseFloat(totaldebit).toFixed(2);
+       set_date.totalcredit=parseFloat(totalcredit).toFixed(2);
        var ejs_template = fs.readFileSync(path.join(__dirname,'reports','documente_interval.ejs'),'utf8'),
       style=fs.readFileSync(path.join(__dirname,'reports','styles.css'),'utf8')
       html = ejs.render(ejs_template, {set_date,style,config});

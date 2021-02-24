@@ -3,16 +3,17 @@
   <div  class="flex flex-center">
     <q-table
       title="Angajamente"
-      :rows="state.rows"
+      :rows="state.angajamente"
       dense
       :columns="columns"
-      row-key="name"
+      row-key="id"
       selection="single"
-      v-model:selected="selected"
+     v-model:selected="selected"
     >
 
       <template v-slot:header="props">
         <q-tr :props="props">
+           <q-th auto-width />
           <q-th auto-width />
           <q-th
             v-for="col in props.cols"
@@ -27,7 +28,15 @@
       <template v-slot:body="props">
         <q-tr :props="props">
           <q-td auto-width>
-            <q-btn size="sm" color="accent" round dense @click="(props.expand = !props.expand)&&extinde(props)" :icon="props.expand ? 'remove' : 'add'" />
+              <q-checkbox  dense v-model="props.selected" ></q-checkbox>
+           
+          </q-td>
+          <q-td auto-width>
+              
+            <q-btn size="sm" color="accent" round dense @click="(props.expand = !props.expand)&&extinde(props)" :icon="props.expand ? 'remove' : 'add'" >
+             
+            </q-btn>
+             <q-badge  color="red" floating transparent >4</q-badge>
           </q-td>
           <q-td
             v-for="col in props.cols"
@@ -37,154 +46,51 @@
             {{ col.value }}
           </q-td>
         </q-tr>
-        <q-tr v-show="props.expand" :props="props">
+        <q-tr v-if="props.expand" :props="props">
           <q-td colspan="100%">
-            <div class="text-left">This is expand slot for row above: {{ props.row.name }}.</div>
+           <!-- <div class="text-left">This is expand slot for row above: {{ props.row.name }}.</div> -->
+           <AngTimeLine />
           </q-td>
         </q-tr>
       </template>
 
     </q-table>
- <q-btn @click="sterge">
-   POP
- </q-btn>
+
 
   </div>
+    <div class="q-mt-md">
+      Selected: {{ JSON.stringify(selected) }}
+    </div>
 </p-page>
 
 </template>
 
 <script>
 import { defineComponent , reactive,inject,ref} from 'vue'
+import AngTimeLine from 'components/AngTimeLine.vue'
 import axios from 'axios'
+//import AngTimeLine from '../components/AngTimeLine.vue'
 const columns = [
-  {
-    name: 'name',
-    required: true,
-    label: 'Dessert (100g serving)',
-    align: 'left',
-    field: row => row.name,
-    format: val => `${val}`,
-    sortable: true
-  },
-  { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-  { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-  { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-  { name: 'protein', label: 'Protein (g)', field: 'protein' },
-  { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-  { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-  { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
+
+  { name: 'nrdoc', align: 'center', label: 'Nr. doc.', field: 'nrdoc', sortable: true },
+  { name: 'detalii', align: 'left',label: 'Detalii', field: 'detalii', sortable: true },
+ 
 ]
 
 const state = reactive(
   {
-    rows : [
-              {
-                name: 'Frozen Yogurt',
-                calories: 159,
-                fat: 6.0,
-                carbs: 24,
-                protein: 4.0,
-                sodium: 87,
-                calcium: '14%',
-                iron: '1%'
-              },
-              {
-                name: 'Ice cream sandwich',
-                calories: 237,
-                fat: 9.0,
-                carbs: 37,
-                protein: 4.3,
-                sodium: 129,
-                calcium: '8%',
-                iron: '1%'
-              },
-              {
-                name: 'Eclair',
-                calories: 262,
-                fat: 16.0,
-                carbs: 23,
-                protein: 6.0,
-                sodium: 337,
-                calcium: '6%',
-                iron: '7%'
-              },
-              {
-                name: 'Cupcake',
-                calories: 305,
-                fat: 3.7,
-                carbs: 67,
-                protein: 4.3,
-                sodium: 413,
-                calcium: '3%',
-                iron: '8%'
-              },
-              {
-                name: 'Gingerbread',
-                calories: 356,
-                fat: 16.0,
-                carbs: 49,
-                protein: 3.9,
-                sodium: 327,
-                calcium: '7%',
-                iron: '16%'
-              },
-              {
-                name: 'Jelly bean',
-                calories: 375,
-                fat: 0.0,
-                carbs: 94,
-                protein: 0.0,
-                sodium: 50,
-                calcium: '0%',
-                iron: '0%'
-              },
-              {
-                name: 'Lollipop',
-                calories: 392,
-                fat: 0.2,
-                carbs: 98,
-                protein: 0,
-                sodium: 38,
-                calcium: '0%',
-                iron: '2%'
-              },
-              {
-                name: 'Honeycomb',
-                calories: 408,
-                fat: 3.2,
-                carbs: 87,
-                protein: 6.5,
-                sodium: 562,
-                calcium: '0%',
-                iron: '45%'
-              },
-              {
-                name: 'Donut',
-                calories: 452,
-                fat: 25.0,
-                carbs: 51,
-                protein: 4.9,
-                sodium: 326,
-                calcium: '2%',
-                iron: '22%'
-              },
-              {
-                name: 'KitKat',
-                calories: 518,
-                fat: 26.0,
-                carbs: 65,
-                protein: 7,
-                sodium: 54,
-                calcium: '12%',
-                iron: '6%'
-              }
-]})
+    angajamente : []        
+  }
+  )
 
 export default defineComponent({
   name: 'Angajamente',
+  components:{
+      AngTimeLine
 
+  },
   setup(p,c){
+
     console.log('Setup Angajamente',p,c)
     const global=inject('global');
     const token=global.state.user.token;
@@ -192,6 +98,24 @@ export default defineComponent({
 
         res => {
            console.log('Raspuns la toate angajamentele',res.data);
+           res.data.angajamente[0].map(a=>{
+             state.angajamente.push({
+               artbug:a.artbug,
+               codCap:a.codCap,
+               compartiment:a.compartiment,
+               dataang:a.dataang,
+               detalii:a.detalii,
+               idAntet:a.idAntet,
+               id:a.id,
+               nrdoc:a.nrdoc,
+               idcompartiment:a.idcompartiment,
+               nr:a.nr,
+               numecap:a.numecap,
+               stare:a.stare,
+               suma:a.suma
+
+             })
+           })
     
         }
       ).catch(err =>{})

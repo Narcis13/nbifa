@@ -921,7 +921,7 @@ export default {
       const token=this.$store.getters.token;
   
          if(this.documenteselectate.length===0){
-              this.$refs.barainterval.raportToateDocumentele(this.$store.getters.gestiuneCurenta.id);
+              this.$refs.barainterval.raportToateDocumentele(this.$store.getters.gestiuneCurenta.id,this.$store.getters.gestiuneCurenta.denumire);
          }
          else
          {

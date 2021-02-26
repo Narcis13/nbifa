@@ -8,7 +8,8 @@
       :columns="columns"
       row-key="id"
       selection="single"
-     v-model:selected="selected"
+      :pagination="initialPagination"
+      v-model:selected="selected"
     >
 
       <template v-slot:header="props">
@@ -33,10 +34,10 @@
           </q-td>
           <q-td auto-width>
               
-            <q-btn size="sm" color="accent" round dense @click="(props.expand = !props.expand)&&extinde(props)" :icon="props.expand ? 'remove' : 'add'" >
+            <q-btn v-if="props.row.nr>1" size="sm" color="accent" round dense @click="(props.expand = !props.expand)&&extinde(props)" :icon="props.expand ? 'remove' : 'add'" >
              
             </q-btn>
-             <q-badge  color="red" floating transparent >4</q-badge>
+             <q-badge v-if="props.row.nr>1" color="red" floating transparent >{{props.row.nr}}</q-badge>
           </q-td>
           <q-td
             v-for="col in props.cols"
@@ -69,13 +70,26 @@
 import { defineComponent , reactive,inject,ref} from 'vue'
 import AngTimeLine from 'components/AngTimeLine.vue'
 import axios from 'axios'
+import { date } from 'quasar'
 //import AngTimeLine from '../components/AngTimeLine.vue'
 const columns = [
 
   { name: 'nrdoc', align: 'center', label: 'Nr. doc.', field: 'nrdoc', sortable: true },
+  { name: 'dataang', align: 'center', label: 'Data', field: 'dataang', sortable: true },
   { name: 'detalii', align: 'left',label: 'Detalii', field: 'detalii', sortable: true },
+  { name: 'suma', align: 'right',label: 'Valoare', field: 'suma', sortable: true },
+  { name: 'numecap', align: 'left',label: 'Capitol bug.', field: 'numecap', sortable: true },
+  { name: 'artbug', align: 'center',label: 'Art. bug.', field: 'artbug', sortable: true },
  
 ]
+
+const  initialPagination = {
+       // sortBy: 'desc',
+       // descending: false,
+        page: 1,
+        rowsPerPage: 15
+
+      }
 
 const state = reactive(
   {
@@ -103,7 +117,7 @@ export default defineComponent({
                artbug:a.artbug,
                codCap:a.codCap,
                compartiment:a.compartiment,
-               dataang:a.dataang,
+               dataang:date.formatDate(a.dataang, 'DD/MM/YYYY'),//a.dataang,
                detalii:a.detalii,
                idAntet:a.idAntet,
                id:a.id,
@@ -122,7 +136,8 @@ export default defineComponent({
 
 
     return {
-       selected: ref([]),
+      initialPagination,
+      selected: ref([]),
       columns,
       state,
       sterge(){

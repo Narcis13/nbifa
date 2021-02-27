@@ -1,6 +1,6 @@
 <template>
 <p-page padding>
-  <div  class="flex flex-center">
+  <div  class="q-mt-sm flex flex-center">
     <q-table
       title="Angajamente"
       :rows="state.angajamente"
@@ -44,7 +44,8 @@
             :key="col.name"
             :props="props"
           >
-            {{ col.value }}
+          <q-checkbox  v-if="col.name=='viza'"  v-model="props.row.viza" disable dense  ></q-checkbox>
+           <div v-else>{{ col.value }}</div> 
           </q-td>
         </q-tr>
         <q-tr v-if="props.expand" :props="props">
@@ -62,6 +63,9 @@
     <div class="q-mt-md">
       Selected: {{ JSON.stringify(selected) }}
     </div>
+        <q-page-sticky  position="bottom-right" :offset="[24, 24]">
+            <q-btn fab   icon="add" color="accent"  />
+    </q-page-sticky>
 </p-page>
 
 </template>
@@ -80,6 +84,7 @@ const columns = [
   { name: 'suma', align: 'right',label: 'Valoare', field: 'suma', sortable: true },
   { name: 'numecap', align: 'left',label: 'Capitol bug.', field: 'numecap', sortable: true },
   { name: 'artbug', align: 'center',label: 'Art. bug.', field: 'artbug', sortable: true },
+  { name: 'viza', align: 'center',label: 'Viza CFPP', field: 'viza', sortable: true }
  
 ]
 
@@ -112,6 +117,7 @@ export default defineComponent({
 
         res => {
            console.log('Raspuns la toate angajamentele',res.data);
+           state.angajamente=[];
            res.data.angajamente[0].map(a=>{
              state.angajamente.push({
                artbug:a.artbug,
@@ -121,6 +127,7 @@ export default defineComponent({
                detalii:a.detalii,
                idAntet:a.idAntet,
                id:a.id,
+               viza:a.viza==1?true:false,
                nrdoc:a.nrdoc,
                idcompartiment:a.idcompartiment,
                nr:a.nr,

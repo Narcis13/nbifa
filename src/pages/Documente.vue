@@ -785,6 +785,7 @@ export default {
                label:e.denumire,
                value:e.id,
                um:e.um,
+               cod:e.cod_import,
                pretpredefinit:e.pretpredefinit
              };
 

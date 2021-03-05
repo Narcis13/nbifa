@@ -3,6 +3,7 @@
   <div  class="q-mt-sm flex flex-center">
     <q-table
       title="Angajamente"
+      :filter="filter"
       :rows="state.angajamente"
       dense
       :columns="columns"
@@ -11,6 +12,33 @@
       :pagination="initialPagination"
       v-model:selected="selected"
     >
+
+        <template v-slot:top>
+            <div class="q-pa-sm text-h6">Angajamente</div>
+            <div class="row q-gutter-sm q-pa-sm q-ml-xl">
+              <q-select class="col" style="min-width:200px;" filled v-model="perspectiva" :options="perspective" label="Perspectiva" stack-label dence options-dense />
+               <div class="flex" style="min-width:200px;max-height:100px;">
+                   <q-btn class="q-ma-sm" :disable="selected.length==0" round color="red" icon="delete_forever" >
+                      <q-tooltip class="bg-accent">Sterge</q-tooltip>
+                   </q-btn>
+                  <q-btn class="q-ma-sm" round color="secondary" icon="print" >
+                        <q-tooltip class="bg-accent">Printeaza</q-tooltip>
+                   </q-btn>
+                   <q-btn class="q-ma-sm" round color="amber" glossy text-color="black" icon="file_download" >
+                        <q-tooltip class="bg-accent">Export CSV</q-tooltip>
+                   </q-btn>
+               </div>
+
+            </div>
+
+            <q-space />
+            <q-input borderless dense debounce="300" color="primary" v-model="filter">
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+        </template>
+
 
       <template v-slot:header="props">
         <q-tr :props="props">
@@ -60,11 +88,31 @@
 
 
   </div>
-    <div class="q-mt-md">
-      Selected: {{ JSON.stringify(selected) }}
-    </div>
+  
+   <q-dialog v-model="adaug_angajament" persistent transition-show="scale" transition-hide="scale">
+           <q-card style="width: 320px; max-width: 80vw;">
+               <q-card-section>
+                          <div class="text-h6">{{selected.length>0?'Suplimentare angajament':'Angajament nou'}}</div><!--   sau suplimentare angajament -->
+               </q-card-section>
+
+               <q-card-actions align="right" class="bg-white text-teal">
+                          <q-btn flat label="Abandon" v-close-popup />
+                          <q-space />
+                          <q-btn flat label="ADAUGA"  />
+               </q-card-actions>
+           </q-card>
+
+    </q-dialog>
+
         <q-page-sticky  position="bottom-right" :offset="[24, 24]">
-            <q-btn fab   icon="add" color="accent"  />
+            <q-btn fab   icon="add" color="accent"  @click="adaug_angajament=true">
+              <q-tooltip anchor="top start" self="center right" class="bg-accent">{{selected.length>0?'Suplimentare angajament':'Angajament nou'}}</q-tooltip>
+            </q-btn>
+    </q-page-sticky>
+    <q-page-sticky  position="bottom-left" :offset="[24, 24]">
+            <q-btn fab   icon="compress" color="red"  >
+              <q-tooltip anchor="top right" self="center left" class="bg-accent">Diminueaza angajament</q-tooltip>
+            </q-btn>
     </q-page-sticky>
 </p-page>
 
@@ -145,8 +193,14 @@ export default defineComponent({
     return {
       initialPagination,
       selected: ref([]),
+      adaug_angajament:ref(false),
+      filter:ref(''),
       columns,
       state,
+      perspectiva: ref( {label:'Angajamente an curent',value:1}),
+      perspective: [
+       {label:'Angajamente an curent',value:1},  {label:'Angajamente alta perioada',value:2}
+      ],
       sterge(){
         state.rows.pop();
       },

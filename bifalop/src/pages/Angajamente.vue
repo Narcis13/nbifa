@@ -95,6 +95,15 @@
                           <div class="text-h6">{{selected.length>0?'Suplimentare angajament':'Angajament nou'}}</div><!--   sau suplimentare angajament -->
                </q-card-section>
 
+                <q-card-section>
+                    <q-select outlined v-model="model"  label="Categoria" >
+                              <template v-slot:prepend>
+                                   <q-icon name="category" />
+                              </template>
+                    </q-select>
+
+                </q-card-section>
+
                <q-card-actions align="right" class="bg-white text-teal">
                           <q-btn flat label="Abandon" v-close-popup />
                           <q-space />
@@ -110,7 +119,7 @@
             </q-btn>
     </q-page-sticky>
     <q-page-sticky  position="bottom-left" :offset="[24, 24]">
-            <q-btn fab   icon="compress" color="red"  >
+            <q-btn :disable="selected.length==0" fab icon="compress" color="red"  >
               <q-tooltip anchor="top right" self="center left" class="bg-accent">Diminueaza angajament</q-tooltip>
             </q-btn>
     </q-page-sticky>

@@ -90,17 +90,65 @@
   </div>
   
    <q-dialog v-model="adaug_angajament" persistent transition-show="scale" transition-hide="scale">
-           <q-card style="width: 320px; max-width: 80vw;">
+           <q-card style="width: 350px; max-width: 80vw;">
                <q-card-section>
                           <div class="text-h6">{{selected.length>0?'Suplimentare angajament':'Angajament nou'}}</div><!--   sau suplimentare angajament -->
                </q-card-section>
 
                 <q-card-section>
-                    <q-select outlined v-model="model"  label="Categoria" >
+                    <q-select dense outlined v-model="model"  label="Categoria" >
                               <template v-slot:prepend>
                                    <q-icon name="category" />
                               </template>
                     </q-select>
+
+                    <q-card dark bordered class="q-mt-md bg-grey-9 my-card">
+                      <q-card-section>
+                        <div class="text-h6">Venituri CASAOPSNAJ</div>
+                        <div class="text-subtitle2">Art. bug. 20.01.01</div>
+                      </q-card-section>
+
+                      <q-separator dark inset />
+
+                      <q-card-section>
+                        <div class="row">
+                          <div class="col-7">Credite bug. aprobate </div>
+                          <div class="col-5 text-right">1.000.000 lei</div>
+                        </div>
+                        <div class="row">
+                          <div class="col-7">Credite bug. angajate </div>
+                          <div class="col-5 text-right">550.000 lei</div>
+                        </div>
+                        <div class="row">
+                          <div class="col-7">Credite bug. disponibile </div>
+                          <div class="col-5 text-right">450.000 lei</div>
+                        </div>
+                      </q-card-section>
+                    </q-card>
+
+                        <q-input dense outlined v-model="date" mask="date" :rules="['date']">
+                        <template v-slot:append>
+                          <q-icon name="event" class="cursor-pointer">
+                            <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                              <q-date v-model="date">
+                                <div class="row items-center justify-end">
+                                  <q-btn v-close-popup label="Close" color="primary" flat />
+                                </div>
+                              </q-date>
+                            </q-popup-proxy>
+                          </q-icon>
+                        </template>
+                      </q-input>
+
+                        <q-input dense autogrow outlined label="Detalii" />
+
+                        <q-input
+                          v-model.number="model"
+                          type="number"
+                          outlined
+                          dense
+                          label="Suma de angajat"
+                        />
 
                 </q-card-section>
 
@@ -220,3 +268,8 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="sass" scoped>
+.my-card
+  width: 100%
+  max-width: 320px
+</style>

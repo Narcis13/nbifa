@@ -102,7 +102,7 @@
                               </template>
                     </q-select>
 
-                    <q-card dark bordered class="q-mt-md bg-grey-9 my-card">
+                    <q-card dark bordered class="q-mt-sm bg-grey-9 my-card">
                       <q-card-section>
                         <div class="text-h6">Venituri CASAOPSNAJ</div>
                         <div class="text-subtitle2">Art. bug. 20.01.01</div>
@@ -126,7 +126,7 @@
                       </q-card-section>
                     </q-card>
 
-                        <q-input dense outlined v-model="date" mask="date" :rules="['date']">
+                        <q-input class="q-mt-sm" dense outlined v-model="date" mask="date" :rules="['date']">
                         <template v-slot:append>
                           <q-icon name="event" class="cursor-pointer">
                             <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
@@ -143,6 +143,7 @@
                         <q-input dense autogrow outlined label="Detalii" />
 
                         <q-input
+                        class="q-mt-sm"
                           v-model.number="model"
                           type="number"
                           outlined
@@ -271,5 +272,9 @@ export default defineComponent({
 <style lang="sass" scoped>
 .my-card
   width: 100%
-  max-width: 320px
+  max-width: 334px
+  margin:auto
+.q-card__section 
+    padding: 8px
+
 </style>

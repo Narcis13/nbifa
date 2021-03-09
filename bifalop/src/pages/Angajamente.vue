@@ -1,5 +1,5 @@
 <template>
-<p-page padding>
+<q-page padding>
   <div  class="q-mt-sm flex flex-center">
     <q-table
       title="Angajamente"
@@ -89,14 +89,14 @@
 
   </div>
   
-   <q-dialog v-model="adaug_angajament" persistent transition-show="scale" transition-hide="scale">
+   <q-dialog v-model="adaug_angajament" persistent >
            <q-card style="width: 350px; max-width: 80vw;">
                <q-card-section>
                           <div class="text-h6">{{selected.length>0?'Suplimentare angajament':'Angajament nou'}}</div><!--   sau suplimentare angajament -->
                </q-card-section>
 
                 <q-card-section>
-                    <q-select dense outlined v-model="categorieSelectata" :options="state.categorii" label="Categoria" @input="categorieAleasa">
+                    <q-select dense outlined v-model="categorieSelectata" :options="state.categorii" label="Categoria" @popup-hide="categorieAleasa()">
                               <template v-slot:prepend>
                                    <q-icon name="category" />
                               </template>
@@ -107,8 +107,8 @@
                                               >
 
                                                 <q-item-section>
-                                                  <q-item-label >{{ scope.opt.label }} artbug</q-item-label>
-                                                  <q-item-label >numecap</q-item-label>
+                                                  <q-item-label >{{ scope.opt.label }} - {{ scope.opt.artbug }}</q-item-label>
+                                                  <q-item-label >{{scope.opt.numecap}}</q-item-label>
                                                   
                                                 </q-item-section>
                                               </q-item>
@@ -158,7 +158,7 @@
 
                         <q-input
                         class="q-mt-sm"
-                          v-model.number="model"
+                          v-model.number="suma"
                           type="number"
                           outlined
                           dense
@@ -186,7 +186,7 @@
               <q-tooltip anchor="top right" self="center left" class="bg-accent">Diminueaza angajament</q-tooltip>
             </q-btn>
     </q-page-sticky>
-</p-page>
+</q-page>
 
 </template>
 
@@ -272,7 +272,8 @@ export default defineComponent({
                         state.categorii.push({
                           value:c.id,
                           label:c.denumire,
-                          categorie:c
+                          artbug:c.artbug,
+                          numecap:c.numecap
                         })
 
            })
@@ -280,15 +281,17 @@ export default defineComponent({
         }
       ).catch(err =>{})
 
-
+     let categorieSelectata = ref({label:'',value:0});
     return {
       initialPagination,
       selected: ref([]),
       adaug_angajament:ref(false),
       filter:ref(''),
+      suma:ref(0),
+      date:ref(Date.now()),
       columns,
       state,
-      categorieSelectata:ref({label:'',value:0}),
+      categorieSelectata,
       perspectiva: ref( {label:'Angajamente an curent',value:1}),
       perspective: [
        {label:'Angajamente an curent',value:1},  {label:'Angajamente alta perioada',value:2}
@@ -300,7 +303,7 @@ export default defineComponent({
         console.log('Ma extinde',props)
       },
       categorieAleasa(c){
-        console.log('Am selectat categoria',c,this.categorieSelectata)
+        console.log('Am selectat categoria',categorieSelectata.value.label)
       }
 
     }

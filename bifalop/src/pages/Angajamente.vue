@@ -96,10 +96,24 @@
                </q-card-section>
 
                 <q-card-section>
-                    <q-select dense outlined v-model="model"  label="Categoria" >
+                    <q-select dense outlined v-model="categorieSelectata" :options="state.categorii" label="Categoria" @input="categorieAleasa">
                               <template v-slot:prepend>
                                    <q-icon name="category" />
                               </template>
+                                  <template v-slot:option="scope">
+                                              <q-item
+                                                v-bind="scope.itemProps"
+                                                v-on="scope.itemEvents"
+                                              >
+
+                                                <q-item-section>
+                                                  <q-item-label >{{ scope.opt.label }} artbug</q-item-label>
+                                                  <q-item-label >numecap</q-item-label>
+                                                  
+                                                </q-item-section>
+                                              </q-item>
+                                  </template>
+
                     </q-select>
 
                     <q-card dark bordered class="q-mt-sm bg-grey-9 my-card">
@@ -204,7 +218,8 @@ const  initialPagination = {
 
 const state = reactive(
   {
-    angajamente : []        
+    angajamente : [],
+    categorii:[]        
   }
   )
 
@@ -247,6 +262,24 @@ export default defineComponent({
         }
       ).catch(err =>{})
 
+      axios.get(process.env.host+`angajamente/catbugetare/${global.state.user.idcompartiment}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+        res => {
+           console.log('Raspuns la categoriile compartimentului',res.data);
+           state.categorii=[];
+           res.data.categorii[0].map(c=>{
+
+                        state.categorii.push({
+                          value:c.id,
+                          label:c.denumire,
+                          categorie:c
+                        })
+
+           })
+    
+        }
+      ).catch(err =>{})
+
 
     return {
       initialPagination,
@@ -255,6 +288,7 @@ export default defineComponent({
       filter:ref(''),
       columns,
       state,
+      categorieSelectata:ref({label:'',value:0}),
       perspectiva: ref( {label:'Angajamente an curent',value:1}),
       perspective: [
        {label:'Angajamente an curent',value:1},  {label:'Angajamente alta perioada',value:2}
@@ -264,7 +298,11 @@ export default defineComponent({
       },
       extinde(props){
         console.log('Ma extinde',props)
+      },
+      categorieAleasa(c){
+        console.log('Am selectat categoria',c,this.categorieSelectata)
       }
+
     }
   }
 })

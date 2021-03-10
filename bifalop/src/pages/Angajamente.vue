@@ -118,8 +118,8 @@
 
                     <q-card dark bordered class="q-mt-sm bg-grey-9 my-card">
                       <q-card-section>
-                        <div class="text-h6">Venituri CASAOPSNAJ</div>
-                        <div class="text-subtitle2">Art. bug. 20.01.01</div>
+                        <div class="text-h6">{{numesursa}}</div>
+                        <div class="text-subtitle2">Art. bug. {{articolbugetar}}</div>
                       </q-card-section>
 
                       <q-separator dark inset />
@@ -127,15 +127,15 @@
                       <q-card-section>
                         <div class="row">
                           <div class="col-7">Credite bug. aprobate </div>
-                          <div class="col-5 text-right">1.000.000 lei</div>
+                          <div class="col-5 text-right">{{credite_aprobate}} lei</div>
                         </div>
                         <div class="row">
                           <div class="col-7">Credite bug. angajate </div>
-                          <div class="col-5 text-right">550.000 lei</div>
+                          <div class="col-5 text-right">{{credite_angajate}} lei</div>
                         </div>
                         <div class="row">
                           <div class="col-7">Credite bug. disponibile </div>
-                          <div class="col-5 text-right">450.000 lei</div>
+                          <div class="col-5 text-right"><strong>{{credite_disponibile}} lei</strong></div>
                         </div>
                       </q-card-section>
                     </q-card>
@@ -146,7 +146,7 @@
                             <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
                               <q-date v-model="date">
                                 <div class="row items-center justify-end">
-                                  <q-btn v-close-popup label="Close" color="primary" flat />
+                                  <q-btn v-close-popup label="Inchide" color="primary" flat />
                                 </div>
                               </q-date>
                             </q-popup-proxy>
@@ -273,7 +273,10 @@ export default defineComponent({
                           value:c.id,
                           label:c.denumire,
                           artbug:c.artbug,
-                          numecap:c.numecap
+                          numecap:c.numecap,
+                          crediteangajate:c.crediteangajate,
+                          crediteaprobate:c.crediteaprobate,
+                          disponibil:c.disponibil
                         })
 
            })
@@ -282,14 +285,24 @@ export default defineComponent({
       ).catch(err =>{})
 
      let categorieSelectata = ref({label:'',value:0});
+     let numesursa=ref('Sursa finantare: ? ')
+     let articolbugetar=ref(' - ?')
+     let credite_aprobate=ref(0)
+     let credite_angajate=ref(0)
+     let credite_disponibile=ref(0)
     return {
       initialPagination,
       selected: ref([]),
       adaug_angajament:ref(false),
       filter:ref(''),
       suma:ref(0),
-      date:ref(Date.now()),
+      date:ref(date.formatDate(Date.now(), 'YYYY/MM/DD')),
       columns,
+      numesursa,
+      credite_aprobate,
+      credite_angajate,
+      credite_disponibile,
+      articolbugetar,
       state,
       categorieSelectata,
       perspectiva: ref( {label:'Angajamente an curent',value:1}),
@@ -303,7 +316,13 @@ export default defineComponent({
         console.log('Ma extinde',props)
       },
       categorieAleasa(c){
-        console.log('Am selectat categoria',categorieSelectata.value.label)
+        console.log('Am selectat categoria',categorieSelectata.value)
+        articolbugetar.value=categorieSelectata.value.artbug;
+        numesursa.value=categorieSelectata.value.numecap;
+        credite_aprobate.value=categorieSelectata.value.crediteaprobate
+        credite_angajate.value=categorieSelectata.value.crediteangajate
+        credite_disponibile.value=categorieSelectata.value.disponibil
+
       }
 
     }

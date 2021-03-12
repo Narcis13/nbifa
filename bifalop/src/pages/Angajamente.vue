@@ -140,11 +140,11 @@
                       </q-card-section>
                     </q-card>
 
-                        <q-input class="q-mt-sm" dense outlined v-model="date" mask="date" :rules="['date']">
+                        <q-input :disable="!eCategoriaSelectata" class="q-mt-sm" dense outlined v-model="dataAngajament" mask="date" :rules="['date']">
                         <template v-slot:append>
                           <q-icon name="event" class="cursor-pointer">
                             <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                              <q-date v-model="date">
+                              <q-date v-model="dataAngajament" :options="restrictieData">
                                 <div class="row items-center justify-end">
                                   <q-btn v-close-popup label="Inchide" color="primary" flat />
                                 </div>
@@ -154,10 +154,12 @@
                         </template>
                       </q-input>
 
-                        <q-input dense autogrow outlined label="Detalii" />
+                        <q-input :disable="!eCategoriaSelectata" dense v-model="detalii" autogrow outlined label="Detalii" />
 
                         <q-input
                         class="q-mt-sm"
+                         :rules="[ val => val>0 || 'Valori mai mari ca 0, va rog!']"
+                        :disable="!eCategoriaSelectata"
                           v-model.number="suma"
                           type="number"
                           outlined
@@ -168,9 +170,9 @@
                 </q-card-section>
 
                <q-card-actions align="right" class="bg-white text-teal">
-                          <q-btn flat label="Abandon" v-close-popup />
+                          <q-btn @click="resetAngNou" flat label="Abandon" v-close-popup />
                           <q-space />
-                          <q-btn flat label="ADAUGA"  />
+                          <q-btn @click="angNou" :disable="!dateValide" flat label="ADAUGA"  />
                </q-card-actions>
            </q-card>
 
@@ -191,7 +193,7 @@
 </template>
 
 <script>
-import { defineComponent , reactive,inject,ref} from 'vue'
+import { defineComponent , reactive,inject,ref,computed} from 'vue'
 import AngTimeLine from 'components/AngTimeLine.vue'
 import axios from 'axios'
 import { date } from 'quasar'
@@ -290,20 +292,52 @@ export default defineComponent({
      let credite_aprobate=ref(0)
      let credite_angajate=ref(0)
      let credite_disponibile=ref(0)
+     let suma=ref(parseFloat('1').toFixed(2));
+     let detalii=ref('');
+     let dataAngajament=ref(date.formatDate(Date.now(), 'YYYY/MM/DD'))
+     let adaug_angajament=ref(false)
+
+     //computed properties
+     let eCategoriaSelectata = computed(()=>{
+       return credite_aprobate.value>0
+     })
+
+     let dateValide = computed(()=>{
+       return credite_aprobate.value>0&&suma.value>0&&detalii.value.length>5
+     })
+
+     //private methods
+     function resetAngNou(){
+       console.log('Reset ang nou')
+       categorieSelectata.value = {label:'',value:0};
+       numesursa.value='Sursa finantare: ? '
+       articolbugetar.value=' - ?'
+       credite_aprobate.value=0
+       credite_angajate.value=0
+       credite_disponibile.value=0
+       suma.value=parseFloat('1').toFixed(2);
+       detalii.value='';
+       dataAngajament.value=date.formatDate(Date.now(), 'YYYY/MM/DD')
+     }
+
     return {
       initialPagination,
       selected: ref([]),
-      adaug_angajament:ref(false),
+      adaug_angajament,
       filter:ref(''),
-      suma:ref(0),
-      date:ref(date.formatDate(Date.now(), 'YYYY/MM/DD')),
+      detalii,
+      suma,
+      dataAngajament,
       columns,
       numesursa,
+      eCategoriaSelectata,
+      dateValide,
       credite_aprobate,
       credite_angajate,
       credite_disponibile,
       articolbugetar,
       state,
+      resetAngNou,
       categorieSelectata,
       perspectiva: ref( {label:'Angajamente an curent',value:1}),
       perspective: [
@@ -315,6 +349,9 @@ export default defineComponent({
       extinde(props){
         console.log('Ma extinde',props)
       },
+      restrictieData (date) {
+        return date >= '2021/03/01' 
+      },
       categorieAleasa(c){
         console.log('Am selectat categoria',categorieSelectata.value)
         articolbugetar.value=categorieSelectata.value.artbug;
@@ -323,6 +360,22 @@ export default defineComponent({
         credite_angajate.value=categorieSelectata.value.crediteangajate
         credite_disponibile.value=categorieSelectata.value.disponibil
 
+      },
+      angNou(){
+        resetAngNou();
+        adaug_angajament.value=false;
+        /*
+        dataprop
+        tip
+        detalii
+        dataang
+        compID
+        viza
+        aprob
+        suma
+        stare
+        idClient
+        */ 
       }
 
     }

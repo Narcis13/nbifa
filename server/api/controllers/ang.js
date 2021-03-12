@@ -49,3 +49,9 @@ knex.raw(sql,[req.params.idcomp]).then(
 ).catch(err =>{console.log(err)})
 
  }
+
+ module.exports.angajament_nou = (res,req,next)=>{
+   console.log('Controller angajamente actiunea angnou..')
+
+   
+ }

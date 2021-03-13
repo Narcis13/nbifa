@@ -50,8 +50,36 @@ knex.raw(sql,[req.params.idcomp]).then(
 
  }
 
- module.exports.angajament_nou = (res,req,next)=>{
-   console.log('Controller angajamente actiunea angnou..')
+ module.exports.angajament_nou = (req,res,next)=>{
+   console.log('Controller angajamente actiunea angnou..',req.body)
+   let sql='SELECT nrdoc FROM anteteangajamente ORDER BY id DESC LIMIT 1';
+   let nrdoc=1;
+   knex.raw(sql,[]).then(
+    r=>{
+     // console.log("Raspuns de la ang nrdoc",r[0][0].nrdoc)
+     nrdoc=parseInt(r[0][0].nrdoc)+1
+    }
+  ).catch(err =>{console.log(err)})
 
-   
+   knex('anteteangajamente').insert({
+
+    dataprop:req.body.dataprop,
+    tip:1,
+    detalii:req.body.detalii,
+    dataang:req.body.dataang,
+    compID:req.body.compID,
+    viza:0,
+    aprob:0,
+    suma:req.body.suma,
+    stare:'activ',
+    idClient:8,
+    nrdoc
+  
+}).then((d)=>{
+  return res.status(200).json({
+    message: "Antet angajament adaugat",
+    id:d[0]
+
+  })
+}).catch(err =>{ console.log(err)})
  }

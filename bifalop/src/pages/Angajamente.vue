@@ -362,20 +362,39 @@ export default defineComponent({
 
       },
       angNou(){
-        resetAngNou();
+        console.log('Adaug angajament',global.state.user.idcompartiment,token)
+        
         adaug_angajament.value=false;
         /*
-        dataprop
-        tip
-        detalii
-        dataang
-        compID
-        viza
-        aprob
-        suma
-        stare
-        idClient
+        dataprop:dataAngajament,
+        tip:1,
+        detalii,
+        dataang:dataAngajament,
+        compID:global.state.user.idcompartiment,
+        viza:0,
+        aprob:0,
+        suma,
+        stare:'ACTIV',
+        idClient:8
         */ 
+
+          axios.post(process.env.host+'angajamente/angnou',{
+                    dataprop:dataAngajament.value,
+                    tip:1,
+                    detalii:detalii.value,
+                    dataang:dataAngajament.value,
+                    compID:global.state.user.idcompartiment,
+                    viza:0,
+                    aprob:0,
+                    suma:suma.value,
+                    stare:'ACTIV',
+                    idClient:8
+                    },{headers:{"Authorization" : `Bearer ${token}`}}).then(res =>{
+                       resetAngNou();
+                       console.log('Am salvat antet angajament',res.data)
+                    }).catch(err=>{
+                                    
+                    })
       }
 
     }

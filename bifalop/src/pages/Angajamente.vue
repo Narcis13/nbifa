@@ -32,7 +32,7 @@
             </div>
 
             <q-space />
-            <q-input borderless dense debounce="300" color="primary" v-model="filter">
+            <q-input outlined dense debounce="300" color="primary" v-model="filter">
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
@@ -274,6 +274,7 @@ export default defineComponent({
                         state.categorii.push({
                           value:c.id,
                           label:c.denumire,
+                          codCap:c.codCap,
                           artbug:c.artbug,
                           numecap:c.numecap,
                           crediteangajate:c.crediteangajate,
@@ -365,18 +366,6 @@ export default defineComponent({
         console.log('Adaug angajament',global.state.user.idcompartiment,token)
         
         adaug_angajament.value=false;
-        /*
-        dataprop:dataAngajament,
-        tip:1,
-        detalii,
-        dataang:dataAngajament,
-        compID:global.state.user.idcompartiment,
-        viza:0,
-        aprob:0,
-        suma,
-        stare:'ACTIV',
-        idClient:8
-        */ 
 
           axios.post(process.env.host+'angajamente/angnou',{
                     dataprop:dataAngajament.value,
@@ -390,8 +379,24 @@ export default defineComponent({
                     stare:'ACTIV',
                     idClient:8
                     },{headers:{"Authorization" : `Bearer ${token}`}}).then(res =>{
-                       resetAngNou();
-                       console.log('Am salvat antet angajament',res.data)
+                    
+
+                       let date_angajament={idAntet:res.data.id,
+                       idcateg:categorieSelectata.value.value,
+                       codCap:categorieSelectata.value.codCap,
+                       numecap:categorieSelectata.value.numecap,
+                       artbug:categorieSelectata.value.artbug,
+                       ca:credite_aprobate.value,
+                       cang:credite_angajate.value,
+                       disp:credite_disponibile.value,
+                       suma:suma.value,
+                       restdisp:credite_disponibile.value-suma.value,
+                       stare:'activ',
+                       idClient:8,
+                       data_ang:dataAngajament.value}
+                       console.log('Am salvat antet angajament',res.data.id,date_angajament)
+
+                                                 resetAngNou();
                     }).catch(err=>{
                                     
                     })

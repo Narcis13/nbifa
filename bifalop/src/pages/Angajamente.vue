@@ -89,10 +89,10 @@
 
   </div>
   
-   <q-dialog v-model="adaug_angajament" persistent >
+   <q-dialog @show="showAngNou" v-model="adaug_angajament" persistent >
            <q-card style="width: 350px; max-width: 80vw;">
                <q-card-section>
-                          <div class="text-h6">{{selected.length>0?'Suplimentare angajament':'Angajament nou'}}</div><!--   sau suplimentare angajament -->
+                          <div class="text-h6">{{selected.length>0?'Suplimentare angajament '+selected[0].nrdoc:'Angajament nou'}}</div><!--   sau suplimentare angajament -->
                </q-card-section>
 
                 <q-card-section>
@@ -236,6 +236,7 @@ export default defineComponent({
     console.log('Setup Angajamente',p,c)
     const global=inject('global');
     const token=global.state.user.token;
+    function toateAngajamentele(){
       axios.get(process.env.host+`angajamente/toate/${global.state.user.idcompartiment}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
         res => {
@@ -263,6 +264,9 @@ export default defineComponent({
     
         }
       ).catch(err =>{})
+      }
+
+      toateAngajamentele();
 
       axios.get(process.env.host+`angajamente/catbugetare/${global.state.user.idcompartiment}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
@@ -297,7 +301,7 @@ export default defineComponent({
      let detalii=ref('');
      let dataAngajament=ref(date.formatDate(Date.now(), 'YYYY/MM/DD'))
      let adaug_angajament=ref(false)
-
+     let selected= ref([])
      //computed properties
      let eCategoriaSelectata = computed(()=>{
        return credite_aprobate.value>0
@@ -323,7 +327,7 @@ export default defineComponent({
 
     return {
       initialPagination,
-      selected: ref([]),
+      selected,
       adaug_angajament,
       filter:ref(''),
       detalii,
@@ -394,12 +398,24 @@ export default defineComponent({
                        stare:'activ',
                        idClient:8,
                        data_ang:dataAngajament.value}
-                       console.log('Am salvat antet angajament',res.data.id,date_angajament)
+                       
 
-                                                 resetAngNou();
+                        axios.post(process.env.host+'angajamente/angnoudetalii',date_angajament,{headers:{"Authorization" : `Bearer ${token}`}}).then(res =>{
+
+                        console.log('Am salvat antet angajament',date_angajament)
+                          resetAngNou();
+                          toateAngajamentele();
+
+                                }).catch(err=>{
+                                                            
+                                })
+                                               
                     }).catch(err=>{
                                     
                     })
+      },
+      showAngNou(){
+        console.log('Show ang nou',selected.value[0])
       }
 
     }

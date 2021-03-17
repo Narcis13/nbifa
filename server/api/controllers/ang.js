@@ -84,3 +84,32 @@ knex.raw(sql,[req.params.idcomp]).then(
 
 
  }
+
+ module.exports.angajament_nou_detalii = (req,res,next)=>{
+
+let ang={
+                       idAntet:req.body.idAntet,
+                       idcateg:req.body.idcateg,
+                       codCap:req.body.codCap,
+                       numecap:req.body.numecap,
+                       artbug:req.body.artbug,
+                       ca:req.body.ca,
+                       cang:req.body.cang,
+                       disp:req.body.disp,
+                       suma:req.body.suma,
+                       restdisp:req.body.restdisp,
+                       stare:'activ',
+                       idClient:8,
+                       data_ang:req.body.data_ang
+}
+
+                        knex('angajamente').insert(ang).then((d)=>{
+                        return res.status(200).json({
+                          message: "Angajament adaugat",
+                          id:d[0]
+
+                        })
+                        }).catch(err =>{ console.log(err)})
+
+
+ }

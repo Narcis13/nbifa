@@ -140,7 +140,7 @@
                       </q-card-section>
                     </q-card>
 
-                        <q-input :disable="!eCategoriaSelectata" class="q-mt-sm" dense outlined v-model="dataAngajament" mask="date" :rules="['date']">
+                        <q-input :disable="(!eCategoriaSelectata)&&selected.length>0" class="q-mt-sm" dense outlined v-model="dataAngajament" mask="date" :rules="['date']">
                         <template v-slot:append>
                           <q-icon name="event" class="cursor-pointer">
                             <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
@@ -328,6 +328,16 @@ export default defineComponent({
        dataAngajament.value=date.formatDate(Date.now(), 'YYYY/MM/DD')
      }
 
+     function categorieAleasa(c){
+        console.log('Am selectat categoria',categorieSelectata.value)
+        articolbugetar.value=categorieSelectata.value.artbug;
+        numesursa.value=categorieSelectata.value.numecap;
+        credite_aprobate.value=categorieSelectata.value.crediteaprobate
+        credite_angajate.value=categorieSelectata.value.crediteangajate
+        credite_disponibile.value=categorieSelectata.value.disponibil
+
+      }
+
     return {
       initialPagination,
       selected,
@@ -360,15 +370,7 @@ export default defineComponent({
       restrictieData (date) {
         return date >= '2021/03/01' 
       },
-      categorieAleasa(c){
-        console.log('Am selectat categoria',categorieSelectata.value)
-        articolbugetar.value=categorieSelectata.value.artbug;
-        numesursa.value=categorieSelectata.value.numecap;
-        credite_aprobate.value=categorieSelectata.value.crediteaprobate
-        credite_angajate.value=categorieSelectata.value.crediteangajate
-        credite_disponibile.value=categorieSelectata.value.disponibil
-
-      },
+      categorieAleasa,
       angNou(){
         console.log('Adaug angajament',global.state.user.idcompartiment,token)
         
@@ -418,14 +420,19 @@ export default defineComponent({
                     })
       },
       showAngNou(){
-        console.log('Show ang nou',selected.value[0].idcateg,state.categorii)
-        state.categorii.map(c=>{
-          //    console.log('ajung aici',c)
-          if(c.value==selected.value[0].idcateg){
-            
-            categorieSelectata.value=c;
-          }
+        if(selected.value.length>0){
+            console.log('Show ang nou',selected.value[0].idcateg,state.categorii)
+            state.categorii.map(c=>{
+              //    console.log('ajung aici',c)
+              if(c.value==selected.value[0].idcateg){
+                
+                categorieSelectata.value=c;
+                categorieAleasa();
+              }
         })
+
+        }
+        
 
       }
 

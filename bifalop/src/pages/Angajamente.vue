@@ -96,7 +96,7 @@
                </q-card-section>
 
                 <q-card-section>
-                    <q-select dense outlined v-model="categorieSelectata" :options="state.categorii" label="Categoria" @popup-hide="categorieAleasa()">
+                    <q-select :disable="selected.length>0" dense outlined v-model="categorieSelectata" :options="state.categorii" label="Categoria" @popup-hide="categorieAleasa()">
                               <template v-slot:prepend>
                                    <q-icon name="category" />
                               </template>
@@ -140,7 +140,7 @@
                       </q-card-section>
                     </q-card>
 
-                        <q-input :disable="(!eCategoriaSelectata)&&selected.length>0" class="q-mt-sm" dense outlined v-model="dataAngajament" mask="date" :rules="['date']">
+                        <q-input :disable="!eCategoriaSelectata||selected.length>0" class="q-mt-sm" dense outlined v-model="dataAngajament" mask="date" :rules="['date']">
                         <template v-slot:append>
                           <q-icon name="event" class="cursor-pointer">
                             <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
@@ -172,7 +172,7 @@
                <q-card-actions align="right" class="bg-white text-teal">
                           <q-btn @click="resetAngNou" flat label="Abandon" v-close-popup />
                           <q-space />
-                          <q-btn @click="angNou" :disable="!dateValide" flat label="ADAUGA"  />
+                          <q-btn @click="angNou" :disable="!dateValide" flat :label="selected.length>0?'Suplimenteaza':'Adauga'"  />
                </q-card-actions>
            </q-card>
 
@@ -338,6 +338,10 @@ export default defineComponent({
 
       }
 
+      function suplimentareAngajament(){
+        console.log('Suplimentare angajament')
+      }
+
     return {
       initialPagination,
       selected,
@@ -372,10 +376,13 @@ export default defineComponent({
       },
       categorieAleasa,
       angNou(){
-        console.log('Adaug angajament',global.state.user.idcompartiment,token)
-        
-        adaug_angajament.value=false;
 
+        if(selected.value.length>0){
+          suplimentareAngajament();
+        }
+        else {
+                  console.log('Adaug angajament',global.state.user.idcompartiment,token)
+        
           axios.post(process.env.host+'angajamente/angnou',{
                     dataprop:dataAngajament.value,
                     tip:1,
@@ -409,6 +416,7 @@ export default defineComponent({
 
                         console.log('Am salvat antet angajament',date_angajament)
                           resetAngNou();
+                           adaug_angajament.value=false;
                           toateAngajamentele();
 
                                 }).catch(err=>{
@@ -418,6 +426,8 @@ export default defineComponent({
                     }).catch(err=>{
                                     
                     })
+        }
+
       },
       showAngNou(){
         if(selected.value.length>0){
@@ -428,6 +438,7 @@ export default defineComponent({
                 
                 categorieSelectata.value=c;
                 categorieAleasa();
+                //dataAngajament.value=selected.value[0].dataang;
               }
         })
 

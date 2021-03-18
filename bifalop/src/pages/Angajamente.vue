@@ -236,6 +236,7 @@ export default defineComponent({
     console.log('Setup Angajamente',p,c)
     const global=inject('global');
     const token=global.state.user.token;
+
     function toateAngajamentele(){
       axios.get(process.env.host+`angajamente/toate/${global.state.user.idcompartiment}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
@@ -253,6 +254,7 @@ export default defineComponent({
                id:a.id,
                viza:a.viza==1?true:false,
                nrdoc:a.nrdoc,
+               idcateg:a.idcateg,
                idcompartiment:a.idcompartiment,
                nr:a.nr,
                numecap:a.numecap,
@@ -302,6 +304,7 @@ export default defineComponent({
      let dataAngajament=ref(date.formatDate(Date.now(), 'YYYY/MM/DD'))
      let adaug_angajament=ref(false)
      let selected= ref([])
+
      //computed properties
      let eCategoriaSelectata = computed(()=>{
        return credite_aprobate.value>0
@@ -415,7 +418,15 @@ export default defineComponent({
                     })
       },
       showAngNou(){
-        console.log('Show ang nou',selected.value[0])
+        console.log('Show ang nou',selected.value[0].idcateg,state.categorii)
+        state.categorii.map(c=>{
+          //    console.log('ajung aici',c)
+          if(c.value==selected.value[0].idcateg){
+            
+            categorieSelectata.value=c;
+          }
+        })
+
       }
 
     }

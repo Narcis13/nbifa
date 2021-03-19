@@ -113,3 +113,8 @@ let ang={
 
 
  }
+
+ module.exports.angajament_suplimentare = (req,res,next)=>{
+
+
+ }

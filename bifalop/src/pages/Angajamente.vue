@@ -339,7 +339,29 @@ export default defineComponent({
       }
 
       function suplimentareAngajament(){
-        console.log('Suplimentare angajament')
+         let date_angajament={idAntet:selected.value[0].idAntet,
+                       idcateg:categorieSelectata.value.value,
+                       codCap:categorieSelectata.value.codCap,
+                       numecap:categorieSelectata.value.numecap,
+                       artbug:categorieSelectata.value.artbug,
+                       ca:credite_aprobate.value,
+                       cang:credite_angajate.value,
+                       disp:credite_disponibile.value,
+                       suma:suma.value,
+                       restdisp:credite_disponibile.value-suma.value,
+                       stare:'activ',
+                       idClient:8,
+                       data_ang:dataAngajament.value}
+           axios.post(process.env.host+'angajamente/angsuplimentare',date_angajament,{headers:{"Authorization" : `Bearer ${token}`}}).then(res =>{
+
+                          resetAngNou();
+                          adaug_angajament.value=false;
+                          toateAngajamentele();
+
+                                }).catch(err=>{
+                                                            
+                                })
+
       }
 
     return {
@@ -372,7 +394,7 @@ export default defineComponent({
         console.log('Ma extinde',props)
       },
       restrictieData (date) {
-        return date >= '2021/03/01' 
+        return date >= '2021/03/01' //!!!! AICI NU TREBUIE SA FIE HARDCODED....tb sa fie prima zi a lunii curente
       },
       categorieAleasa,
       angNou(){

@@ -393,8 +393,12 @@ export default defineComponent({
       extinde(props){
         console.log('Ma extinde',props)
       },
-      restrictieData (date) {
-        return date >= '2021/03/01' //!!!! AICI NU TREBUIE SA FIE HARDCODED....tb sa fie prima zi a lunii curente
+      restrictieData (d) {
+        var azi = new Date(); 
+        var firstDay =  
+                    new Date(azi.getFullYear(), azi.getMonth(), 1); 
+        let datainceput=date.formatDate(firstDay, 'YYYY/MM/DD');
+        return d >= datainceput //!!!! AICI NU TREBUIE SA FIE HARDCODED....tb sa fie prima zi a lunii curente
       },
       categorieAleasa,
       angNou(){

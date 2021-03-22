@@ -1,2 +1,1 @@
-- incerc diminuarea S-o fac Cu ajutorul cu ajutorul unei slide-uri
-- trebuie sa mai adaug la angajamente in cimpuri si valoare lichidata si categoria(sa apara clar)
+- tb sa calculez valoarea deja angajata (receptionata) ctunci cind diminuez un angajament...

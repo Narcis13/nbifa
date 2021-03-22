@@ -202,6 +202,7 @@ const columns = [
 
   { name: 'nrdoc', align: 'center', label: 'Nr. doc.', field: 'nrdoc', sortable: true },
   { name: 'dataang', align: 'center', label: 'Data', field: 'dataang', sortable: true },
+  { name: 'categorie', align: 'left',label: 'Categorie', field: 'categorie', sortable: true },
   { name: 'detalii', align: 'left',label: 'Detalii', field: 'detalii', sortable: true },
   { name: 'suma', align: 'right',label: 'Valoare', field: 'suma', sortable: true },
   { name: 'numecap', align: 'left',label: 'Capitol bug.', field: 'numecap', sortable: true },
@@ -252,6 +253,7 @@ export default defineComponent({
                detalii:a.detalii,
                idAntet:a.idAntet,
                id:a.id,
+               categorie:a.categorie,
                viza:a.viza==1?true:false,
                nrdoc:a.nrdoc,
                idcateg:a.idcateg,

@@ -92,7 +92,7 @@
    <q-dialog @show="showAngNou" v-model="adaug_angajament" persistent >
            <q-card style="width: 350px; max-width: 80vw;">
                <q-card-section>
-                          <div class="text-h6">{{selected.length>0?'Suplimentare angajament '+selected[0].nrdoc:'Angajament nou'}}</div><!--   sau suplimentare angajament -->
+                          <div class="text-h6">{{selected.length>0?`${actiuneModificareAngajament} angajament `+selected[0].nrdoc:'Angajament nou'}}</div><!--   sau suplimentare angajament -->
                </q-card-section>
 
                 <q-card-section>
@@ -179,12 +179,12 @@
     </q-dialog>
 
         <q-page-sticky  position="bottom-right" :offset="[24, 24]">
-            <q-btn fab   icon="add" color="accent"  @click="adaug_angajament=true">
+            <q-btn fab   icon="add" color="accent"  @click="(adaug_angajament=true)&&(actiuneModificareAngajament='Suplimentare')">
               <q-tooltip anchor="top start" self="center right" class="bg-accent">{{selected.length>0?'Suplimentare angajament':'Angajament nou'}}</q-tooltip>
             </q-btn>
     </q-page-sticky>
     <q-page-sticky  position="bottom-left" :offset="[24, 24]">
-            <q-btn :disable="selected.length==0" fab icon="compress" color="red"  >
+            <q-btn :disable="selected.length==0||selectatSiNevizat" fab icon="compress" color="red" @click="(adaug_angajament=true)&&(actiuneModificareAngajament='Diminuare')" >
               <q-tooltip anchor="top right" self="center left" class="bg-accent">Diminueaza angajament</q-tooltip>
             </q-btn>
     </q-page-sticky>
@@ -306,6 +306,7 @@ export default defineComponent({
      let dataAngajament=ref(date.formatDate(Date.now(), 'YYYY/MM/DD'))
      let adaug_angajament=ref(false)
      let selected= ref([])
+     let actiuneModificareAngajament = ref('nou')
 
      //computed properties
      let eCategoriaSelectata = computed(()=>{
@@ -314,6 +315,10 @@ export default defineComponent({
 
      let dateValide = computed(()=>{
        return credite_aprobate.value>0&&suma.value>0&&detalii.value.length>5
+     })
+
+     let selectatSiNevizat = computed(()=>{
+       return selected.value.length>0&&!selected.value[0].viza
      })
 
      //private methods
@@ -378,10 +383,12 @@ export default defineComponent({
       numesursa,
       eCategoriaSelectata,
       dateValide,
+      selectatSiNevizat,
       credite_aprobate,
       credite_angajate,
       credite_disponibile,
       articolbugetar,
+      actiuneModificareAngajament,
       state,
       resetAngNou,
       categorieSelectata,
@@ -459,7 +466,7 @@ export default defineComponent({
       },
       showAngNou(){
         if(selected.value.length>0){
-            console.log('Show ang nou',selected.value[0].idcateg,state.categorii)
+            console.log('Show ang nou',selected.value[0],state.categorii)
             state.categorii.map(c=>{
               //    console.log('ajung aici',c)
               if(c.value==selected.value[0].idcateg){

@@ -164,7 +164,8 @@
                           type="number"
                           outlined
                           dense
-                          label="Suma de angajat"
+                          :color="actiuneModificareAngajament==='Diminuare'? 'red':'blue'"
+                          :label="actiuneModificareAngajament==='Diminuare'? 'Suma de dezangajat':'Suma de angajat'"
                         />
 
                 </q-card-section>

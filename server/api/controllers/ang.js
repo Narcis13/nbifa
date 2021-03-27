@@ -119,3 +119,20 @@ let ang={
 
 
  }
+
+ module.exports.calc_dezangajare = (req,res,next)=>{
+  console.log('sunt in calcul suma maxima de dezangajat',req.params.idang)
+
+  let sql=`SELECT SUM(suma) suma  FROM antetereceptii WHERE idAng=? and stare = 'activ'`;
+
+  knex.raw(sql,[req.params.idang]).then(
+    r=>{
+     // console.log("Raspuns de la query stoc pret mediu",r)
+     return res.status(200).json({
+      message: "Suma angajata deja",
+      suma_angajata:r
+     
+    });
+    }
+  ).catch(err =>{console.log(err)})
+ }

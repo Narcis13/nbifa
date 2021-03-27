@@ -161,6 +161,8 @@
                          :rules="[ val => val>0 || 'Valori mai mari ca 0, va rog!']"
                         :disable="!eCategoriaSelectata"
                           v-model.number="suma"
+                          error-message="Suma invalida!" 
+                          :error="!sumaValida"
                           type="number"
                           outlined
                           dense
@@ -173,7 +175,7 @@
                <q-card-actions align="right" class="bg-white text-teal">
                           <q-btn @click="resetAngNou" flat label="Abandon" v-close-popup />
                           <q-space />
-                          <q-btn @click="angNou" :disable="!dateValide" flat :label="selected.length>0?'Suplimenteaza':'Adauga'"  />
+                          <q-btn @click="angNou" :disable="!dateValide" flat :label="selected.length>0?`${actiuneModificareAngajament}`:'Adauga'"  />
                </q-card-actions>
            </q-card>
 
@@ -303,6 +305,7 @@ export default defineComponent({
      let credite_angajate=ref(0)
      let credite_disponibile=ref(0)
      let suma=ref(parseFloat('1').toFixed(2));
+     let suma_max=ref(parseFloat('0').toFixed(2));
      let detalii=ref('');
      let dataAngajament=ref(date.formatDate(Date.now(), 'YYYY/MM/DD'))
      let adaug_angajament=ref(false)
@@ -316,6 +319,10 @@ export default defineComponent({
 
      let dateValide = computed(()=>{
        return credite_aprobate.value>0&&suma.value>0&&detalii.value.length>5
+     })
+
+     let sumaValida = computed(()=>{
+       return suma.value!==''&&suma.value>0&&suma.value<=suma_max.value
      })
 
      let selectatSiNevizat = computed(()=>{
@@ -355,7 +362,7 @@ export default defineComponent({
                        ca:credite_aprobate.value,
                        cang:credite_angajate.value,
                        disp:credite_disponibile.value,
-                       suma:suma.value,
+                       suma:actiuneModificareAngajament==='Diminuare'?0-suma.value: suma.value,
                        restdisp:credite_disponibile.value-suma.value,
                        stare:'activ',
                        idClient:8,
@@ -384,6 +391,7 @@ export default defineComponent({
       numesursa,
       eCategoriaSelectata,
       dateValide,
+      sumaValida,
       selectatSiNevizat,
       credite_aprobate,
       credite_angajate,
@@ -477,7 +485,21 @@ export default defineComponent({
                 //dataAngajament.value=selected.value[0].dataang;
               }
         })
+          if(actiuneModificareAngajament.value=='Diminuare'){
+            //aici calculez cit pot diminua
+            console.log('calculez diminuare')
+            axios.get(process.env.host+`angajamente/calcdezangajare/${selected.value[0].idAntet}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
+              res => {
+                console.log('Raspuns la calcul dezangajare',res.data.suma_angajata[0][0].suma,parseFloat(selected.value[0].suma)-res.data.suma_angajata[0][0].suma);
+                suma.value=parseFloat(selected.value[0].suma)-res.data.suma_angajata[0][0].suma;
+                suma_max.value=parseFloat(selected.value[0].suma)-res.data.suma_angajata[0][0].suma;
+          
+              }
+            ).catch(err =>{})
+
+
+          }
         }
         
 

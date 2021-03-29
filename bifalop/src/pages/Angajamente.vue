@@ -175,7 +175,7 @@
                <q-card-actions align="right" class="bg-white text-teal">
                           <q-btn @click="resetAngNou" flat label="Abandon" v-close-popup />
                           <q-space />
-                          <q-btn @click="angNou" :disable="!dateValide" flat :label="selected.length>0?`${actiuneModificareAngajament}`:'Adauga'"  />
+                          <q-btn @click="angNou" :disable="!dateValide||!sumaValida" flat :label="selected.length>0?`${actiuneModificareAngajament}`:'Adauga'"  />
                </q-card-actions>
            </q-card>
 
@@ -362,7 +362,7 @@ export default defineComponent({
                        ca:credite_aprobate.value,
                        cang:credite_angajate.value,
                        disp:credite_disponibile.value,
-                       suma:actiuneModificareAngajament==='Diminuare'?0-suma.value: suma.value,
+                       suma:actiuneModificareAngajament.value==='Diminuare'?0-suma.value: suma.value,
                        restdisp:credite_disponibile.value-suma.value,
                        stare:'activ',
                        idClient:8,
@@ -494,6 +494,7 @@ export default defineComponent({
                 console.log('Raspuns la calcul dezangajare',res.data.suma_angajata[0][0].suma,parseFloat(selected.value[0].suma)-res.data.suma_angajata[0][0].suma);
                 suma.value=parseFloat(selected.value[0].suma)-res.data.suma_angajata[0][0].suma;
                 suma_max.value=parseFloat(selected.value[0].suma)-res.data.suma_angajata[0][0].suma;
+                detalii.value=selected.value[0].detalii;
           
               }
             ).catch(err =>{})

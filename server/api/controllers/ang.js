@@ -5,7 +5,7 @@ const primaziaanului=moment().startOf('year').format('YYYY-MM-DD');
 module.exports.toate = (req,res,next) => {
   console.log('Toate angajamentele',moment().startOf('year').format('YYYY-MM-DD'))
 
-let sql=`SELECT statistici.nr,ang.id,antang.nrdoc,antang.viza,ang.idAntet,cat.denumire categorie, antang.dataang,antang.detalii,ang.suma,ang.codCap,ang.numecap,ang.artbug,c.denumire compartiment,c.id idcompartiment,antang.stare,ang.idcateg  FROM adata.angajamente ang 
+let sql=`SELECT statistici.nr,ang.id,antang.nrdoc,antang.viza,ang.idAntet,cat.denumire categorie, ang.data_ang dataang,antang.detalii,ang.suma,ang.codCap,ang.numecap,ang.artbug,c.denumire compartiment,c.id idcompartiment,antang.stare,ang.idcateg  FROM adata.angajamente ang 
 left join adata.anteteangajamente antang on antang.id=ang.idAntet
 inner join compartimente c on c.id=antang.compID
 inner join caategorii cat on cat.id=ang.idcateg

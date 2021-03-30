@@ -136,3 +136,11 @@ let ang={
     }
   ).catch(err =>{console.log(err)})
  }
+
+ module.exports.sterg_total = (req,res,next)=>{
+
+ }
+
+ module.exports.sterg_partial = (req,res,next)=>{
+   
+ }

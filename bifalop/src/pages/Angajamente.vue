@@ -18,7 +18,7 @@
             <div class="row q-gutter-sm q-pa-sm q-ml-xl">
               <q-select class="col" style="min-width:200px;" filled v-model="perspectiva" :options="perspective" label="Perspectiva" stack-label dence options-dense />
                <div class="flex" style="min-width:200px;max-height:100px;">
-                   <q-btn class="q-ma-sm" :disable="selected.length==0" round color="red" icon="delete_forever" >
+                   <q-btn @click="stergAngajament" class="q-ma-sm" :disable="selectatSiVizat||selected.length==0" round color="red" icon="delete_forever" >
                       <q-tooltip class="bg-accent">Sterge</q-tooltip>
                    </q-btn>
                   <q-btn class="q-ma-sm" round color="secondary" icon="print" >
@@ -329,6 +329,10 @@ export default defineComponent({
        return selected.value.length>0&&!selected.value[0].viza
      })
 
+     let selectatSiVizat = computed(()=>{
+       return selected.value.length>0&&selected.value[0].viza
+     })
+
      //private methods
      function resetAngNou(){
        console.log('Reset ang nou')
@@ -393,6 +397,7 @@ export default defineComponent({
       dateValide,
       sumaValida,
       selectatSiNevizat,
+      selectatSiVizat,
       credite_aprobate,
       credite_angajate,
       credite_disponibile,
@@ -410,6 +415,9 @@ export default defineComponent({
       },
       extinde(props){
         console.log('Ma extinde',props)
+      },
+      stergAngajament(){
+          console.log('Sterg angajament ',selected.value[0])
       },
       restrictieData (d) {
         var azi = new Date(); 

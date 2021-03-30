@@ -9,5 +9,7 @@ router.get("/catbugetare/:idcomp", /*checkaut,*/ AngController.categorii_bugetar
 router.post("/angnou", AngController.angajament_nou);
 router.post("/angnoudetalii", AngController.angajament_nou_detalii);
 router.post("/angsuplimentare", AngController.angajament_nou_detalii);
+router.delete("/stergtotal/:idang", /*checkaut,*/ AngController.sterg_total);
+router.delete("/stergpartial/:idang", /*checkaut,*/ AngController.sterg_partial);
 
 module.exports=router;

@@ -142,3 +142,41 @@ module.exports.un_referat = (req,res,next) => {
 
 
 }
+
+module.exports.un_angajament = (req,res,next) => {
+    console.log('sunt in controllerul rapoarte actiunea un_angajament',req.params.idAntet,req.params.idAng);
+
+let sql =
+`SELECT ang.id,ang.codCap,ang.artbug,ang.ca,ang.cang,ang.disp,ang.suma,ang.restdisp,ang.data_ang,aa.id idAntet, aa.dataang dataang, aa.nrdoc nrdoc, aa.dataprop dataprop,aa.dataang dataang, aa.detalii descriere, IF( aa.viza =1,TRUE ,FALSE ) viza, aa.numeviza numeviza,aa.dataviza dataviza,comp.denumire compartiment
+FROM angajamente ang
+inner join anteteangajamente aa on ang.idAntet=aa.id
+INNER JOIN compartimente comp ON aa.compID = comp.id
+WHERE ang.idAntet=? and ang.id=?`
+
+
+knexaky.raw(sql,[req.params.idAntet,req.params.idAng]).then(
+    r=>{
+      console.log("Raspuns de la query printat ang",r[0][0])
+      let set_date={
+          compartiment:r[0][0].compartiment,
+          nrdoc:r[0][0].nrdoc,
+          detalii:r[0][0].descriere,
+          codCap:r[0][0].codCap+'.'+r[0][0].artbug,
+          ca:r[0][0].ca,
+          cang:r[0][0].cang,
+          disp:r[0][0].disp,
+          suma:r[0][0].suma,
+          restdisp:r[0][0].restdisp,
+          numeviza:r[0][0].viza==1?r[0][0].numeviza:'nevizat',
+          dataviza:r[0][0].viza==1?moment(r[0][0].dataviza).format('DD/MM/YYYY'):'nevizat',
+          data_ang:moment(r[0][0].data_ang).format('DD/MM/YYYY')
+
+      }
+     var ejs_template = fs.readFileSync(path.join(__dirname,'reports','un_angajament.ejs'),'utf8')
+     const html = ejs.render(ejs_template, set_date);
+     res.send(html);
+    }
+  ).catch(err =>{console.log(err)})
+
+
+}

@@ -120,6 +120,21 @@ let ang={
 
  }
 
+ 
+ module.exports.ang_la_antet = (req,res,next)=>{
+   console.log('ang la antet',req.params.idAntet)
+   knex.select(['angajamente.data_ang', 'angajamente.suma'])
+   .from('angajamente')
+   .where('idAntet',req.params.idAntet)
+   .orderBy('angajamente.id').then((rows)=>{
+      return res.status(200).json({
+       message: "Toate angajamentele la un antet",
+       anglaantet:rows
+     });
+    }).catch(err =>{})
+}
+
+
  module.exports.calc_dezangajare = (req,res,next)=>{
   console.log('sunt in calcul suma maxima de dezangajat',req.params.idang)
 
@@ -138,9 +153,42 @@ let ang={
  }
 
  module.exports.sterg_total = (req,res,next)=>{
+  console.log('sunt in sterg total angajament',req.params.idang,req.params.idantang)
+  knex('angajamente').where({
+    id: req.params.idang
+  }).del()
+  .then(()=>{
+ 
+
+    knex('anteteangajamente').where({
+      id: req.params.idang
+    }).del()
+    .then(()=>{
+      return res.status(200).json({
+        message: "Angajament sters"
+      });
+    
+    }).catch(err =>{})
+
+
+    }).catch(err =>{});
+  
 
  }
 
  module.exports.sterg_partial = (req,res,next)=>{
-   
+  console.log('sunt in sterg partial angajament',req.params.idang,req.params.idantang)
+
+  knex('angajamente').where({
+    id: req.params.idang
+  }).del()
+  .then(()=>{
+    return res.status(200).json({
+      message: "Angajament sters"
+    });
+  
+  }).catch(err =>{})
+
+
+
  }

@@ -1,2 +1,4 @@
-- datele de la rapoarte trebuie sa fie cele de la luna curenta
+- nu calculeaza bine restul de disponibil la angajamentele pe minus....
+
+
 

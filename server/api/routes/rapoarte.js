@@ -7,6 +7,7 @@ const RapoarteController =require('../controllers/rapoarte');
 router.post("/documenteinterval", RapoarteController.documente_interval);
 router.get("/undocument/:iddoc",  RapoarteController.un_document);
 router.get("/unreferat/:iddoc",  RapoarteController.un_referat);
+router.get("/unangajament/:idAntet/:idAng",  RapoarteController.un_angajament);
 
 //router.post("/login", UserController.user_login);
 

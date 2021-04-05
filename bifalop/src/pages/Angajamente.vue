@@ -21,7 +21,7 @@
                    <q-btn @click="stergAngajament" class="q-ma-sm" :disable="selectatSiVizat||selected.length==0" round color="red" icon="delete_forever" >
                       <q-tooltip class="bg-accent">Sterge</q-tooltip>
                    </q-btn>
-                  <q-btn class="q-ma-sm" round color="secondary" icon="print" >
+                  <q-btn @click="printAngajamente" class="q-ma-sm" round color="secondary" icon="print" >
                         <q-tooltip class="bg-accent">Printeaza</q-tooltip>
                    </q-btn>
                    <q-btn class="q-ma-sm" round color="amber" glossy text-color="black" icon="file_download" >
@@ -73,22 +73,26 @@
             :props="props"
           >
           <q-checkbox  v-if="col.name=='viza'"  v-model="props.row.viza" disable dense  ></q-checkbox>
-           <div v-else>{{ col.value }}</div> 
+           <div :style="{color:col.name=='suma'&&col.value<0?'red':'black'}" v-else>{{ col.value }}</div> 
           </q-td>
         </q-tr>
         <q-tr v-if="props.expand" :props="props">
           <q-td colspan="100%">
            <!-- <div class="text-left">This is expand slot for row above: {{ props.row.name }}.</div> -->
-           <AngTimeLine />
+           <AngTimeLine :cine="props.row"/>
           </q-td>
         </q-tr>
       </template>
+
 
     </q-table>
 
 
   </div>
-  
+  <q-dialog  v-model="selectez_interval" persistent >
+     <dela-la @interval-selectat="intervalSelectat"/>
+  </q-dialog> 
+
    <q-dialog @show="showAngNou" v-model="adaug_angajament" persistent >
            <q-card style="width: 350px; max-width: 80vw;">
                <q-card-section>
@@ -198,8 +202,11 @@
 <script>
 import { defineComponent , reactive,inject,ref,computed} from 'vue'
 import AngTimeLine from 'components/AngTimeLine.vue'
+//import DelaLa from 'components/DelaLa.vue'
 import axios from 'axios'
 import { date } from 'quasar'
+import { useQuasar } from 'quasar'
+import DelaLa from '../components/DelaLa.vue'
 //import AngTimeLine from '../components/AngTimeLine.vue'
 const columns = [
 
@@ -232,11 +239,13 @@ const state = reactive(
 export default defineComponent({
   name: 'Angajamente',
   components:{
-      AngTimeLine
+      AngTimeLine,
+      DelaLa
+ 
 
   },
   setup(p,c){
-
+    const $q = useQuasar()
     console.log('Setup Angajamente',p,c)
     const global=inject('global');
     const token=global.state.user.token;
@@ -305,10 +314,11 @@ export default defineComponent({
      let credite_angajate=ref(0)
      let credite_disponibile=ref(0)
      let suma=ref(parseFloat('1').toFixed(2));
-     let suma_max=ref(parseFloat('0').toFixed(2));
+     let suma_max=ref(parseFloat('999999999').toFixed(2));
      let detalii=ref('');
      let dataAngajament=ref(date.formatDate(Date.now(), 'YYYY/MM/DD'))
      let adaug_angajament=ref(false)
+     let selectez_interval = ref(false)
      let selected= ref([])
      let actiuneModificareAngajament = ref('nou')
 
@@ -367,7 +377,7 @@ export default defineComponent({
                        cang:credite_angajate.value,
                        disp:credite_disponibile.value,
                        suma:actiuneModificareAngajament.value==='Diminuare'?0-suma.value: suma.value,
-                       restdisp:credite_disponibile.value-suma.value,
+                       restdisp:actiuneModificareAngajament.value==='Diminuare'?credite_disponibile.value+suma.value:credite_disponibile.value-suma.value,
                        stare:'activ',
                        idClient:8,
                        data_ang:dataAngajament.value}
@@ -402,6 +412,7 @@ export default defineComponent({
       credite_angajate,
       credite_disponibile,
       articolbugetar,
+      selectez_interval,
       actiuneModificareAngajament,
       state,
       resetAngNou,
@@ -417,7 +428,33 @@ export default defineComponent({
         console.log('Ma extinde',props)
       },
       stergAngajament(){
-          console.log('Sterg angajament ',selected.value[0])
+        let actiune = selected.value[0].nr>1 ? 'stergpartial':'stergtotal';
+          console.log('Sterg angajament ',selected.value[0],actiune)
+          axios.delete(process.env.host+`angajamente/${actiune}/${selected.value[0].id}/${selected.value[0].idAntet}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+              res => {
+                           $q.notify({
+                              message:res.data.message,
+                              timeout:2000,
+                              position:'top',
+                              color:'positive'
+                            }) 
+                            toateAngajamentele();
+        }
+      ).catch(err =>{})
+      },
+      intervalSelectat(d){
+          console.log('interval selectat',d)
+          selectez_interval.value=false;
+      },
+      printAngajamente(){
+        let angdePrintat=selected.value.length==0?0:selected.value[0].idAntet;
+         if(angdePrintat>0) {
+            window.open(process.env.host+'rapoarte/unangajament/'+angdePrintat+'/'+selected.value[0].id,'_blank');
+         }
+         else {
+           selectez_interval.value=true;
+         }
       },
       restrictieData (d) {
         var azi = new Date(); 

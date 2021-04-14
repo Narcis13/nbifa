@@ -18,7 +18,10 @@
             <div class="row q-gutter-sm q-pa-sm q-ml-xl">
               <q-select class="col" style="min-width:200px;" filled v-model="perspectiva" :options="perspective" label="Perspectiva" stack-label dence options-dense />
                <div class="flex" style="min-width:200px;max-height:100px;">
-                   <q-btn @click="stergAngajament" class="q-ma-sm" :disable="selectatSiVizat||selected.length==0" round color="red" icon="delete_forever" >
+                  <q-btn v-show="modSupervizare" @click="vizatCFPP" class="q-ma-sm" :disable="selectatSiVizat||selected.length==0" round color="green" icon="done_outline" >
+                      <q-tooltip class="bg-accent">Vizat CFPP</q-tooltip>
+                   </q-btn>
+                   <q-btn v-show="!modSupervizare" @click="stergAngajament" class="q-ma-sm" :disable="selectatSiVizat||selected.length==0" round color="red" icon="delete_forever" >
                       <q-tooltip class="bg-accent">Sterge</q-tooltip>
                    </q-btn>
                   <q-btn @click="printAngajamente" class="q-ma-sm" round color="secondary" icon="print" >
@@ -91,6 +94,10 @@
   </div>
   <q-dialog  v-model="selectez_interval" persistent >
      <dela-la @interval-selectat="intervalSelectat"/>
+  </q-dialog> 
+
+   <q-dialog  v-model="vizez_angajament" persistent >
+     <viza-angajament @angajament-vizat="angajamentVizat" :care="selected[0]"/>
   </q-dialog> 
 
    <q-dialog @show="showAngNou" v-model="adaug_angajament" persistent >
@@ -186,12 +193,12 @@
     </q-dialog>
 
         <q-page-sticky  position="bottom-right" :offset="[24, 24]">
-            <q-btn fab   icon="add" color="accent"  @click="(adaug_angajament=true)&&(actiuneModificareAngajament='Suplimentare')">
+            <q-btn v-show="!modSupervizare" fab   icon="add" color="accent"  @click="(adaug_angajament=true)&&(actiuneModificareAngajament='Suplimentare')">
               <q-tooltip anchor="top start" self="center right" class="bg-accent">{{selected.length>0?'Suplimentare angajament':'Angajament nou'}}</q-tooltip>
             </q-btn>
     </q-page-sticky>
     <q-page-sticky  position="bottom-left" :offset="[24, 24]">
-            <q-btn :disable="selected.length==0||selectatSiNevizat" fab icon="compress" color="red" @click="(adaug_angajament=true)&&(actiuneModificareAngajament='Diminuare')" >
+            <q-btn v-show="!modSupervizare" :disable="selected.length==0||selectatSiNevizat" fab icon="compress" color="red" @click="(adaug_angajament=true)&&(actiuneModificareAngajament='Diminuare')" >
               <q-tooltip anchor="top right" self="center left" class="bg-accent">Diminueaza angajament</q-tooltip>
             </q-btn>
     </q-page-sticky>
@@ -207,6 +214,7 @@ import axios from 'axios'
 import { date } from 'quasar'
 import { useQuasar } from 'quasar'
 import DelaLa from '../components/DelaLa.vue'
+import VizaAngajament from '../components/VizaAngajament.vue'
 //import AngTimeLine from '../components/AngTimeLine.vue'
 const columns = [
 
@@ -240,18 +248,21 @@ export default defineComponent({
   name: 'Angajamente',
   components:{
       AngTimeLine,
-      DelaLa
- 
+      DelaLa,
+ VizaAngajament
 
   },
   setup(p,c){
+    
     const $q = useQuasar()
-    console.log('Setup Angajamente',p,c)
+   
     const global=inject('global');
     const token=global.state.user.token;
-
+    const compartiment=global.state.user.compartiment;
+    let idcompartiment=compartiment=='SUPERVIZARE'? 0:global.state.user.idcompartiment;
+     console.log('Setup Angajamente',idcompartiment)
     function toateAngajamentele(){
-      axios.get(process.env.host+`angajamente/toate/${global.state.user.idcompartiment}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+      axios.get(process.env.host+`angajamente/toate/${idcompartiment}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
         res => {
            console.log('Raspuns la toate angajamentele',res.data);
@@ -318,6 +329,7 @@ export default defineComponent({
      let detalii=ref('');
      let dataAngajament=ref(date.formatDate(Date.now(), 'YYYY/MM/DD'))
      let adaug_angajament=ref(false)
+     let vizez_angajament=ref(false)
      let selectez_interval = ref(false)
      let selected= ref([])
      let actiuneModificareAngajament = ref('nou')
@@ -341,6 +353,10 @@ export default defineComponent({
 
      let selectatSiVizat = computed(()=>{
        return selected.value.length>0&&selected.value[0].viza
+     })
+
+     let modSupervizare = computed(()=>{
+       return compartiment=='SUPERVIZARE'
      })
 
      //private methods
@@ -413,8 +429,10 @@ export default defineComponent({
       credite_disponibile,
       articolbugetar,
       selectez_interval,
+      vizez_angajament,
       actiuneModificareAngajament,
       state,
+      modSupervizare,
       resetAngNou,
       categorieSelectata,
       perspectiva: ref( {label:'Angajamente an curent',value:1}),
@@ -444,8 +462,27 @@ export default defineComponent({
       ).catch(err =>{})
       },
       intervalSelectat(d){
-          console.log('interval selectat',d)
+          console.log('interval selectat',d,btoa(d.deladata+'|'+d.ladata))
           selectez_interval.value=false;
+          //global.state.user.idcompartiment
+           window.open(process.env.host+'rapoarte/toateangajamentele/'+idcompartiment+'/'+btoa(d.deladata+'|'+d.ladata),'_blank');
+
+      },
+      angajamentVizat(nr){
+          vizez_angajament.value=false;
+           toateAngajamentele();
+           selected.value=[];
+           $q.notify({
+                              message:'Viza CFPP nr. '+nr.nrviza+' a fost acordata!',
+                              timeout:2500,
+                              position:'top',
+                              color:'positive'
+                            }) 
+
+      },
+      vizatCFPP(){
+         console.log('Vizat CFPP')
+         vizez_angajament.value=true;
       },
       printAngajamente(){
         let angdePrintat=selected.value.length==0?0:selected.value[0].idAntet;

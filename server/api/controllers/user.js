@@ -43,7 +43,7 @@ module.exports.user_signup = (req, res, next) => {
 
 module.exports.user_loginaky = (req, res, next) => {
   console.log('sunt in controllerul users actiunea loginAKY....',req.body)
-  knexaky.select(['authentication.id', 'authentication.username', 'authentication.rol' ,'authentication.obs', 'compartimente.denumire',{idcompartiment:'compartimente.id'} ])
+  knexaky.select(['authentication.id', 'authentication.username', 'authentication.rol' ,'authentication.sigiliu','authentication.obs', 'compartimente.denumire',{idcompartiment:'compartimente.id'} ])
   .from('authentication')
   .innerJoin('compartimente','compartimente.idsef','authentication.id')
   .where({

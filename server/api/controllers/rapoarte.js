@@ -180,3 +180,58 @@ knexaky.raw(sql,[req.params.idAntet,req.params.idAng]).then(
 
 
 }
+
+module.exports.toate_angajamentele = (req,res,next) => {
+    let cod=Buffer.from(req.params.cod, 'base64').toString('utf-8');
+    let interval=cod.split('|');
+    let deladata=moment(interval[0],'YYYY/MM/DD').format('YYYY-MM-DD');
+    let ladata=moment(interval[1],'YYYY/MM/DD').format('YYYY-MM-DD');
+    let semn=req.params.idcomp==0?'>':'=';
+   // console.log('toate angajamentele',req.params.idcomp,moment(interval[0],'YYYY/MM/DD').format('YYYY-MM-DD'))
+   let sql=`
+   SELECT antang.nrdoc,antang.detalii ,ang.suma ,antang.dataang, c.numecap, c.artbug FROM adata.angajamente ang
+inner join anteteangajamente antang on antang.id=ang.idAntet
+inner join caategorii c on c.id=ang.idcateg
+where antang.dataang>=? and antang.dataang<=? and antang.stare='activ' and antang.compID${semn}?
+order by c.numecap,c.artbug,antang.nrdoc
+   `
+
+   knexaky.raw(sql,[deladata,ladata,req.params.idcomp]).then(
+    r=>{
+      console.log("Raspuns de la query angajamente in perioada",r[0])
+      let linii=[];
+      let cArtbug=r[0][0].artbug;
+      let sumapartiala=0;
+      let sumatotala=0;
+      r[0].map((a)=>{
+          a.dataang=moment(a.dataang).format('DD/MM/YYYY')
+          a.suma=parseFloat(a.suma);
+          sumatotala+=a.suma ;
+         // cArtbug=a.artbug;
+          if(a.artbug==cArtbug){
+              sumapartiala+=a.suma
+              linii.push(a)
+          } else {
+              //sumapartiala+=a.suma // sa vedem daca ramine
+              linii.push({clasa:'evidentiat',suma:parseFloat(sumapartiala).toFixed(2),detalii:'Subtotal '+cArtbug})
+              linii.push(a) //sa vedem daca ramine
+              sumapartiala=a.suma;
+              cArtbug=a.artbug;
+          }
+      })
+      linii.push({clasa:'evidentiat',suma:parseFloat(sumapartiala).toFixed(2),detalii:'Subtotal '+cArtbug})
+      linii.push({clasa:'evidentiat',suma:parseFloat(sumatotala).toFixed(2),detalii:'TOTAL GENERAL'})
+      let set_date={
+         datainceput:deladata,
+         datasfirsit:ladata,
+         linii
+
+      }
+     var ejs_template = fs.readFileSync(path.join(__dirname,'reports','toate_angajamentele.ejs'),'utf8'),
+     style=fs.readFileSync(path.join(__dirname,'reports','analitica_styles.css'),'utf8');
+     const html = ejs.render(ejs_template,{set_date,style,config});
+     res.send(html);
+    }
+  ).catch(err =>{console.log(err)})
+   
+}

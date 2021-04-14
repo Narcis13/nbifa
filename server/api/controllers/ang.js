@@ -4,15 +4,15 @@ const primaziaanului=moment().startOf('year').format('YYYY-MM-DD');
 
 module.exports.toate = (req,res,next) => {
   console.log('Toate angajamentele',moment().startOf('year').format('YYYY-MM-DD'))
-
+let semn=req.params.idcomp==0?'>':'=';
 let sql=`SELECT statistici.nr,ang.id,antang.nrdoc,antang.viza,ang.idAntet,cat.denumire categorie, ang.data_ang dataang,antang.detalii,ang.suma,ang.codCap,ang.numecap,ang.artbug,c.denumire compartiment,c.id idcompartiment,antang.stare,ang.idcateg  FROM adata.angajamente ang 
 left join adata.anteteangajamente antang on antang.id=ang.idAntet
 inner join compartimente c on c.id=antang.compID
 inner join caategorii cat on cat.id=ang.idcateg
 inner join (select idAntet, count(idAntet) as nr from adata.angajamente group by idAntet ) statistici on statistici.idAntet=ang.idAntet
-where dataang>'${primaziaanului}' and antang.stare='activ' and  c.id=?
+where dataang>'${primaziaanului}' and antang.stare='activ' and  c.id${semn}?
 
-order by ang.id desc`;
+order by antang.viza,ang.id desc`;
 
 knex.raw(sql,[req.params.idcomp]).then(
   r=>{
@@ -30,6 +30,65 @@ knex.raw(sql,[req.params.idcomp]).then(
   
   
  }
+
+module.exports.angajament_vizat = (req,res,next)=>{
+ console.log('Controller angajamente actiunea vizat ',moment().format('YYYY-MM-DD'))
+  let codang=req.body.codang;
+  let {idAntet} = req.body;
+  let registru=req.body.registru;
+  registru.dataviza=knex.fn.now();
+
+  knex('regviza').insert(registru).then((d)=>{
+  /*return res.status(200).json({
+    message: "Angajament vizat",
+    id:d[0]
+
+  })*/
+  let viza={codang:codang,   
+    dataviza:moment().format('YYYY-MM-DD') ,
+    numeviza:registru.nrvizac+d[0],
+    viza:1}
+console.log('updatez ang id '+idAntet+ ' cu datele '+viza)
+      knex('anteteangajamente').where({
+        id: idAntet
+      }).update(viza)
+      .then(()=>{
+        return res.status(200).json({
+          message: "Angajament vizat",
+          id:registru.nrvizac+d[0]
+      
+        })
+      
+      }).catch(err =>{})
+
+}).catch(err =>{ console.log(err)})
+
+
+}
+
+ module.exports.codviza = (req,res,next)=> {
+    console.log('caut cod viza',req.params.artbug)
+
+    let sql=`
+    SELECT antang.nrdoc,antang.detalii ,ang.suma ,antang.dataang, ang.artbug,antang.codang FROM adata.angajamente ang
+inner join anteteangajamente antang on antang.id=ang.idAntet
+where ang.artbug=? and antang.viza=1
+order by antang.dataang desc
+limit 1
+    `
+    knex.raw(sql,[req.params.artbug]).then(
+      r=>{
+       // console.log("Raspuns de la query stoc pret mediu",r)
+       return res.status(200).json({
+        message: "Ultimul cod",
+        coduri:r
+       
+      });
+      }
+    ).catch(err =>{console.log(err)})
+
+ }
+
 
  module.exports.categorii_bugetare = (req,res,next) => {
    console.log('sunt in categorii bugetare...',req.params.idcomp)

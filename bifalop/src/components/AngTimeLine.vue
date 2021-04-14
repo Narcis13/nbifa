@@ -31,6 +31,7 @@ export default defineComponent({
 
                   res => {
                   console.log('Raspuns la toate angajamentele pentru antet',res.data);
+                  state.itemi=[];
                     res.data.anglaantet.map(a=>{
                           state.itemi.push({
                                 data:date.formatDate(a.data_ang, 'DD/MM/YYYY'),

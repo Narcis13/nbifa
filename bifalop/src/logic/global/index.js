@@ -8,7 +8,8 @@ const state = reactive({
         rol:null,
         token:null,
         idcompartiment:0,
-        idutilizator:0
+        idutilizator:0,
+        sigiliu:null
     }
 })
 
@@ -20,6 +21,7 @@ const actions = {
          state.user.token=user.token;
          state.user.nume=user.utilizator[0].obs;
          state.user.rol=user.utilizator[0].rol;
+         state.user.sigiliu=user.utilizator[0].sigiliu;
          state.user.compartiment=user.utilizator[0].denumire;
          state.user.idcompartiment=user.utilizator[0].idcompartiment;
          state.user.idutilizator=user.utilizator[0].id;

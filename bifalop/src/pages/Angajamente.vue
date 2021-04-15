@@ -294,7 +294,8 @@ export default defineComponent({
       }
 
       toateAngajamentele();
-
+      
+      function categoriileCompartimentului(){
       axios.get(process.env.host+`angajamente/catbugetare/${global.state.user.idcompartiment}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
 
         res => {
@@ -317,6 +318,9 @@ export default defineComponent({
     
         }
       ).catch(err =>{})
+      }
+
+    categoriileCompartimentului();
 
      let categorieSelectata = ref({label:'',value:0});
      let numesursa=ref('Sursa finantare: ? ')
@@ -402,6 +406,7 @@ export default defineComponent({
                           resetAngNou();
                           adaug_angajament.value=false;
                           toateAngajamentele();
+                          categoriileCompartimentului();
 
                                 }).catch(err=>{
                                                             
@@ -458,6 +463,7 @@ export default defineComponent({
                               color:'positive'
                             }) 
                             toateAngajamentele();
+                            categoriileCompartimentului();
         }
       ).catch(err =>{})
       },
@@ -544,7 +550,7 @@ export default defineComponent({
                           resetAngNou();
                            adaug_angajament.value=false;
                           toateAngajamentele();
-
+                          categoriileCompartimentului(); 
                                 }).catch(err=>{
                                                             
                                 })

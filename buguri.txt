@@ -1,4 +1,4 @@
-- nu calculeaza bine restul de disponibil la angajamentele pe minus....
+
 
 
 

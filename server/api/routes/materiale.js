@@ -12,6 +12,7 @@ router.post("/materialnou", MaterialeController.materialnou);
 router.put("/:idmaterial", /*checkaut,*/ MaterialeController.update);
 router.patch("/sterg/:id", /*checkaut,*/ MaterialeController.sterg_material);
 router.get("/toate/:idgest", /*checkaut,*/ MaterialeController.toate); 
+router.get("/ultimulcod/:idgest", /*checkaut,*/ MaterialeController.ultimulcod); 
 
 
 module.exports=router;

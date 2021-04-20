@@ -6,7 +6,11 @@
                         <q-input autofocus ref="edNume" v-model="nume_material" label="Denumire"  @keyup.enter="urmatorul('edUM')" />
                         <q-input ref="edUM" v-model="um_material" label="UM" @keyup.enter="urmatorul('edPret')"  />
                         <q-input ref="edPret" v-model.number="pret_predefinit" label="Pret predefinit" type="number"   />
-                        <q-input  v-model="cod_material" label="Cod"  />
+                        <q-input  v-model="cod_material" label="Cod"  >
+                                          <template v-slot:append>
+                                              <q-btn round color="green" icon="search" dense @click="aflaUltimulCod"/>
+                                           </template>
+                        </q-input>
                         <q-btn
                             color="primary"
                             @click="adauga"
@@ -89,6 +93,18 @@ console.log('ADAUG MATERIAL!',this.mat);
 
 
              //  this.$q.notify({color:'secondary',message:'Material adaugat cu succes',position:'top'})
+        },
+        aflaUltimulCod(){
+          const token=this.$store.getters.token;
+
+        axios.get(process.env.host+`materiale/ultimulcod/${this.$store.getters.gestiuneCurenta.id}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+          res => {
+             console.log('Rspuns la ultimul cod',res.data);
+             this.cod_material=res.data.coduri[0][0].cod_import;
+            // this.materiale=[...res.data.materiale]
+          }
+        ).catch(err =>{})
         },
         urmatorul(el){
          this.$refs[el].focus();

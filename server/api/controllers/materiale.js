@@ -19,6 +19,24 @@ module.exports.toate = (req, res, next) => {
  
 };
 
+module.exports.ultimulcod = (req,res,next)=>{
+let sql=`
+SELECT * FROM bifa.materiale where stare='activ' and idgestiune=? order by id desc limit 1;
+`
+console.log('Ultimul cod!',req.params.idgest)
+
+knex.raw(sql,[req.params.idgest]).then(
+  r=>{
+   // console.log("Raspuns de la query stoc pret mediu",r)
+   return res.status(200).json({
+    message: "Ultimul cod",
+    coduri:r
+   
+  });
+  }
+).catch(err =>{console.log(err)})
+}
+
 module.exports.materialnou = (req,res,next) =>{
   console.log('sunt in comntrolerul matriale actiunea material nou',req.body)
   if(req.body.denumire===""){

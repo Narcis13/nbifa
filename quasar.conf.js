@@ -25,7 +25,7 @@ module.exports = function (ctx) {
     /*framework: {
       components: [
         'QLayout',
-        'QHeader',
+        'QHeader',.
         'QDrawer',
         'QPageContainer',
         'QPage',

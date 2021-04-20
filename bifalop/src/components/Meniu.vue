@@ -33,7 +33,7 @@
                   <q-btn class="full-width q-ma-xs" color="teal" no-caps>
                     Prevederi<br>Bugetare
                   </q-btn>
-                  <q-btn class="full-width q-ma-xs" color="teal" no-caps>
+                  <q-btn class="full-width q-ma-xs" color="teal" to="f" no-caps>
                      Furnizori
                   </q-btn>
 

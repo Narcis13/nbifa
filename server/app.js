@@ -19,6 +19,7 @@ const balRoutes = require('./api/routes/balante');
 const paapRoutes = require('./api/routes/paaproutes');
 const rnRoutes = require('./api/routes/rnroutes');
 const angRoutes = require('./api/routes/angroutes')
+const furnRoutes = require('./api/routes/angroutes')
 
 app.use(morgan('dev'));
 
@@ -55,6 +56,7 @@ app.use('/balante',balRoutes);
 app.use('/paap',paapRoutes);
 app.use('/rn',rnRoutes);
 app.use('/angajamente',angRoutes);
+app.use('/furnizori',furnRoutes);
 
 app.use((req,resp,next)=>{
     const error = new Error('Resursa nu poate fi gasita!!');

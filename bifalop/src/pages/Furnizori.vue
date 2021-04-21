@@ -17,7 +17,7 @@ export default defineComponent({
     const global=inject('global');
     const token=global.state.user.token;
     const compartiment=global.state.user.compartiment;
-    let idcompartiment=compartiment=='SUPERVIZARE'? 0:global.state.user.idcompartiment;
+    let idcompartiment=compartiment=='SUPERVIZARE'? 0:global.state.user.nume_logare;
      console.log('Setup Furnizori',idcompartiment)
 
         function totiFurnizorii(){

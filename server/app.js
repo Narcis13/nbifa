@@ -19,7 +19,7 @@ const balRoutes = require('./api/routes/balante');
 const paapRoutes = require('./api/routes/paaproutes');
 const rnRoutes = require('./api/routes/rnroutes');
 const angRoutes = require('./api/routes/angroutes')
-const furnRoutes = require('./api/routes/angroutes')
+const furnRoutes = require('./api/routes/furnroutes')
 
 app.use(morgan('dev'));
 

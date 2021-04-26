@@ -40,8 +40,12 @@
     </q-table>
   </div>
 
+   <q-dialog  v-model="adaug_furnizor" persistent >
+     <add-furnizor />
+  </q-dialog> 
+
     <q-page-sticky  position="bottom-right" :offset="[24, 24]">
-            <q-btn  fab   icon="add" color="accent"  >
+            <q-btn  fab   icon="add" color="accent"  @click="adaug_furnizor=true">
               <q-tooltip anchor="top start" self="center right" class="bg-accent">Adauga Furnizor</q-tooltip>
             </q-btn>
     </q-page-sticky>
@@ -54,6 +58,7 @@ import { defineComponent ,reactive,inject,ref,computed} from 'vue'
 import axios from 'axios'
 import { date } from 'quasar'
 import { useQuasar } from 'quasar'
+import AddFurnizor from '../components/AddFurnizor.vue'
 
 const columns = [
 
@@ -81,6 +86,7 @@ const state = reactive(
   }
   )
 export default defineComponent({
+  components: { AddFurnizor },
     setup () {
             const $q = useQuasar()
    
@@ -108,11 +114,13 @@ export default defineComponent({
 
 
         let selected= ref([])
+        let adaug_furnizor=ref(false)
 
 
         return {
             state,
             initialPagination,
+            adaug_furnizor,
             columns,
             selected,
             filter:ref(''),

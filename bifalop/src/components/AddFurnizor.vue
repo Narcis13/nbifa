@@ -1,7 +1,15 @@
 <template>
-<q-card style="width: 480px; max-width: 70vw;">
+<q-card style="width: 320px; max-width: 70vw;">
                      <q-card-section>
                           <div class="text-h6">Adauga furnizor</div>
+                       </q-card-section>
+                       <q-card-section>
+                          <q-input  label="CUI"  />
+                          <q-input  label="Furnizor"  />
+                          <q-input  label="IBAN"  />
+                          <q-input  label="Adresa e-mail"  />
+                          <q-input  label="Localitate"  />
+                          <q-input  label="Judet"  />
                        </q-card-section>
 
                         
@@ -16,10 +24,11 @@
 <script>
 import { defineComponent,ref,computed } from 'vue'
 import { date } from 'quasar'
+import {uf} from '../logic/UtileFurnizori'
 export default defineComponent({
     name:'AddFurnizor',
     setup (props, { emit }) {
-       
+       uf();
 
         return {
             

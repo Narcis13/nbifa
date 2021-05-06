@@ -4,7 +4,7 @@ export function uf(){
 
 export function vercif(v){
 	
-    if ( v.length>10 ) return 'Lungimea nu poate fi mai mare de 10';
+    if ( v.length>10 ) return false;
     var cifra_control=v.substr(v.length-1, 1);
     var cif=v.substr(0, v.length-1);
     while (cif.length!=9){
@@ -17,7 +17,7 @@ export function vercif(v){
     if ( rest==10 ) rest=0;
 
     if (rest==cifra_control) return true;
-    else return 'EROARE CIFRA DE CONTROL!';
+    else return false;
 }
 
 var judete = [{"judet":"ALBA"},

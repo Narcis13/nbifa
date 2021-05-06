@@ -4,7 +4,7 @@
                           <div class="text-h6">Adauga furnizor</div>
                        </q-card-section>
                        <q-card-section>
-                          <q-input  label="CUI"  />
+                          <q-input  bottom-slots hint="Minim 3 caractere(cifre)" error-message="CUI INVALID!" v-model="cui" label="CUI" :error="!cuiValid" />
                           <q-input  label="Furnizor"  />
                           <q-input  label="IBAN"  />
                           <q-input  label="Adresa e-mail"  />
@@ -24,14 +24,24 @@
 <script>
 import { defineComponent,ref,computed } from 'vue'
 import { date } from 'quasar'
-import {uf} from '../logic/UtileFurnizori'
+import {uf,vercif} from '../logic/UtileFurnizori'
+
+function suntDoarCifre(text){
+   return /^\d+$/.test(text)
+}
+
 export default defineComponent({
     name:'AddFurnizor',
     setup (props, { emit }) {
        uf();
 
+
+        let cui = ref('')
         return {
-            
+            cui,
+            cuiValid:computed(()=>{
+                return cui.value.length>=3&&suntDoarCifre(cui.value)&&vercif(cui.value)
+            }),
             
         }
     }

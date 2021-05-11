@@ -3,7 +3,7 @@ export function uf(){
 }
 
 export function vercif(v){
-	
+	console.log('Verific IBAN...')
     if ( v.length>10 ) return false;
     var cifra_control=v.substr(v.length-1, 1);
     var cif=v.substr(0, v.length-1);
@@ -107,11 +107,11 @@ export function veriban(v){
                                 if(smod(partial)=='1')
                             return true;
                             else
-                            return 'Cont IBAN invalid!';
+                            return false;
                             }
                             else{
                             if(v.length>0)
-                            return 'Contul acesta nu are 24 de caractere!';
+                            return false;
                             else
                             return true;
                         }

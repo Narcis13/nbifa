@@ -41,7 +41,7 @@
   </div>
 
    <q-dialog  v-model="adaug_furnizor" persistent >
-     <add-furnizor />
+     <add-furnizor @furnizor-adaugat="furnizorAdaugat"/>
   </q-dialog> 
 
     <q-page-sticky  position="bottom-right" :offset="[24, 24]">
@@ -124,6 +124,15 @@ export default defineComponent({
             columns,
             selected,
             filter:ref(''),
+            furnizorAdaugat(){
+              adaug_furnizor.value=false
+              totiFurnizorii()
+              $q.notify({
+                              message:"Furnizor adaugat!",
+                              timeout:2000,
+                              position:'top',
+                              color:'positive'})
+            }
             }
     }
 })

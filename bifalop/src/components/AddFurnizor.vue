@@ -25,6 +25,7 @@
 import { defineComponent,ref,computed,inject } from 'vue'
 import { date } from 'quasar'
 import axios from 'axios'
+import { useQuasar } from 'quasar'
 import {uf,vercif,veriban} from '../logic/UtileFurnizori'
 
 function suntDoarCifre(text){
@@ -33,10 +34,13 @@ function suntDoarCifre(text){
 
 export default defineComponent({
     name:'AddFurnizor',
+    props:['furnizori'],
     setup (props, { emit }) {
        uf();
+       console.log('Props Add Furnizori',props.furnizori[0].codfiscal)
        const global=inject('global');
        const token=global.state.user.token;
+       const $q = useQuasar()
 
         let cui = ref('')
         let iban= ref('')
@@ -44,6 +48,14 @@ export default defineComponent({
         let judet=ref('')
         let localitate=ref('')
         let numefurnizor= ref('')
+
+        let cuiulEUnic=()=>{
+           let unic=true
+           props.furnizori.map(f=>{
+               if (f.codfiscal==cui.value) unic=false
+           })
+           return unic;
+        }
 
         //computed
                let cuiValid=computed(()=>{
@@ -64,6 +76,7 @@ export default defineComponent({
             ibanValid,
             dateValide: computed(()=>cuiValid&&ibanValid&&numefurnizor.value.length>=3),
             furnizorNou(){
+                if(cuiulEUnic())
                 axios.post(process.env.host+'furnizori/furnizornou',{
                         cui:cui.value,
                         iban:iban.value,
@@ -79,6 +92,13 @@ export default defineComponent({
                     .catch(err=>{
                                     
                     })
+                    else {
+                         $q.notify({
+                              message:"Furnizorul cu acest CUI exista deja!",
+                              timeout:2000,
+                              position:'top',
+                              color:'negative'})
+                    }
             }
             
         }

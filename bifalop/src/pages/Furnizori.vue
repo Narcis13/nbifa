@@ -41,7 +41,7 @@
   </div>
 
    <q-dialog  v-model="adaug_furnizor" persistent >
-     <add-furnizor @furnizor-adaugat="furnizorAdaugat"/>
+     <add-furnizor :furnizori="state.furnizori" @furnizor-adaugat="furnizorAdaugat"/>
   </q-dialog> 
 
     <q-page-sticky  position="bottom-right" :offset="[24, 24]">

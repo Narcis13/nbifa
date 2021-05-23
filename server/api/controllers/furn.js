@@ -4,7 +4,7 @@ module.exports.toti = (req,res,next)=> {
 
   console.log('Toti furnizorii compartimentului...',req.params.idcomp)
 
-  knex('furnizori').where('addedby',req.params.idcomp).orderBy('id', 'desc').then(r=>{
+  knex('furnizori').where({'addedby':req.params.idcomp,'stare':'activ'}).orderBy('id', 'desc').then(r=>{
 
     return res.status(200).json({
       message: "toti furnizorii",
@@ -39,4 +39,19 @@ module.exports.furnizor_nou=(req,res,next)=>{
 }).catch(err =>{ console.log(err)})
   
 
+}
+
+module.exports.stergfurnizor=(req,res,next)=>{
+
+  console.log('sterg furnizor',req.params.idf)
+  knex('furnizori').where({
+    id: req.params.idf
+  }).update({stare:'inactiv'})
+  .then(()=>{
+    return res.status(200).json({
+      message: "Furnizor sters"
+  
+    })
+  
+  }).catch(err =>{})
 }

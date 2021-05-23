@@ -20,7 +20,7 @@
               
                <div class="flex" style="min-width:200px;max-height:100px;">
 
-                   <q-btn  class="q-ma-sm"  round color="red" :disable="selected.length==0" icon="delete_forever" >
+                   <q-btn  class="q-ma-sm" @click="stergFurnizor" round color="red" :disable="selected.length==0" icon="delete_forever" >
                       <q-tooltip class="bg-accent">Sterge</q-tooltip>
                    </q-btn>
                   
@@ -124,6 +124,24 @@ export default defineComponent({
             columns,
             selected,
             filter:ref(''),
+            stergFurnizor(){
+              console.log('Sterg furnizor',selected.value[0].id)
+              axios.post(process.env.host+'furnizori/stergfurnizor/'+selected.value[0].id,{
+                        
+                    },{headers:{"Authorization" : `Bearer ${token}`}}).then(res =>{
+                       
+                                     totiFurnizorii()
+                      $q.notify({
+                              message:"Furnizor sters!",
+                              timeout:2000,
+                              position:'top',
+                              color:'positive'})
+                       
+                    })
+                    .catch(err=>{
+                                    
+                    })
+            },
             furnizorAdaugat(){
               adaug_furnizor.value=false
               totiFurnizorii()

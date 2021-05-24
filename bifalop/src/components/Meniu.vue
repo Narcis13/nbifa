@@ -12,7 +12,7 @@
             <q-card>
               <q-card-section>
                   <q-btn class="full-width q-ma-xs" color="indigo"  to="a" no-caps>
-                    Angajamente<br>Bugetare
+                    Angajamente<br>Bugetare / Legale
                   </q-btn>
                   <q-btn class="full-width q-ma-xs" color="indigo" to="l" no-caps>
                      Lichidari<br>Receptii

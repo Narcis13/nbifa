@@ -1,94 +1,123 @@
 <template>
 <q-page padding>
-  <div  class="q-mt-sm flex flex-center">
-    <q-table
-      title="Angajamente"
-      :filter="filter"
-      :rows="state.angajamente"
-      dense
-      :columns="columns"
-      row-key="id"
-      selection="single"
-      :pagination="initialPagination"
-      v-model:selected="selected"
-    >
+  <div  class="q-mt-sm flex flex-center column">
+        <q-tabs
+          v-model="tab"
+          dense
+          class="text-grey"
+          active-color="primary"
+          indicator-color="primary"
+          align="justify"
+          narrow-indicator
+        >
+          <q-tab name="bugetare" label="Bugetare" />
+          <q-tab name="legale" label="Legale" />
 
-        <template v-slot:top>
-            <div class="q-pa-sm text-h6">Angajamente</div>
-            <div class="row q-gutter-sm q-pa-sm q-ml-xl">
-              <q-select class="col" style="min-width:200px;" filled v-model="perspectiva" :options="perspective" label="Perspectiva" stack-label dence options-dense />
-               <div class="flex" style="min-width:200px;max-height:100px;">
-                  <q-btn v-show="modSupervizare" @click="vizatCFPP" class="q-ma-sm" :disable="selectatSiVizat||selected.length==0" round color="green" icon="done_outline" >
-                      <q-tooltip class="bg-accent">Vizat CFPP</q-tooltip>
-                   </q-btn>
-                   <q-btn v-show="!modSupervizare" @click="stergAngajament" class="q-ma-sm" :disable="selectatSiVizat||selected.length==0" round color="red" icon="delete_forever" >
-                      <q-tooltip class="bg-accent">Sterge</q-tooltip>
-                   </q-btn>
-                  <q-btn @click="printAngajamente" class="q-ma-sm" round color="secondary" icon="print" >
-                        <q-tooltip class="bg-accent">Printeaza</q-tooltip>
-                   </q-btn>
-                   <q-btn class="q-ma-sm" round color="amber" glossy text-color="black" icon="file_download" >
-                        <q-tooltip class="bg-accent">Export CSV</q-tooltip>
-                   </q-btn>
-               </div>
+        </q-tabs>
 
-            </div>
+        <q-separator />
 
-            <q-space />
-            <q-input outlined dense debounce="300" color="primary" v-model="filter">
-              <template v-slot:append>
-                <q-icon name="search" />
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="bugetare">
+            <q-table
+              title="Angajamente"
+              :filter="filter"
+              :rows="state.angajamente"
+              dense
+              :columns="columns"
+              row-key="id"
+              selection="single"
+              :pagination="initialPagination"
+              v-model:selected="selected"
+            >
+
+                <template v-slot:top>
+                    <div class="q-pa-sm text-h6">Angajamente</div>
+                    <div class="row q-gutter-sm q-pa-sm q-ml-xl">
+                      <q-select class="col" style="min-width:200px;" filled v-model="perspectiva" :options="perspective" label="Perspectiva" stack-label dence options-dense />
+                      <div class="flex" style="min-width:200px;max-height:100px;">
+                          <q-btn v-show="modSupervizare" @click="vizatCFPP" class="q-ma-sm" :disable="selectatSiVizat||selected.length==0" round color="green" icon="done_outline" >
+                              <q-tooltip class="bg-accent">Vizat CFPP</q-tooltip>
+                          </q-btn>
+                          <q-btn v-show="!modSupervizare" @click="stergAngajament" class="q-ma-sm" :disable="selectatSiVizat||selected.length==0" round color="red" icon="delete_forever" >
+                              <q-tooltip class="bg-accent">Sterge</q-tooltip>
+                          </q-btn>
+                          <q-btn @click="printAngajamente" class="q-ma-sm" round color="secondary" icon="print" >
+                                <q-tooltip class="bg-accent">Printeaza</q-tooltip>
+                          </q-btn>
+                          <q-btn class="q-ma-sm" round color="amber" glossy text-color="black" icon="file_download" >
+                                <q-tooltip class="bg-accent">Export CSV</q-tooltip>
+                          </q-btn>
+                      </div>
+
+                    </div>
+
+                    <q-space />
+                    <q-input outlined dense debounce="300" color="primary" v-model="filter">
+                      <template v-slot:append>
+                        <q-icon name="search" />
+                      </template>
+                    </q-input>
+                </template>
+
+
+              <template v-slot:header="props">
+                <q-tr :props="props">
+                  <q-th auto-width />
+                  <q-th auto-width />
+                  <q-th
+                    v-for="col in props.cols"
+                    :key="col.name"
+                    :props="props"
+                  >
+                    {{ col.label }}
+                  </q-th>
+                </q-tr>
               </template>
-            </q-input>
-        </template>
+
+              <template v-slot:body="props">
+                <q-tr :props="props">
+                  <q-td auto-width>
+                      <q-checkbox  dense v-model="props.selected" ></q-checkbox>
+                  
+                  </q-td>
+                  <q-td auto-width>
+                      
+                    <q-btn v-if="props.row.nr>1" size="sm" color="accent" round dense @click="(props.expand = !props.expand)&&extinde(props)" :icon="props.expand ? 'remove' : 'add'" >
+                    
+                    </q-btn>
+                    <q-badge v-if="props.row.nr>1" color="red" floating transparent >{{props.row.nr}}</q-badge>
+                  </q-td>
+                  <q-td
+                    v-for="col in props.cols"
+                    :key="col.name"
+                    :props="props"
+                  >
+                  <q-checkbox  v-if="col.name=='viza'"  v-model="props.row.viza" disable dense  ></q-checkbox>
+                  <div :style="{color:col.name=='suma'&&col.value<0?'red':'black'}" v-else>{{ col.value }}</div> 
+                  </q-td>
+                </q-tr>
+                <q-tr v-if="props.expand" :props="props">
+                  <q-td colspan="100%">
+                  <!-- <div class="text-left">This is expand slot for row above: {{ props.row.name }}.</div> -->
+                  <AngTimeLine :cine="props.row"/>
+                  </q-td>
+                </q-tr>
+              </template>
 
 
-      <template v-slot:header="props">
-        <q-tr :props="props">
-           <q-th auto-width />
-          <q-th auto-width />
-          <q-th
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-          >
-            {{ col.label }}
-          </q-th>
-        </q-tr>
-      </template>
+            </q-table>
+          </q-tab-panel>
 
-      <template v-slot:body="props">
-        <q-tr :props="props">
-          <q-td auto-width>
-              <q-checkbox  dense v-model="props.selected" ></q-checkbox>
-           
-          </q-td>
-          <q-td auto-width>
-              
-            <q-btn v-if="props.row.nr>1" size="sm" color="accent" round dense @click="(props.expand = !props.expand)&&extinde(props)" :icon="props.expand ? 'remove' : 'add'" >
-             
-            </q-btn>
-             <q-badge v-if="props.row.nr>1" color="red" floating transparent >{{props.row.nr}}</q-badge>
-          </q-td>
-          <q-td
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-          >
-          <q-checkbox  v-if="col.name=='viza'"  v-model="props.row.viza" disable dense  ></q-checkbox>
-           <div :style="{color:col.name=='suma'&&col.value<0?'red':'black'}" v-else>{{ col.value }}</div> 
-          </q-td>
-        </q-tr>
-        <q-tr v-if="props.expand" :props="props">
-          <q-td colspan="100%">
-           <!-- <div class="text-left">This is expand slot for row above: {{ props.row.name }}.</div> -->
-           <AngTimeLine :cine="props.row"/>
-          </q-td>
-        </q-tr>
-      </template>
+          <q-tab-panel name="legale">
+            <div class="text-h6">Angajamente legale </div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </q-tab-panel>
 
 
-    </q-table>
+        </q-tab-panels>
+
+
 
 
   </div>
@@ -419,6 +448,7 @@ export default defineComponent({
       selected,
       adaug_angajament,
       filter:ref(''),
+      tab: ref('bugetare'),
       detalii,
       suma,
       dataAngajament,

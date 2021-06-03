@@ -1,24 +1,9 @@
 <template>
 <q-page padding>
   <div  class="q-mt-sm flex flex-center column">
-        <q-tabs
-          v-model="tab"
-          dense
-          class="text-grey"
-          active-color="primary"
-          indicator-color="primary"
-          align="justify"
-          narrow-indicator
-        >
-          <q-tab name="bugetare" label="Bugetare" />
-          <q-tab name="legale" label="Legale" />
 
-        </q-tabs>
 
-        <q-separator />
-
-        <q-tab-panels v-model="tab" animated>
-          <q-tab-panel name="bugetare">
+         
             <q-table
               title="Angajamente"
               :filter="filter"
@@ -45,8 +30,9 @@
                           <q-btn @click="printAngajamente" class="q-ma-sm" round color="secondary" icon="print" >
                                 <q-tooltip class="bg-accent">Printeaza</q-tooltip>
                           </q-btn>
-                          <q-btn class="q-ma-sm" round color="amber" glossy text-color="black" icon="file_download" >
-                                <q-tooltip class="bg-accent">Export CSV</q-tooltip>
+                          <q-btn @click="anglegal_nou=true" class="q-ma-sm" round color="amber" glossy   icon="assignment" >
+
+                                <q-tooltip class="bg-accent">Angajamente legale</q-tooltip>
                           </q-btn>
                       </div>
 
@@ -107,15 +93,7 @@
 
 
             </q-table>
-          </q-tab-panel>
-
-          <q-tab-panel name="legale">
-            <div class="text-h6">Angajamente legale </div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          </q-tab-panel>
-
-
-        </q-tab-panels>
+        
 
 
 
@@ -127,6 +105,10 @@
 
    <q-dialog  v-model="vizez_angajament" persistent >
      <viza-angajament @angajament-vizat="angajamentVizat" :care="selected[0]"/>
+  </q-dialog> 
+
+   <q-dialog  v-model="anglegal_nou" persistent >
+    <angajament-legal />
   </q-dialog> 
 
    <q-dialog @show="showAngNou" v-model="adaug_angajament" persistent >
@@ -244,6 +226,7 @@ import { date } from 'quasar'
 import { useQuasar } from 'quasar'
 import DelaLa from '../components/DelaLa.vue'
 import VizaAngajament from '../components/VizaAngajament.vue'
+import AngajamentLegal from '../components/AngajamentLegal.vue'
 //import AngTimeLine from '../components/AngTimeLine.vue'
 const columns = [
 
@@ -278,7 +261,8 @@ export default defineComponent({
   components:{
       AngTimeLine,
       DelaLa,
- VizaAngajament
+ VizaAngajament,
+    AngajamentLegal
 
   },
   setup(p,c){
@@ -362,6 +346,7 @@ export default defineComponent({
      let detalii=ref('');
      let dataAngajament=ref(date.formatDate(Date.now(), 'YYYY/MM/DD'))
      let adaug_angajament=ref(false)
+     let anglegal_nou=ref(false)
      let vizez_angajament=ref(false)
      let selectez_interval = ref(false)
      let selected= ref([])
@@ -465,6 +450,7 @@ export default defineComponent({
       articolbugetar,
       selectez_interval,
       vizez_angajament,
+      anglegal_nou,
       actiuneModificareAngajament,
       state,
       modSupervizare,

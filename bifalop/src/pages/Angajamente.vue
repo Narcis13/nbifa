@@ -30,7 +30,7 @@
                           <q-btn @click="printAngajamente" class="q-ma-sm" round color="secondary" icon="print" >
                                 <q-tooltip class="bg-accent">Printeaza</q-tooltip>
                           </q-btn>
-                          <q-btn @click="anglegal_nou=true" class="q-ma-sm" round color="amber" glossy   icon="assignment" >
+                          <q-btn @click="anglegal_nou=true" :disable="selected.length==0" class="q-ma-sm" round color="amber" glossy   icon="assignment" >
 
                                 <q-tooltip class="bg-accent">Angajamente legale</q-tooltip>
                           </q-btn>
@@ -108,7 +108,7 @@
   </q-dialog> 
 
    <q-dialog  v-model="anglegal_nou" persistent >
-    <angajament-legal />
+    <angajament-legal :ang_bugetar="selected[0]"/>
   </q-dialog> 
 
    <q-dialog @show="showAngNou" v-model="adaug_angajament" persistent >

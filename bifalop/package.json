@@ -9,13 +9,13 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.10.7",
+    "@quasar/extras": "^1.10.8",
     "axios": "^0.19.0",
     "core-js": "^3.6.5",
-    "quasar": "^2.0.0"
+    "quasar": "^2.0.1"
   },
   "devDependencies": {
-    "@quasar/app": "^3.0.0"
+    "@quasar/app": "^3.0.1"
   },
   "browserslist": [
     "last 10 Chrome versions",

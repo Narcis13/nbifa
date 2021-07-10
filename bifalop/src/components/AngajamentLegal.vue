@@ -1,5 +1,5 @@
 <template>
-<q-card style="width: 640px; max-width: 70vw;">
+<q-card style="width: 800px; max-width: 70vw;">
         <q-bar>
           <q-btn dense flat  :icon="panelActiv=='unul'?'list':'arrow_back'" @click="schimbaPanelActiv">
             <q-tooltip>{{panelActiv=='unul'?'Toate angajamentele legale':'Inapoi'}}</q-tooltip>
@@ -18,16 +18,13 @@
           <div class="text-subtitle2"> Categoria: {{angBugetar.categorie}} Art. bug. {{angBugetar.artbug}} <span class="text-right">Suma disponibila: {{angBugetar.suma}}</span></div>
            <div class="q-gutter-md row">
               <q-select
-                filled
+                label="Furnizor"
                 v-model="furnizor"
                 use-input
-                hide-selected
-                fill-input
-                input-debounce="0"
                 :options="furnizori"
                 @filter="filterFn"
-                hint="Minimum 2 caractere pentru a cauta..."
-                style="width: 250px; padding-bottom: 32px"
+                hint="Min 2 caractere pentru a cauta..."
+                style="width: 200px; padding-bottom: 16px"
               >
                 <template v-slot:no-option>
                   <q-item>
@@ -37,7 +34,29 @@
                   </q-item>
                 </template>
               </q-select>
+
+              <q-input   label="Nr. contract" stack-label  />
+
+              <q-input style="width: 140px; padding-bottom: 16px" label="Data contract" stack-label v-model="date" mask="date" :rules="['date']">
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                    <q-date v-model="date">
+                      <div class="row items-center justify-end">
+                        <q-btn v-close-popup label="Close" color="primary" flat />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+
+             <q-input   label="Valoare" stack-label  />
+
           </div>
+         <div class="row items-center justify-center">
+                        <q-btn v-close-popup label="Adauga" color="primary" flat />
+         </div>
         </q-tab-panel>
 
         <q-tab-panel name="toate">

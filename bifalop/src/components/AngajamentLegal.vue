@@ -16,7 +16,7 @@
         <q-tab-panel name="unul">
           <div class="text-subtitle1">Ang. bugetar nr. {{angBugetar.nrdoc}} din {{angBugetar.dataang}} - {{angBugetar.detalii}}</div>
           <div class="text-subtitle2"> Categoria: {{angBugetar.categorie}} Art. bug. {{angBugetar.artbug}} <span class="text-right">Suma disponibila: {{angBugetar.suma}}</span></div>
-           <div class="q-gutter-md row">
+           <div class="q-pa-sm q-gutter-md row">
               <q-select
                 label="Furnizor"
                 v-model="furnizor"
@@ -35,7 +35,7 @@
                 </template>
               </q-select>
 
-              <q-input   label="Nr. contract" stack-label  />
+              <q-input  v-model="nrcontract" label="Nr. contract" stack-label  />
 
               <q-input style="width: 140px; padding-bottom: 16px" label="Data contract" stack-label v-model="date" mask="date" :rules="['date']">
               <template v-slot:append>
@@ -51,7 +51,7 @@
               </template>
             </q-input>
 
-             <q-input   label="Valoare" stack-label  />
+             <q-input v-model="valoare"  label="Valoare" stack-label  />
 
           </div>
          <div class="row items-center justify-center">
@@ -88,11 +88,15 @@ export default defineComponent({
        console.log('Prop ang legal',props.ang_bugetar)
        let furnizori=ref([])
        let furnizor = ref(null)
+       let nrcontract=ref("")
+       let valoare=ref(0)
        let panelActiv = ref('unul')
         return {
             panelActiv,
             furnizori,
             furnizor,
+            nrcontract,
+            valoare,
             angBugetar:props.ang_bugetar,
             filterFn (val, update, abort) {
                 if (val.length < 2) {

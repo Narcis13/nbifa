@@ -77,14 +77,37 @@ import { date } from 'quasar'
 import axios from 'axios'
 import { useQuasar } from 'quasar'
 
-const totiFurnizorii = [
-  'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
+let totiFurnizorii = [
+
 ]
 
 export default defineComponent({
     name:'AngajamentLegal',
     props:['ang_bugetar'],
     setup (props, { emit }) {
+        const global=inject('global');
+        const token=global.state.user.token;
+        const compartiment=global.state.user.compartiment;
+        let idcompartiment=compartiment=='SUPERVIZARE'? 0:global.state.user.nume_logare;
+
+        /**
+         * 
+        incarc furnizorii
+
+         */
+
+        axios.get(process.env.host+`furnizori/toti/${idcompartiment}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+                    res => {
+                    console.log('Raspuns la toti furnizorii',res.data);
+                    totiFurnizorii=[];
+                    res.data.furnizori.map(f=>{
+                       totiFurnizorii.push(f)
+                    })
+                
+                    }
+                ).catch(err =>{})
+
        console.log('Prop ang legal',props.ang_bugetar)
        let furnizori=ref([])
        let furnizor = ref(null)
@@ -106,7 +129,8 @@ export default defineComponent({
 
                 update(() => {
                   const needle = val.toLowerCase()
-                  furnizori.value = totiFurnizorii.filter(v => v.toLowerCase().indexOf(needle) > -1)
+                  console.log('toti furnizorii',totiFurnizorii)
+                  furnizori.value = totiFurnizorii.filter(v => v.denumire.toLowerCase().indexOf(needle) > -1)
                 })
           },
             schimbaPanelActiv(){

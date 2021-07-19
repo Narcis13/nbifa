@@ -33,17 +33,28 @@
                     </q-item-section>
                   </q-item>
                 </template>
+
+                <template v-slot:option="scope">
+                  <q-item v-bind="scope.itemProps">
+
+                    <q-item-section>
+                      <q-item-label v-html="scope.opt.label" />
+                      <q-item-label caption>CUI: {{ scope.opt.cui }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </template>
+
               </q-select>
 
               <q-input  v-model="nrcontract" label="Nr. contract" stack-label  />
 
-              <q-input style="width: 140px; padding-bottom: 16px" label="Data contract" stack-label v-model="date" mask="date" :rules="['date']">
+              <q-input style="width: 140px; padding-bottom: 16px" label="Data contract" stack-label v-model="deladata" mask="date" :rules="['date']">
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                    <q-date v-model="date">
+                    <q-date v-model="deladata">
                       <div class="row items-center justify-end">
-                        <q-btn v-close-popup label="Close" color="primary" flat />
+                        <q-btn v-close-popup label="Inchide" color="primary" flat />
                       </div>
                     </q-date>
                   </q-popup-proxy>
@@ -55,7 +66,7 @@
 
           </div>
          <div class="row items-center justify-center">
-                        <q-btn v-close-popup label="Adauga" color="primary" flat />
+                        <q-btn @click="angLegalNou" label="Adauga" color="primary" flat />
          </div>
         </q-tab-panel>
 
@@ -90,6 +101,8 @@ export default defineComponent({
         const compartiment=global.state.user.compartiment;
         let idcompartiment=compartiment=='SUPERVIZARE'? 0:global.state.user.nume_logare;
 
+        let azi=new Date()
+        let deladata=ref(date.formatDate(azi, 'YYYY/MM/DD'))
         /**
          * 
         incarc furnizorii
@@ -102,7 +115,7 @@ export default defineComponent({
                     console.log('Raspuns la toti furnizorii',res.data);
                     totiFurnizorii=[];
                     res.data.furnizori.map(f=>{
-                       totiFurnizorii.push(f)
+                       totiFurnizorii.push({label:f.denumire,value:f.id,cui:f.codfiscal})
                     })
                 
                     }
@@ -120,6 +133,7 @@ export default defineComponent({
             furnizor,
             nrcontract,
             valoare,
+            deladata,
             angBugetar:props.ang_bugetar,
             filterFn (val, update, abort) {
                 if (val.length < 2) {
@@ -130,7 +144,7 @@ export default defineComponent({
                 update(() => {
                   const needle = val.toLowerCase()
                   console.log('toti furnizorii',totiFurnizorii)
-                  furnizori.value = totiFurnizorii.filter(v => v.denumire.toLowerCase().indexOf(needle) > -1)
+                  furnizori.value = totiFurnizorii.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
                 })
           },
             schimbaPanelActiv(){
@@ -139,6 +153,9 @@ export default defineComponent({
                else
                   panelActiv.value='unul'
 
+            },
+            angLegalNou(){
+              console.log('Angajament legal nou!')
             }
         }
     }

@@ -41,6 +41,32 @@ module.exports.furnizor_nou=(req,res,next)=>{
 
 }
 
+module.exports.anglegal_nou=(req,res,next)=>{
+  console.log('Angajament legal NOU...',req.body)
+  /*knex('furnizori').insert({
+    denumire:req.body.numefurnizor,
+    codfiscal:req.body.cui,
+    iban:req.body.iban,
+    email:req.body.mail,
+    localitate:req.body.localitate,
+    judet:req.body.judet,
+    addedby:req.body.addedby,
+    dindata:moment().format('YYYY-MM-DD'),
+    stare:'activ',
+    idc:8,
+  
+  
+}).then((d)=>{
+  return res.status(200).json({
+    message: "Furnizor adaugat!",
+    id:d[0]
+
+  })
+}).catch(err =>{ console.log(err)})*/
+  
+
+}
+
 module.exports.stergfurnizor=(req,res,next)=>{
 
   console.log('sterg furnizor',req.params.idf)

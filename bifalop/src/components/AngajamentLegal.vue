@@ -155,12 +155,12 @@ export default defineComponent({
 
             },
             angLegalNou(){
-              console.log('Angajament legal nou!',props.ang_bugetar)
+              console.log('Angajament legal nou!',props.ang_bugetar,deladata.value)
                    let anglegal={idAng:props.ang_bugetar.idAntet,numepartener:furnizor.value.label,furnizor:furnizor.value.value,nrcontract:nrcontract.value,valoare:valoare.value,datacontract:deladata.value,addedby:global.state.user.nume_logare};
                    axios.post(process.env.host+'furnizori/anglegalnou',anglegal,{headers:{"Authorization" : `Bearer ${token}`}}).then(res =>{
 
                       //  console.log('A sosit rasunsul de la furnizor nou...')
-                      //  emit('furnizor-adaugat',{id:res.data.id})
+                        emit('anglegal-adaugat',{id:res.data.id})
 
                     })
                     .catch(err=>{

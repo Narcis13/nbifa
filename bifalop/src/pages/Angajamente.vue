@@ -108,7 +108,7 @@
   </q-dialog> 
 
    <q-dialog  v-model="anglegal_nou" persistent >
-    <angajament-legal :ang_bugetar="selected[0]"/>
+    <angajament-legal :ang_bugetar="selected[0]" @anglegal-adaugat="anglegalAdaugat"/>
   </q-dialog> 
 
    <q-dialog @show="showAngNou" v-model="adaug_angajament" persistent >
@@ -501,6 +501,15 @@ export default defineComponent({
                               color:'positive'
                             }) 
 
+      },
+      anglegalAdaugat(){
+           $q.notify({
+                              message:'Angajamentul legal a fost adaugat!',
+                              timeout:2500,
+                              position:'top',
+                              color:'positive'
+                            })
+                            anglegal_nou.value=false;
       },
       vizatCFPP(){
          console.log('Vizat CFPP')

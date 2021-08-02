@@ -43,26 +43,28 @@ module.exports.furnizor_nou=(req,res,next)=>{
 
 module.exports.anglegal_nou=(req,res,next)=>{
   console.log('Angajament legal NOU...',req.body)
-  /*knex('furnizori').insert({
-    denumire:req.body.numefurnizor,
-    codfiscal:req.body.cui,
-    iban:req.body.iban,
-    email:req.body.mail,
-    localitate:req.body.localitate,
-    judet:req.body.judet,
+  knex('contracte').insert({
+    idAng:req.body.idAng,
+    numepartener:req.body.numepartener,
+    partenerID:req.body.furnizor,
+    numar:req.body.nrcontract,
+    valoare:req.body.valoare,
+    dindata:req.body.datacontract,
     addedby:req.body.addedby,
-    dindata:moment().format('YYYY-MM-DD'),
+    //dindata:moment().format('YYYY-MM-DD'),
     stare:'activ',
     idc:8,
+    tip:'achizitii',
+    durata:12
   
   
 }).then((d)=>{
   return res.status(200).json({
-    message: "Furnizor adaugat!",
+    message: "Angajament legal adaugat!",
     id:d[0]
 
   })
-}).catch(err =>{ console.log(err)})*/
+}).catch(err =>{ console.log(err)})
   
 
 }

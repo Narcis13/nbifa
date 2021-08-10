@@ -77,10 +77,10 @@
                 dense
                 :filter="filter"
                 :pagination="initialPagination"
-                :rows="rows"
+                :rows="state.angajamente"
                 v-model:selected="selected"
                 :columns="columns"
-                row-key="name"
+                row-key="id"
                 selection="single"
               >
 
@@ -88,7 +88,7 @@
 
                       <div class="flex" style="min-width:200px;max-height:100px;">
   
-                          <q-btn  class="q-ma-sm"  round color="red" icon="delete_forever" >
+                          <q-btn  class="q-ma-sm"  round color="red" :disable="selected.length==0" icon="delete_forever" @click="stergAngajament">
                               <q-tooltip class="bg-accent">Sterge</q-tooltip>
                           </q-btn>
 
@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import { defineComponent,ref,computed,inject } from 'vue'
+import { defineComponent,ref,computed,inject ,reactive} from 'vue'
 import { date } from 'quasar'
 import axios from 'axios'
 import { useQuasar } from 'quasar'
@@ -130,126 +130,29 @@ const  initialPagination = {
 
 const columns = [
   {
-    name: 'name',
+    name: 'id',
     required: true,
-    label: 'Dessert (100g serving)',
+    label: 'ID',
     align: 'left',
-    field: row => row.name,
-    format: val => `${val}`,
+    field:'id',
     sortable: true
   },
-  { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-  { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-  { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-  { name: 'protein', label: 'Protein (g)', field: 'protein' },
-  { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-  { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-  { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
+  { name: 'nr', align: 'center', label: 'Nr. contr.', field: 'numar', sortable: true },
+  { name: 'data', label: 'Data contr.', field: 'dindata', sortable: true },
+  { name: 'valoare', label: 'Valoare', field: 'valoare' },
+  { name: 'partener', label: 'Partener', field: 'numepartener' ,align:'left'},
+  { name: 'scop', label: 'Scop', field: 'detalii' ,align:'left'}
 ]
 
 const rows = [
-  {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    sodium: 87,
-    calcium: '14%',
-    iron: '1%'
-  },
-  {
-    name: 'Ice cream sandwich',
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    sodium: 129,
-    calcium: '8%',
-    iron: '1%'
-  },
-  {
-    name: 'Eclair',
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    sodium: 337,
-    calcium: '6%',
-    iron: '7%'
-  },
-  {
-    name: 'Cupcake',
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    sodium: 413,
-    calcium: '3%',
-    iron: '8%'
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-    protein: 3.9,
-    sodium: 327,
-    calcium: '7%',
-    iron: '16%'
-  },
-  {
-    name: 'Jelly bean',
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-    protein: 0.0,
-    sodium: 50,
-    calcium: '0%',
-    iron: '0%'
-  },
-  {
-    name: 'Lollipop',
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-    sodium: 38,
-    calcium: '0%',
-    iron: '2%'
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-    sodium: 562,
-    calcium: '0%',
-    iron: '45%'
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-    fat: 25.0,
-    carbs: 51,
-    protein: 4.9,
-    sodium: 326,
-    calcium: '2%',
-    iron: '22%'
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-    fat: 26.0,
-    carbs: 65,
-    protein: 7,
-    sodium: 54,
-    calcium: '12%',
-    iron: '6%'
-  }
+  
 ]
 
+const state = reactive(
+  {
+    angajamente : []  
+  }
+  )
 
 let totiFurnizorii = [
 
@@ -263,7 +166,7 @@ export default defineComponent({
         const token=global.state.user.token;
         const compartiment=global.state.user.compartiment;
         let idcompartiment=compartiment=='SUPERVIZARE'? 0:global.state.user.nume_logare;
-
+        const $q = useQuasar()
         let azi=new Date()
         let deladata=ref(date.formatDate(azi, 'YYYY/MM/DD'))
         /**
@@ -284,13 +187,32 @@ export default defineComponent({
                     }
                 ).catch(err =>{})
 
+         function toateAngajamenteleLegale(){
+                axios.get(process.env.host+`furnizori/toateangajamentele/${idcompartiment}`,{headers:{"Authorization" : `Bearer ${token}`}}).then(
+
+                    res => {
+                    console.log('Raspuns la toate angajamentele',res.data);
+                     state.angajamente=[]
+                    res.data.angajamente.map(a=>{
+                      a.dindata=date.formatDate(a.dindata, 'DD/MM/YYYY')
+                        state.angajamente.push(a)
+                    })
+                
+                    }
+                ).catch(err =>{})
+        }
+
+        toateAngajamenteleLegale();
+
        console.log('Prop ang legal',props.ang_bugetar)
        let furnizori=ref([])
+       let  selected=ref([])
        let furnizor = ref(null)
        let nrcontract=ref("")
        let valoare=ref(0)
        let panelActiv = ref('unul')
         return {
+            state,
             panelActiv,
             furnizori,
             furnizor,
@@ -299,7 +221,7 @@ export default defineComponent({
             deladata,
             columns,
             rows,
-            selected: ref([]),
+            selected,
             filter:ref(''),
             initialPagination,
             angBugetar:props.ang_bugetar,
@@ -316,11 +238,32 @@ export default defineComponent({
                 })
           },
             schimbaPanelActiv(){
-               if(panelActiv.value=='unul')
-                  panelActiv.value='toate'
+               if(panelActiv.value=='unul'){
+                    panelActiv.value='toate'
+
+               }
+                 
                else
                   panelActiv.value='unul'
 
+            },
+            stergAngajament(){
+                 console.log(selected.value)
+                 axios.post(process.env.host+'furnizori/stergangajament/'+selected.value[0].id,{
+                        
+                    },{headers:{"Authorization" : `Bearer ${token}`}}).then(res =>{
+                       
+                                     toateAngajamenteleLegale()
+                      $q.notify({
+                              message:"Angajament legal sters!",
+                              timeout:2000,
+                              position:'top',
+                              color:'positive'})
+                       
+                    })
+                    .catch(err=>{
+                                    
+                    })
             },
             angLegalNou(){
               console.log('Angajament legal nou!',props.ang_bugetar,deladata.value)

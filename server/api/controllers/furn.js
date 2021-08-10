@@ -15,6 +15,21 @@ module.exports.toti = (req,res,next)=> {
 
 }
 
+module.exports.toateangajamentele = (req,res,next)=> {
+
+  console.log('Toate angajamentele compartimentului...',req.params.idcomp,moment().startOf('year').format('YYYY-MM-DD'))
+
+  knex.select(['contracte.id','contracte.numar','contracte.dindata','contracte.numepartener','contracte.valoare','anteteangajamente.detalii']).from('contracte').innerJoin('anteteangajamente','anteteangajamente.id','contracte.idAng').where({'addedby':req.params.idcomp,'contracte.stare':'activ'}).andWhere('contracte.dindata','>=',moment().startOf('year').format('YYYY-MM-DD')).orderBy('id', 'desc').then(r=>{
+
+    return res.status(200).json({
+      message: "toate angajamentele ",
+      angajamente:r
+    });
+  }).catch(err =>{console.log(err)})
+
+
+}
+
 module.exports.furnizor_nou=(req,res,next)=>{
   console.log('FURNIZOR NOU...',req.body)
   knex('furnizori').insert({
@@ -78,6 +93,21 @@ module.exports.stergfurnizor=(req,res,next)=>{
   .then(()=>{
     return res.status(200).json({
       message: "Furnizor sters"
+  
+    })
+  
+  }).catch(err =>{})
+}
+
+module.exports.stergangajament=(req,res,next)=>{
+
+  console.log('sterg angajament',req.params.idf)
+  knex('contracte').where({
+    id: req.params.idf
+  }).update({stare:'inactiv'})
+  .then(()=>{
+    return res.status(200).json({
+      message: "Ang legal sters"
   
     })
   

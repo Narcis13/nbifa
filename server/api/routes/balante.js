@@ -6,6 +6,7 @@ const BalController =require('../controllers/balante');
 
 router.post("/balantanoua", BalController.analitica);
 router.post("/rapanalitica", BalController.raportanalitica);
+router.post("/rapli", BalController.raportli);
 router.post("/rapfisacont", BalController.raportfisacont);
 router.post("/fisacont", BalController.fisacont);
 

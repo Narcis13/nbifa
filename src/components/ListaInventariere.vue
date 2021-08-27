@@ -1,5 +1,6 @@
 <template>
-      <q-group-table :loading="loading" dense dark :group-on="group" :title="niceTitle" :data="users" :columns="column_defs"  selection="single" :selected.sync="selected" @select="get_selection($event)">
+<div>
+ <q-group-table v-if="false" :loading="loading" dense dark :group-on="group" :title="niceTitle" :data="users" :columns="column_defs"  selection="single" :selected.sync="selected" @select="get_selection($event)">
       <template v-slot:top>
         <q-btn dense dark color="primary" :disable="loading" label="Add row" @click="addrow" />
         <q-space />
@@ -10,6 +11,9 @@
         </q-input>
       </template>
       </q-group-table>
+ 
+ <div>Lista de inventariere</div>
+ </div>
 </template>
 
 <script>

@@ -12,6 +12,7 @@
                  <template v-slot:top>
 
                           <q-btn class="on-right" icon="print" flat dense color="green"  label="Print" @click="raportPrintat" />
+                          <q-btn class="on-right" icon="print" flat dense color="blue"  label="Lista inventariere" @click="raportLIPrintat" />
                           <q-space />
                           <q-input  dense debounce="300" color="primary" v-model="filter">
                             <template v-slot:append>
@@ -61,6 +62,36 @@ export default {
     }
  },
  methods:{
+   raportLIPrintat(){
+     console.log('PRINT LISTA  INV!')
+
+             const token=this.$store.getters.token;
+          var that=this;
+          axios.post(process.env.host+'balante/rapli',this.parametrii,{responseType:'blob',headers:{"Authorization" : `Bearer ${token}`}}).then(
+             res => {
+                  const file = new Blob([res.data], {
+                            type: "text/html"
+                          });
+
+                // saveAs(file,'pdfNou.pdf');
+                let newWindow = window.open('/','rapli')
+                newWindow.onload = () => {
+                        newWindow.location = URL.createObjectURL(file);
+                        
+                      };
+                newWindow.document.title="Lista inventariere"     
+              }
+           ).catch(err=>{
+                 //  console.log('Eroare.............',err.response.data.message)
+                    this.$q.notify({
+                        color: 'negative',
+                        timeout:1500,
+                        position:'top',
+                        icon: 'delete',
+                        message: `ATENTIE! `
+                     })
+             })
+   },
    raportPrintat(){
      //
                const token=this.$store.getters.token;

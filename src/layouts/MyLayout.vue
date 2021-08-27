@@ -17,7 +17,7 @@
         </q-btn>
 
         <q-toolbar-title>
-          BIFA Gestiune (vers. 1.0 alpha build 2021.8)
+          BIFA Gestiune (vers. 1.0 beta build 2021.9)
           
         </q-toolbar-title>
         <q-btn v-if="!userAutentificat" icon="lock" flat dense @click="doLogin">Autentificare!</q-btn>

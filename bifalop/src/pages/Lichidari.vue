@@ -1,12 +1,12 @@
 <template>
   <div class="bg-blue text-white text-center q-pa-md flex flex-center">
     <div>
-      <div style="font-size: 30vh">
+      <div >
         Lichidari 
       </div>
 
       <div class="text-h2" style="opacity:.4">
-        In lucru...
+        In lucru........
       </div>
 
       <q-btn

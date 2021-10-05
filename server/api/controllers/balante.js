@@ -340,6 +340,7 @@ module.exports.raportli = (req,res,next)=>{
              vi:parseFloat(linie.vi).toFixed(2),
               ve:parseFloat(linie.ve).toFixed(2),
                valoarestoc:parseFloat(linie.valoarestoc).toFixed(2),
+               pret:(parseFloat(linie.valoarestoc)/parseFloat(linie.stocfinal)).toFixed(2)
 
         })
          nrcrt++;

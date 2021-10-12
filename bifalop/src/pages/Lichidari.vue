@@ -65,7 +65,9 @@
       </div>
 
     </div>
+    <div class="row">
 
+    </div>
       <div class="bg-blue text-white text-center q-pa-md q-mt-md flex flex-center">
        <q-btn
        

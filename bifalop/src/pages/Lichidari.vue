@@ -66,6 +66,18 @@
 
     </div>
 
+    <div class="row q-pa-md q-mt-sm">
+      <q-input outlined  label="Furnizor" />
+      <q-input outlined  label="Nr. contract" />
+      <q-input outlined  label="Valoare contract" />
+    </div>
+
+    <div class="row q-pa-md q-mt-sm">
+      <q-input outlined  label="Nr. factura" />
+      <q-input outlined  label="Data factura" />
+      <q-input outlined  label="Valoare factura" />
+    </div>
+
       <div class="bg-blue text-white text-center q-pa-md q-mt-md flex flex-center">
        <q-btn
        
@@ -73,7 +85,16 @@
         text-color="blue"
         unelevated
         to="/"
-        label="Go Home"
+        label="Adauga!"
+        no-caps
+      />
+      <q-btn
+       
+        color="white"
+        text-color="blue"
+        unelevated
+        to="/"
+        label="Reset!"
         no-caps
       />
     </div>

@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-         BIFA ALOP Teaser
+         BIFA ALOP 
         </q-toolbar-title>
 
         <div>Quasar v{{ $q.version }}</div>

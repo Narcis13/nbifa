@@ -19,7 +19,7 @@
     "ejs": "^3.0.1",
     "express": "^4.16.4",
     "file-saver": "^2.0.2",
-    "jsonwebtoken": "^8.4.0",
+    "jsonwebtoken": "^9.0.0",
     "knex": "^0.20.12",
     "moment": "^2.24.0",
     "mysql2": "^1.6.5",

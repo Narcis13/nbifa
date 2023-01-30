@@ -159,7 +159,7 @@ module.exports.tranzactienoua = (req,res,next) =>{
         'debit' :0,
         'credit' :t.valoare,
         'stare_material' :t.stare_material_iesire,
-        'tip_material':t.tip_material,
+        'tip_material':t.tipmaterial,
         'stare' :'ACTIV',
         'datacreere':knex.fn.now(),
         'datamodificare' :knex.fn.now()
@@ -178,7 +178,7 @@ module.exports.tranzactienoua = (req,res,next) =>{
         'debit' :t.valoare,
         'credit' :0,
         'stare_material' :t.stare_material_intrare,
-        'tip_material':t.tip_material,
+        'tip_material':t.tipmaterial,
         'stare' :'ACTIV',
         'datacreere':knex.fn.now(),
         'datamodificare' :knex.fn.now()
@@ -203,7 +203,7 @@ module.exports.tranzactienoua = (req,res,next) =>{
           'credit' :0,
           'stare_material' :t.stare_material_intrare,
           'stare' :'ACTIV',
-          'tip_material':t.tip_material,
+          'tip_material':t.tipmaterial,
           'datacreere':knex.fn.now(),
           'datamodificare' :knex.fn.now()
         })
@@ -222,7 +222,7 @@ module.exports.tranzactienoua = (req,res,next) =>{
             'credit' :t.valoare,
             'stare_material' :t.stare_material_iesire,
             'stare' :'ACTIV',
-            'tip_material':t.tip_material,
+            'tip_material':t.tipmaterial,
             'datacreere':knex.fn.now(),
             'datamodificare' :knex.fn.now()
           })     

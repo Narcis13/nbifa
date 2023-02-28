@@ -11,7 +11,7 @@
     "start": "nodemon -e js,ejs,json,css ./server/server.js"
   },
   "dependencies": {
-    "@quasar/cli": "^1.2.1",
+    "@quasar/cli": "^1.4.0",
     "@quasar/extras": "^1.10.7",
     "axios": "^0.18.1",
     "body-parser": "^1.18.3",
@@ -27,7 +27,7 @@
     "quasar": "^1.15.21"
   },
   "devDependencies": {
-    "@quasar/app": "^1.9.6",
+    "@quasar/app": "^2.4.3",
     "morgan": "^1.9.1",
     "nodemon": "^1.18.10",
     "quasar-app-extension-q-grouped-table": "^0.1.0",

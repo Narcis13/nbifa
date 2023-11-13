@@ -308,6 +308,10 @@ module.exports.raportli = (req,res,next)=>{
      m.denumire,
      tranzactii.id_reper,
      m.um um,
+     g.gestionar gestionar,
+     g.i_presedinte presedinte,
+     g.i_membru1 membru1,
+     g.i_membru2 membru2,
      ifnull(sum(case when op.data < '${req.body.datainceput}' then tranzactii.cantitate_debit-tranzactii.cantitate_credit end),0) as stocinitial,
      ifnull(sum(case when op.data >= '${req.body.datainceput}' and op.data <= '${req.body.datasfirsit}' then tranzactii.cantitate_debit end),0) ti,
      ifnull(sum(case when op.data >= '${req.body.datainceput}' and op.data <= '${req.body.datasfirsit}' then tranzactii.cantitate_credit end),0) te,
@@ -319,6 +323,7 @@ module.exports.raportli = (req,res,next)=>{
      FROM bifa.tranzactii 
      inner join materiale m on m.id=id_reper
      inner join operatiuni  op on op.id=tranzactii.idAntet
+     inner join gestiuni g on g.id = tranzactii.id_gestiune
      where tranzactii.stare_material LIKE '${sql_stari}' and tranzactii.tip_material='${req.body.tipmaterial}'  and id_categ${sql_categ} and op.stare='ACTIV' and tranzactii.stare='ACTIV' and id_gestiune=${req.body.idgestiune} and id_locdispunere${sql_locuri}
      group by id_reper
      having stocinitial>0 or stocfinal>0`;
@@ -340,7 +345,11 @@ module.exports.raportli = (req,res,next)=>{
              vi:parseFloat(linie.vi).toFixed(2),
               ve:parseFloat(linie.ve).toFixed(2),
                valoarestoc:parseFloat(linie.valoarestoc).toFixed(2),
-               pret:(parseFloat(linie.valoarestoc)/parseFloat(linie.stocfinal)).toFixed(2)
+               pret:parseFloat(linie.stocfinal).toFixed(2)==0?0:(parseFloat(linie.valoarestoc)/parseFloat(linie.stocfinal)).toFixed(2),
+               gestionar:linie.gestionar,
+               presedinte:linie.presedinte,
+               membru1:linie.membru1,
+               membru2:linie.membru2
 
         })
          nrcrt++;
@@ -355,6 +364,10 @@ module.exports.raportli = (req,res,next)=>{
       set_date.tsi=tsi.toFixed(2);
       set_date.rd=rd.toFixed(2);
       set_date.rc=rc.toFixed(2);
+      set_date.presedinte=linii[0].presedinte
+      set_date.gestionar=linii[0].gestionar
+      set_date.membru1=linii[0].membru1
+      set_date.membru2=linii[0].membru2
 
 
        const html = ejs.render(ejs_template, {set_date,style,config});

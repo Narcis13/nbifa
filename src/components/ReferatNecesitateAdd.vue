@@ -361,7 +361,7 @@ export default {
 
 <style lang="sass" scoped>
 .coloana-dreapta 
-  border-left: 1px solid grey;
+  border-left: 1px solid grey
 
 
 .my-sticky-virtscroll-table

@@ -13,24 +13,24 @@
   "dependencies": {
     "@quasar/cli": "^1.2.1",
     "@quasar/extras": "^1.10.7",
-    "axios": "^0.18.1",
+    "axios": "^1.6.1",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "ejs": "^3.0.1",
     "express": "^4.16.4",
     "file-saver": "^2.0.2",
-    "jsonwebtoken": "^8.4.0",
-    "knex": "^0.20.12",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.0.1",
     "moment": "^2.24.0",
     "mysql2": "^1.6.5",
     "puppeteer": "^2.1.1",
     "quasar": "^1.15.21"
   },
   "devDependencies": {
-    "@quasar/app": "^1.9.6",
+    "@quasar/app": "^2.4.3",
     "morgan": "^1.9.1",
-    "nodemon": "^1.18.10",
-    "quasar-app-extension-q-grouped-table": "^0.1.0",
+    "nodemon": "^3.0.1",
+    
     "strip-ansi": "=3.0.1"
   },
   "engines": {

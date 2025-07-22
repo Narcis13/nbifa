@@ -31,72 +31,72 @@ Complete migration of BIFA Gestiune frontend application from Quasar v1/Vue 2 (O
 - [x] Migrate `boot/axios.js` to use Vue 3 app instance
 
 ### 1.5 Router Migration
-- [ ] Update Vue Router to v4
-- [ ] Convert router configuration to Vue Router 4 syntax
-- [ ] Update route guards to new format
-- [ ] Test all route navigation
+- [x] Update Vue Router to v4
+- [x] Convert router configuration to Vue Router 4 syntax
+- [x] Update route guards to new format
+- [x] Test all route navigation
 
 ### 1.6 State Management Migration
-- [ ] Install and configure Pinia
-- [ ] Convert Vuex user module to Pinia store
-- [ ] Update all store references in components
-- [ ] Remove Vuex dependencies
+- [x] Install and configure Pinia
+- [x] Convert Vuex user module to Pinia store
+- [x] Update all store references in components
+- [x] Remove Vuex dependencies
 
 ## Phase 2: Simple Components Migration (1-2 days)
 
 ### 2.1 PaapResponsabil.vue (23 lines)
-- [ ] Convert template refs from `ref="name"` to `ref` with setup()
-- [ ] Convert props to defineProps()
-- [ ] Convert emits to defineEmits()
-- [ ] Move logic to setup() or `<script setup>`
+- [x] Convert template refs from `ref="name"` to `ref` with setup()
+- [x] Convert props to defineProps()
+- [x] Convert emits to defineEmits()
+- [x] Move logic to setup() or `<script setup>`
 
 ### 2.2 ContracteNoi.vue (30 lines)
-- [ ] Convert data() to ref/reactive
-- [ ] Convert methods to regular functions
-- [ ] Update component registration
+- [x] Convert data() to ref/reactive
+- [x] Convert methods to regular functions
+- [x] Update component registration
 
 ### 2.3 PaapCompartimente.vue (45 lines)
-- [ ] Migrate Options API to Composition API
-- [ ] Update any Quasar component usage
-- [ ] Test functionality
+- [x] Migrate Options API to Composition API
+- [x] Update any Quasar component usage
+- [x] Test functionality
 
 ### 2.4 PaapProceduri.vue (45 lines)
-- [ ] Complete Composition API conversion
-- [ ] Verify all event handlers work
-- [ ] Update any deprecated Quasar components
+- [x] Complete Composition API conversion
+- [x] Verify all event handlers work
+- [x] Update any deprecated Quasar components
 
 ## Phase 3: Medium Components Migration (3-4 days)
 
 ### 3.1 PaapArticolBugetar.vue (78 lines)
-- [ ] Convert data properties to ref/reactive
-- [ ] Migrate computed properties to computed()
-- [ ] Convert watchers to watch/watchEffect
-- [ ] Update lifecycle hooks (created -> onMounted, etc.)
+- [x] Convert data properties to ref/reactive
+- [x] Migrate computed properties to computed()
+- [x] Convert watchers to watch/watchEffect
+- [x] Update lifecycle hooks (created -> onMounted, etc.)
 
 ### 3.2 FisaCont.vue (80 lines)
-- [ ] Migrate component logic to Composition API
-- [ ] Update $refs usage to template refs
-- [ ] Convert this.$q usage to useQuasar()
+- [x] Migrate component logic to Composition API
+- [x] Update $refs usage to template refs
+- [x] Convert this.$q usage to useQuasar()
 
 ### 3.3 PaapCodCPV.vue (99 lines)
-- [ ] Full Composition API migration
-- [ ] Update form handling
-- [ ] Migrate validation logic
+- [x] Full Composition API migration
+- [x] Update form handling
+- [x] Migrate validation logic
 
 ### 3.4 Repere.vue (111 lines)
-- [ ] Convert component to Composition API
-- [ ] Update data table configuration
-- [ ] Migrate filters and sorting logic
+- [x] Convert component to Composition API
+- [x] Update data table configuration
+- [x] Migrate filters and sorting logic
 
 ### 3.5 MaterialAdd.vue (114 lines)
-- [ ] Migrate form component to Composition API
-- [ ] Update v-model usage
-- [ ] Convert validation rules
+- [x] Migrate form component to Composition API
+- [x] Update v-model usage
+- [x] Convert validation rules
 
 ### 3.6 Balanta.vue (127 lines)
-- [ ] Complete Composition API conversion
-- [ ] Update calculations and computed values
-- [ ] Migrate API calls pattern
+- [x] Complete Composition API conversion
+- [x] Update calculations and computed values
+- [x] Migrate API calls pattern
 
 ## Phase 4: Complex Components Migration (4-5 days)
 

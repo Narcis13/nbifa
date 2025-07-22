@@ -19,53 +19,58 @@
 </template>
 
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { useQuasar } from 'quasar'
+import { useUserStore } from '../stores/user'
 import axios from 'axios'
-export default {
-    data(){
-      return {
-        numeUser:'',
-        pass:''
-      }
 
+const $q = useQuasar()
+const route = useRoute()
+const userStore = useUserStore()
 
-    },
-  mounted(){
-       console.log('Login form  mounted!',this.$root._route.path)
-  },
-    methods:{
-      autentificare(){
-        let sufix=this.$root._route.path==="/aky"?"loginaky":"login";
-        axios.post(process.env.host+'user/'+sufix,{user:this.numeUser,parola:this.pass}).then(
-            res => {
-               console.log('Raspuns la autentificare ',res)
-               this.$q.notify({
-                 message:res.data.message,
-                 timeout:1500,
-                 position:'top',
-                 color:'positive'
-               });
+// Reactive data
+const numeUser = ref('')
+const pass = ref('')
 
-               if(sufix==="loginaky")
-                 this.$store.dispatch('akysignUserIn',res.data)
-               else
-                this.$store.dispatch('signUserIn',res.data)
-            }
-     ).catch(err=>{
-       this.numeUser=''
-       this.pass=''
-       this.$q.notify({
-                    color: 'negative',
-                    timeout:1500,
-                    position:'top',
-                    icon: 'delete',
-                    message: `User sau parola incorecte...`
-                  })
-       console.log('Eroare autentificare',err);
-     });
-       // this.$store.dispatch('signUserIn',this.numeUser)
-      }
+// Methods
+const autentificare = () => {
+  const sufix = route.path === "/aky" ? "loginaky" : "login"
+  
+  axios.post(process.env.API_URL + 'user/' + sufix, {
+    user: numeUser.value,
+    parola: pass.value
+  }).then(res => {
+    console.log('Raspuns la autentificare ', res)
+    $q.notify({
+      message: res.data.message,
+      timeout: 1500,
+      position: 'top',
+      color: 'positive'
+    })
+
+    if (sufix === "loginaky") {
+      userStore.akysignUserIn(res.data)
+    } else {
+      userStore.signUserIn(res.data)
     }
-  }
+  }).catch(err => {
+    numeUser.value = ''
+    pass.value = ''
+    $q.notify({
+      color: 'negative',
+      timeout: 1500,
+      position: 'top',
+      icon: 'delete',
+      message: `User sau parola incorecte...`
+    })
+    console.log('Eroare autentificare', err)
+  })
+}
 
+// Lifecycle
+onMounted(() => {
+  console.log('Login form mounted!', route.path)
+})
 </script>

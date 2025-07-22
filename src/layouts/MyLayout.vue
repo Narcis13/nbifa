@@ -79,110 +79,86 @@
   </q-layout>
 </template>
 
-<script>
-import { openURL } from 'quasar'
-import Meniu from '../components/Meniu'
+<script setup>
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { useQuasar, openURL } from 'quasar'
+import { useUserStore } from '../stores/user'
+import { useEventsStore } from '../stores/events'
+import Meniu from '../components/Meniu.vue'
 
-export default {
-  name: 'MyLayout',
-  components:{
-    'Meniu':Meniu
-  },
-  data () {
-    return {
-      left: this.$q.platform.is.desktop,
-      group: 'op1',
-      gestiune:{id:0,denumire:''},
-      options: [
-        {
-          label: 'GEstiunea 1',
-          value: 'op1'
-        },
-        {
-          label: 'GEstiunea 2',
-          value: 'op2'
-        },
-        {
-          label: 'GEstiunea 3',
-          value: 'op3'
-        }
-      ]
-    }
-  },
-  created(){
-    console.log('BIFA app a fost creata la '+process.env.host)
-  },
-  computed:{
-    userAutentificat(){
-      return this.$store.getters.user !== null && this.$store.getters.user !== undefined
-     //return false;
-    },
-    numeUtilizator(){
-      return this.$store.getters.user
-    },
-    rolUtilizator(){
-       return this.$store.getters.rol
-     //return 'admin'
-    },
-    gestiuneaCurenta(){
-       return this.gestiune.denumire
-    },
-    gestiuni(){
-      if(this.$store.getters.gestiuni.length>0) {
-        this.group=this.$store.getters.gestiuni[0].id
-        this.gestiune = {id:this.$store.getters.gestiuni[0].id,denumire:this.$store.getters.gestiuni[0].denumire}
-        this.$store.dispatch('schimbaGestiuneaCurenta',{id:this.$store.getters.gestiuni[0].id,denumire:this.$store.getters.gestiuni[0].denumire})
-      //  this.$root.$emit('schimbgestiunea',this.$store.getters.gestiuni[0].id);
-      }
-       return this.$store.getters.gestiuni.map( item =>({
+const $q = useQuasar()
+const router = useRouter()
+const userStore = useUserStore()
+const eventsStore = useEventsStore()
 
-               label:item.denumire,
-               value:item.id
-       }))
-      /*return [
-        {
-          label: 'GEstiunea 1',
-          value: 'op1'
-        },
-        {
-          label: 'GEstiunea 2',
-          value: 'op2'
-        },
-        {
-          label: 'GEstiunea 3',
-          value: 'op3'
-        }
-      ]*/
-    }
-  },
-  methods: {
-    openURL,
-    doLogin(){
-     this.$router.push('/login');
-    },
-    doLogout(){
-       this.$store.dispatch('schimbaGestiuneaCurenta',{id:0,denumire:''})
-      this.$store.dispatch('logout');
-    },
-    inchideUser(){
-         this.$root.$emit('schimbgestiunea',this.group);
-    },
-    actUser(p){
-      console.log('actionez user',this.group,this.gestiuni);
-      var that=this;
-      this.gestiuni.map(item =>{
-        if(item.value==that.group) {
-          that.gestiune={id:item.value,denumire:item.label}
-          
-          }
-      })
-       this.$store.dispatch('schimbaGestiuneaCurenta',this.gestiune)
-       
-  
-    }
+// Reactive data
+const left = ref($q.platform.is.desktop)
+const group = ref('op1')
+const gestiune = ref({ id: 0, denumire: '' })
 
+// Computed properties
+const userAutentificat = computed(() => {
+  return userStore.user !== null && userStore.user !== undefined
+})
+
+const numeUtilizator = computed(() => {
+  return userStore.userGetter
+})
+
+const rolUtilizator = computed(() => {
+  return userStore.rolGetter
+})
+
+const gestiuneaCurenta = computed(() => {
+  return gestiune.value.denumire
+})
+
+const gestiuni = computed(() => {
+  const gestiuniList = userStore.gestiuniGetter || []
+  if (gestiuniList.length > 0 && group.value === 'op1') {
+    group.value = gestiuniList[0].id
+    gestiune.value = { id: gestiuniList[0].id, denumire: gestiuniList[0].denumire }
+    userStore.schimbaGestiuneaCurenta({ id: gestiuniList[0].id, denumire: gestiuniList[0].denumire })
+  }
+  return gestiuniList.map(item => ({
+    label: item.denumire,
+    value: item.id
+  }))
+})
+
+// Methods
+const doLogin = () => {
+  router.push('/login')
+}
+
+const doLogout = () => {
+  userStore.schimbaGestiuneaCurenta({ id: 0, denumire: '' })
+  userStore.logout()
+}
+
+const inchideUser = () => {
+  eventsStore.emit('schimbgestiunea', group.value)
+}
+
+const actUser = () => {
+  console.log('actionez user', group.value, gestiuni.value)
+  const selectedGestiune = gestiuni.value.find(item => item.value === group.value)
+  if (selectedGestiune) {
+    gestiune.value = { id: selectedGestiune.value, denumire: selectedGestiune.label }
+    userStore.schimbaGestiuneaCurenta(gestiune.value)
   }
 }
+
+// Lifecycle
+onMounted(() => {
+  console.log('BIFA app a fost creata la ' + process.env.host)
+})
+
+// Watch for group changes
+watch(group, () => {
+  actUser()
+})
 </script>
 
 <style>

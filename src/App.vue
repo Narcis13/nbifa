@@ -1,14 +1,8 @@
 <template>
-  <div id="q-app">
-    <router-view />
-  </div>
+  <router-view />
 </template>
 
-<script>
-export default {
-  name: 'App'
-}
+<script setup>
+// This is the root component of the application
+// Using Composition API with <script setup>
 </script>
-
-<style>
-</style>

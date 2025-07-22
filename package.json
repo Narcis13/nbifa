@@ -8,41 +8,56 @@
   "private": true,
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
-    "start": "nodemon -e js,ejs,json,css ./server/server.js"
+    "start": "nodemon -e js,ejs,json,css ./server/server.js",
+    "dev": "quasar dev",
+    "build": "quasar build",
+    "build:pwa": "quasar build -m pwa",
+    "clean": "quasar clean"
   },
   "dependencies": {
-    "@quasar/cli": "^1.2.1",
-    "@quasar/extras": "^1.16.12",
-    "axios": "^1.6.1",
+    "@quasar/extras": "^1.16.9",
+    "axios": "^1.6.2",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "ejs": "^3.0.1",
     "express": "^4.16.4",
-    "file-saver": "^2.0.2",
+    "file-saver": "^2.0.5",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.0.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "mysql2": "^1.6.5",
+    "pinia": "^2.1.7",
     "puppeteer": "^2.1.1",
-    "quasar": "^1.22.10"
+    "quasar": "^2.14.2",
+    "vue": "^3.3.10",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
-    "@quasar/app": "^2.4.4",
+    "@quasar/app-vite": "^1.7.1",
+    "@vue/compiler-sfc": "^3.3.10",
     "morgan": "^1.9.1",
     "nodemon": "^3.0.1",
-    "strip-ansi": "=3.0.1"
+    "eslint": "^8.54.0",
+    "eslint-plugin-vue": "^9.18.1",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-n": "^16.3.1",
+    "eslint-plugin-promise": "^6.1.1"
   },
   "engines": {
-    "node": ">= 8.9.0",
-    "npm": ">= 5.6.0",
-    "yarn": ">= 1.6.0"
+    "node": "^18 || ^16 || ^14.19",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
   },
   "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 10"
-  ],
-  "resolutions": {
-    "ajv": "6.8.1"
-  }
+    "last 10 Chrome versions",
+    "last 10 Firefox versions",
+    "last 4 Edge versions",
+    "last 7 Safari versions",
+    "last 8 Android versions",
+    "last 8 ChromeAndroid versions",
+    "last 8 FirefoxAndroid versions",
+    "last 10 iOS versions",
+    "last 5 Opera versions"
+  ]
 }
